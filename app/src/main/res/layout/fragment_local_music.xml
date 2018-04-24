@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/FragmentBGColor"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/FindColor"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/find_local_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/find_Localmusic"
+            android:background="@drawable/btn_white"
+            android:gravity="center"
+            android:hint="搜索本地歌曲，下拉自动搜索"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/find_Localmusic"
+            android:layout_alignParentRight="true"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/find_music" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/SongNum"
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="歌曲数：10"/>
+
+
+    <ListView
+        android:id="@+id/fragment_local_music_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+
+</LinearLayout>
