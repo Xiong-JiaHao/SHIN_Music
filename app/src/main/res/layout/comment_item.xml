@@ -12,13 +12,15 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/comment_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ginshin - 信 - 反正我信了"
+            android:text="ginshin"
             android:textColor="#ffffff"
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/comment_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lines="1"
@@ -28,6 +30,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/comment_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

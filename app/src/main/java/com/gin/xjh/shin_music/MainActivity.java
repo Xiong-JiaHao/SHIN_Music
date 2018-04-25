@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gin.xjh.shin_music.adapter.FragmentAdapter;
 import com.gin.xjh.shin_music.fragment.Fragment_Local;
 import com.gin.xjh.shin_music.fragment.Fragment_Online;
 import com.gin.xjh.shin_music.fragment.Fragment_Shin;
@@ -65,10 +66,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragments.add(new Fragment_Online());
         fragments.add(new Fragment_Local());
 
+        Index = 0;
         shin_img.setImageResource(R.drawable.shin_red);
         shin_text.setTextColor(Color.RED);
         mSreenWidth = getWindowManager().getDefaultDisplay().getWidth();
-        Index = 0;
 
         adapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         mViewPager.setAdapter(adapter);
@@ -142,8 +143,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case 2:
                         if(Index==0){
-                            Local_music_img.setImageResource(R.drawable.local_music_white);
-                            Local_music_text.setTextColor(Color.WHITE);
+                            shin_img.setImageResource(R.drawable.shin_white);
+                            shin_text.setTextColor(Color.WHITE);
                         }
                         else if(Index==1){
                             Online_music_img.setImageResource(R.drawable.online_music_white);

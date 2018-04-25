@@ -1,4 +1,4 @@
-package com.gin.xjh.shin_music;
+package com.gin.xjh.shin_music.adapter;
 
 
 import android.support.v4.app.Fragment;

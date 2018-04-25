@@ -6,12 +6,10 @@
     android:orientation="vertical">
 
     <GridView
-        android:id="@+id/gridview"
+        android:id="@+id/gridview_shin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnWidth="200dp"
-        android:numColumns="2"
-        android:stretchMode="spacingWidthUniform">
+        android:numColumns="2">
 
     </GridView>
 

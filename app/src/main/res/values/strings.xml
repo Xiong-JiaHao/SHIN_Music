@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SHIN_Music</string>
+    <string name="my_appId">62882</string>
+    <string name="my_appSecret">33ff1ea139954d69a2d4aa884dc30a96</string>
 </resources>
