@@ -1,5 +1,6 @@
 package com.gin.xjh.shin_music;
 
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             /**
-             * 代表哪个页面被选中,当用手指滑动翻页的时候，
+             * 用手指滑动翻页的时候表示哪个页面被选中
              * 如果翻动成功了（滑动的距离够长），手指抬起来就会立即执行这个方法，
              * position就是当前滑动到的页面
              */
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if(Index==1){
                             Online_music_img.setImageResource(R.drawable.online_music_white);
                             Online_music_text.setTextColor(Color.WHITE);
+                            IntentFilter filter = new IntentFilter();
                         }
                         else if(Index==2){
                             Local_music_img.setImageResource(R.drawable.local_music_white);
@@ -159,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             /**
-             *这个方法在手指操作屏幕的时候发生变化。有三个值：0（END）,1(PRESS) , 2(UP) 。
+             * 这个方法在手指操作屏幕的时候发生变化。有三个值：0（END）,1(PRESS) , 2(UP) 。
              * 当用手指滑动翻页时，手指按下去的时候会触发这个方法，state值为1，
              * 手指抬起时，如果发生了滑动（即使很小），这个值会变为2，然后最后变为0 。总共执行这个方法三次。
              * 一种特殊情况是手指按下去以后一点滑动也没有发生，这个时候只会调用这个方法两次，state值分别是1,0 。
@@ -175,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         shin.setOnClickListener(this);
         Online_music.setOnClickListener(this);
         Local_music.setOnClickListener(this);
+
     }
 
     /**

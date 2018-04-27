@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,11 +46,13 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
 
     public class MusicViewHolder extends RecyclerView.ViewHolder{
         private TextView SongName,SingerName;
+        private ImageView sz;
 
         public MusicViewHolder(View itemView){
             super(itemView);
             SongName=itemView.findViewById(R.id.itemSongName);
             SingerName=itemView.findViewById(R.id.itemSingerName);
+            sz = itemView.findViewById(R.id.music_sz);
         }
 
         public void load(Song song, final Context context) {
@@ -59,6 +62,13 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(context,"check it",Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            sz.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "check", Toast.LENGTH_SHORT).show();
                 }
             });
         }

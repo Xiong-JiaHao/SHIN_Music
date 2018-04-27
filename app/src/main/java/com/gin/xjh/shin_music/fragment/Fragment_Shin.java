@@ -8,15 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
+import com.gin.xjh.shin_music.adapter.albumItemAdapter;
+import com.gin.xjh.shin_music.bean.Album;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Gin on 2018/4/23.
@@ -25,8 +24,8 @@ import java.util.Map;
 public class Fragment_Shin extends Fragment {
 
     private GridView gridView;
-    private List<Map<String, Object>> dataList;
-    private SimpleAdapter adapter;
+    private List<Album> dataList;
+    private albumItemAdapter adapter;
 
     @Nullable
     @Override
@@ -41,19 +40,13 @@ public class Fragment_Shin extends Fragment {
     private void initData() {
         dataList = new ArrayList<>();
         for (int i = 0; i <10; i++) {
-            Map<String, Object> map=new HashMap<>();
-            map.put("img", R.drawable.dayemen);
-            map.put("text","大爷们");
-            dataList.add(map);
+            dataList.add(new Album("大爷们","ss"));
         }
     }
 
     private void initEvent() {
         //GridView
-        String[] from={"img","text"};
-        int[] to={R.id.shin_img,R.id.shin_text};
-        adapter=new SimpleAdapter(getContext(), dataList, R.layout.fragment_shin_item, from, to);
-
+        adapter = new albumItemAdapter(getContext(),dataList);
         gridView.setAdapter(adapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -63,4 +56,5 @@ public class Fragment_Shin extends Fragment {
             }
         });
     }
+
 }

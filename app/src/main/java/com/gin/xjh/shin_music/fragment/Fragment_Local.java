@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
@@ -27,11 +29,16 @@ public class Fragment_Local extends Fragment {
     private RecyclerView mRecyclerView;
     private musicRecyclerViewAdapter mMusicListViewAdapter;
 
+    private EditText mFind = null;
+    private ImageView mCheck;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_local_music,null);
+        View view = inflater.inflate(R.layout.fragment_local_music, null);
         mRecyclerView = view.findViewById(R.id.fragment_local_music_list);
+        mFind = view.findViewById(R.id.find_local_name);
+        mCheck = view.findViewById(R.id.find_Localmusic);
         initData();
         initEvent();
         return view;
@@ -41,24 +48,44 @@ public class Fragment_Local extends Fragment {
         /**
          * 测试
          */
-        if(mSongList==null){
-            mSongList=new ArrayList<>();
-        }
-        else{
+        if (mSongList == null) {
+            mSongList = new ArrayList<>();
+        } else {
             mSongList.clear();
         }
 
-        mSongList=new ArrayList<>();
-        for(int i=0;i<10;i++){
-            mSongList.add(new Song("反正我信了","信","反正我信了","1111"));
+        mSongList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            mSongList.add(new Song("反正我信了", "信", "反正我信了", "1111"));
         }
     }
 
-    private void initEvent(){
-        mMusicListViewAdapter = new musicRecyclerViewAdapter(getContext(),mSongList);
+    private void initEvent() {
+        mMusicListViewAdapter = new musicRecyclerViewAdapter(getContext(), mSongList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());//默认动画
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mMusicListViewAdapter);
+
+
+
+        mCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                find();
+            }
+        });
     }
+
+    private void find() {
+
+    }
+
+//    public class Find_Local_BroadcastReceiver extends BroadcastReceiver {
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            mFind.setText("");
+//        }
+//    }
 }

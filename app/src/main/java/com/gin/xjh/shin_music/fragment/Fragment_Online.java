@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -38,12 +40,19 @@ public class Fragment_Online extends Fragment {
     private List<Map<String, Object>> dataList;
     private SimpleAdapter adapter;
 
+    private EditText mFind = null;
+    private ImageView mCheck;
+
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_online_music,null);
         mRecyclerView = view.findViewById(R.id.fragment_recommend_music_list);
         gridView = view.findViewById(R.id.Online_music_gv);
+        mFind = view.findViewById(R.id.find_online_name);
+        mCheck = view.findViewById(R.id.find_Onlinemusic);
         initData();
         initEvent();
         return view;
@@ -74,28 +83,51 @@ public class Fragment_Online extends Fragment {
 
     }
 
-    private void initEvent(){
+    private void initEvent() {
 
         //RecyclerView
-        mRecommendmusicRecyclerViewAdapter = new recommendmusicRecyclerViewAdapter(getContext(),mSongList);
+        mRecommendmusicRecyclerViewAdapter = new recommendmusicRecyclerViewAdapter(getContext(), mSongList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());//默认动画
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mRecommendmusicRecyclerViewAdapter);
 
 
         //GridView
-        String[] from={"img","text"};
-        int[] to={R.id.music_img,R.id.music_text};
-        adapter=new SimpleAdapter(getContext(), dataList, R.layout.online_music_item, from, to);
+        String[] from = {"img", "text"};
+        int[] to = {R.id.music_img, R.id.music_text};
+        adapter = new SimpleAdapter(getContext(), dataList, R.layout.online_music_item, from, to);
 
         gridView.setAdapter(adapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Toast.makeText(getContext(),"check "+arg2,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "check " + arg2, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                find();
             }
         });
     }
+
+    /**
+     * 查找数据
+     */
+    private void find() {
+
+    }
+
+//    public class Find_Online_BroadcastReceiver extends BroadcastReceiver {
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            mFind.setText("");
+//        }
+//    }
+
 }
