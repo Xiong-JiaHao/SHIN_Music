@@ -1,6 +1,7 @@
 package com.gin.xjh.shin_music.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gin.xjh.shin_music.R;
+import com.gin.xjh.shin_music.album_details_Activity;
 import com.gin.xjh.shin_music.bean.Album;
 
 import java.util.List;
@@ -22,9 +24,9 @@ public class albumItemAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private List<Album> mList;
 
-    public albumItemAdapter(Context context,List<Album> list){
+    public albumItemAdapter(Context context, List<Album> list) {
         mContext = context;
-        mList=list;
+        mList = list;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -48,16 +50,15 @@ public class albumItemAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(convertView == null){
+        if (convertView == null) {
             convertView = mInflater.inflate(R.layout.fragment_shin_item, null);
             holder = new ViewHolder();
             holder.shin_Img = convertView.findViewById(R.id.shin_img);
             holder.shin_Text = convertView.findViewById(R.id.shin_text);
             convertView.setTag(holder);
-        }
-        else{
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
@@ -67,6 +68,14 @@ public class albumItemAdapter extends BaseAdapter {
         Bitmap bitmap = bd.getBitmap();
         holder.shin_Img.setImageBitmap(bitmap);
         holder.shin_Text.setText(mList.get(position).getAlbumName());
+        holder.shin_Img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, album_details_Activity.class);
+                intent.putExtra("album",mList.get(position));
+                mContext.startActivity(intent);
+            }
+        });
         return convertView;
     }
 

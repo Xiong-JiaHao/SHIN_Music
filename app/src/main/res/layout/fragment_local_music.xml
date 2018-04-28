@@ -12,7 +12,6 @@
         android:gravity="center">
 
         <EditText
-            android:cursorVisible="false"
             android:id="@+id/find_local_name"
             android:layout_width="match_parent"
             android:layout_height="30dp"
@@ -21,6 +20,7 @@
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/find_Localmusic"
             android:background="@drawable/btn_white"
+            android:cursorVisible="false"
             android:gravity="center"
             android:hint="搜索本地歌曲，下拉自动搜索"
             android:imeOptions="actionSearch"
@@ -29,9 +29,9 @@
 
         <ImageView
             android:id="@+id/find_Localmusic"
-            android:layout_alignParentRight="true"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_alignParentRight="true"
             android:layout_gravity="center"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
@@ -40,10 +40,10 @@
 
     <TextView
         android:id="@+id/SongNum"
-        android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="歌曲数：10"/>
+        android:layout_margin="5dp"
+        android:text="歌曲数：10" />
 
 
     <android.support.v7.widget.RecyclerView

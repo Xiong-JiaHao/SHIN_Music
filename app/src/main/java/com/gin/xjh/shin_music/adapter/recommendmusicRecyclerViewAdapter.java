@@ -25,15 +25,20 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
     public List<Song> list;
     private Context context;
 
+    public recommendmusicRecyclerViewAdapter(Context context, List<Song> list) {
+        this.list = list;
+        this.context = context;
+    }
+
     @Override
     public recommendmusicRecyclerViewAdapter.MusicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MusicViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recommend_music_item,parent,false));
+        return new MusicViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recommend_music_item, parent, false));
     }
 
     //绑定视图
     @Override
     public void onBindViewHolder(recommendmusicRecyclerViewAdapter.MusicViewHolder holder, int position) {
-        holder.load(list.get(position),context);
+        holder.load(list.get(position), context);
     }
 
     @Override
@@ -41,21 +46,15 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
         return list.size();
     }
 
-    public recommendmusicRecyclerViewAdapter(Context context, List<Song> list) {
-        this.list = list;
-        this.context=context;
-    }
-
-
-    public class MusicViewHolder extends RecyclerView.ViewHolder{
-        private TextView SongName,SingerName;
+    public class MusicViewHolder extends RecyclerView.ViewHolder {
+        private TextView SongName, SingerName;
         private ImageView cover;
 
-        public MusicViewHolder(View itemView){
+        public MusicViewHolder(View itemView) {
             super(itemView);
-            SongName=itemView.findViewById(R.id.itemSongName);
-            SingerName=itemView.findViewById(R.id.itemSingerName);
-            cover=itemView.findViewById(R.id.cover);
+            SongName = itemView.findViewById(R.id.itemSongName);
+            SingerName = itemView.findViewById(R.id.itemSingerName);
+            cover = itemView.findViewById(R.id.cover);
         }
 
         public void load(Song song, final Context context) {
@@ -68,7 +67,7 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,"check it",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "check it", Toast.LENGTH_SHORT).show();
                 }
             });
         }

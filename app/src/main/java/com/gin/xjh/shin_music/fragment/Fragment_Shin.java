@@ -30,7 +30,7 @@ public class Fragment_Shin extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_shin,null);
+        View view = inflater.inflate(R.layout.fragment_shin, null);
         gridView = view.findViewById(R.id.gridview_shin);
         initData();
         initEvent();
@@ -39,20 +39,20 @@ public class Fragment_Shin extends Fragment {
 
     private void initData() {
         dataList = new ArrayList<>();
-        for (int i = 0; i <10; i++) {
-            dataList.add(new Album("大爷们","ss"));
+        for (int i = 0; i < 10; i++) {
+            dataList.add(new Album("大爷们", "http://p3.music.126.net/AdIfGCIfxVOSe-x00EEFuw==/109951163167778043.jpg","1483027200007",35104037,"信"));
         }
     }
 
     private void initEvent() {
         //GridView
-        adapter = new albumItemAdapter(getContext(),dataList);
+        adapter = new albumItemAdapter(getContext(), dataList);
         gridView.setAdapter(adapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Toast.makeText(getContext(),"check "+arg2,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "check " + arg2, Toast.LENGTH_SHORT).show();
             }
         });
     }

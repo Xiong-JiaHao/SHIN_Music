@@ -9,13 +9,13 @@ import java.io.Serializable;
 public class Song implements Serializable {
 
     private String SongName;//歌曲名字
-    private int SongId;//歌曲id
+    private long SongId;//歌曲id
     private String SingerName;//歌手名字
     private String AlbumName;//专辑名称
     private String Uri;//路径
     private String AlbumUrl;//专辑图片路径
 
-    public Song(String SongName,String SingerName,String AlbumName,String Uri){
+    public Song(String SongName, String SingerName, String AlbumName, String Uri) {
         this.SongName = SongName;
         this.SingerName = SingerName;
         this.AlbumName = AlbumName;
@@ -24,7 +24,7 @@ public class Song implements Serializable {
         AlbumUrl = "-1";
     }
 
-    public Song(String SongName,int Songid,String SingerName,String AlbumName,String Uri,String AlbumUrl){
+    public Song(String SongName, long Songid, String SingerName, String AlbumName, String Uri, String AlbumUrl) {
         this.SongName = SongName;
         this.SongId = Songid;
         this.SingerName = SingerName;
@@ -33,8 +33,8 @@ public class Song implements Serializable {
         this.AlbumUrl = AlbumUrl;
     }
 
-    public boolean isOnline(){
-        if(SongId==-1){
+    public boolean isOnline() {
+        if (SongId == -1) {
             return false;
         }
         return true;
@@ -44,7 +44,7 @@ public class Song implements Serializable {
         return SongName;
     }
 
-    public int getSongId() {
+    public long getSongId() {
         return SongId;
     }
 
@@ -66,6 +66,6 @@ public class Song implements Serializable {
 
     @Override
     public String toString() {
-        return SingerName+" - "+AlbumName;
+        return SingerName + " - " + AlbumName;
     }
 }

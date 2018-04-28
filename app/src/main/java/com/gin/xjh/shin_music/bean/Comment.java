@@ -11,6 +11,12 @@ public class Comment {
     private String MyComment;//评论内容
     private String Times;//时间
 
+    public Comment(String UserName, String MyComment, String Times) {
+        this.UserName = UserName;
+        this.MyComment = MyComment;
+        this.Times = Times;
+    }
+
     public String getUserName() {
         return UserName;
     }
@@ -21,12 +27,6 @@ public class Comment {
 
     public String getTimes() {
         return Times;
-    }
-
-    public Comment(String UserName,String MyComment,String Times){
-        this.UserName = UserName;
-        this.MyComment = MyComment;
-        this.Times = Times;
     }
 
 }

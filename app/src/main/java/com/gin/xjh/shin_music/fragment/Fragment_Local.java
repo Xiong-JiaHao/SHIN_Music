@@ -68,7 +68,6 @@ public class Fragment_Local extends Fragment {
         mRecyclerView.setAdapter(mMusicListViewAdapter);
 
 
-
         mCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

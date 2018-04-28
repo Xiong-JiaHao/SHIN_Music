@@ -21,15 +21,20 @@ public class commentRecyclerViewAdapter extends RecyclerView.Adapter<commentRecy
     public List<Comment> list;
     private Context context;
 
+    public commentRecyclerViewAdapter(Context context, List<Comment> list) {
+        this.list = list;
+        this.context = context;
+    }
+
     @Override
     public commentRecyclerViewAdapter.commentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new commentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item,parent,false));
+        return new commentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item, parent, false));
     }
 
     //绑定视图
     @Override
     public void onBindViewHolder(commentRecyclerViewAdapter.commentViewHolder holder, int position) {
-        holder.load(list.get(position),context);
+        holder.load(list.get(position), context);
     }
 
     @Override
@@ -37,20 +42,14 @@ public class commentRecyclerViewAdapter extends RecyclerView.Adapter<commentRecy
         return list.size();
     }
 
-    public commentRecyclerViewAdapter(Context context, List<Comment> list) {
-        this.list = list;
-        this.context=context;
-    }
+    public class commentViewHolder extends RecyclerView.ViewHolder {
+        private TextView itemName, itemComment, itemTimes;
 
-
-    public class commentViewHolder extends RecyclerView.ViewHolder{
-        private TextView itemName,itemComment,itemTimes;
-
-        public commentViewHolder(View itemView){
+        public commentViewHolder(View itemView) {
             super(itemView);
             itemName = itemView.findViewById(R.id.comment_name);
-            itemComment=itemView.findViewById(R.id.comment_content);
-            itemTimes=itemView.findViewById(R.id.comment_time);
+            itemComment = itemView.findViewById(R.id.comment_content);
+            itemTimes = itemView.findViewById(R.id.comment_time);
         }
 
         public void load(Comment comment, final Context context) {
@@ -60,7 +59,7 @@ public class commentRecyclerViewAdapter extends RecyclerView.Adapter<commentRecy
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,"check it",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "check it", Toast.LENGTH_SHORT).show();
                 }
             });
         }

@@ -44,11 +44,10 @@ public class Fragment_Online extends Fragment {
     private ImageView mCheck;
 
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_online_music,null);
+        View view = inflater.inflate(R.layout.fragment_online_music, null);
         mRecyclerView = view.findViewById(R.id.fragment_recommend_music_list);
         gridView = view.findViewById(R.id.Online_music_gv);
         mFind = view.findViewById(R.id.find_online_name);
@@ -62,22 +61,21 @@ public class Fragment_Online extends Fragment {
         /**
          * 测试
          */
-        if(mSongList==null){
-            mSongList=new ArrayList<>();
-        }
-        else{
+        if (mSongList == null) {
+            mSongList = new ArrayList<>();
+        } else {
             mSongList.clear();
         }
-        mSongList=new ArrayList<>();
-        for(int i=0;i<10;i++){
-            mSongList.add(new Song("反正我信了","信","反正我信了","1111"));
+        mSongList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            mSongList.add(new Song("反正我信了", "信", "反正我信了", "1111"));
         }
 
         dataList = new ArrayList<>();
-        for (int i = 0; i <6; i++) {
-            Map<String, Object> map=new HashMap<>();
+        for (int i = 0; i < 6; i++) {
+            Map<String, Object> map = new HashMap<>();
             map.put("img", R.drawable.test);
-            map.put("text","摇滚");
+            map.put("text", "摇滚");
             dataList.add(map);
         }
 

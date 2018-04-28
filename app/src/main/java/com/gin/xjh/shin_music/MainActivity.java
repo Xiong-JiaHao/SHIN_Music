@@ -1,5 +1,6 @@
 package com.gin.xjh.shin_music;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //记录当前为哪个Fragment以及当前的屏幕宽度
     private int Index;
     private int mSreenWidth;
+
 
 
     @Override
@@ -115,12 +117,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
-                        if(Index==1){
+                        if (Index == 1) {
                             Online_music_img.setImageResource(R.drawable.online_music_white);
                             Online_music_text.setTextColor(Color.WHITE);
                             IntentFilter filter = new IntentFilter();
-                        }
-                        else if(Index==2){
+                        } else if (Index == 2) {
                             Local_music_img.setImageResource(R.drawable.local_music_white);
                             Local_music_text.setTextColor(Color.WHITE);
                         }
@@ -130,11 +131,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ChangeLine(0);
                         break;
                     case 1:
-                        if(Index==0){
+                        if (Index == 0) {
                             shin_img.setImageResource(R.drawable.shin_white);
                             shin_text.setTextColor(Color.WHITE);
-                        }
-                        else if(Index==2){
+                        } else if (Index == 2) {
                             Local_music_img.setImageResource(R.drawable.local_music_white);
                             Local_music_text.setTextColor(Color.WHITE);
                         }
@@ -144,11 +144,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ChangeLine(mSreenWidth / 3);
                         break;
                     case 2:
-                        if(Index==0){
+                        if (Index == 0) {
                             shin_img.setImageResource(R.drawable.shin_white);
                             shin_text.setTextColor(Color.WHITE);
-                        }
-                        else if(Index==1){
+                        } else if (Index == 1) {
                             Online_music_img.setImageResource(R.drawable.online_music_white);
                             Online_music_text.setTextColor(Color.WHITE);
                         }
@@ -177,6 +176,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         shin.setOnClickListener(this);
         Online_music.setOnClickListener(this);
         Local_music.setOnClickListener(this);
+        Topbar_music.setOnClickListener(this);
+        Topbar_setting.setOnClickListener(this);
 
     }
 
@@ -194,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.shin:
                 mViewPager.setCurrentItem(0);
                 break;
@@ -204,7 +205,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.Local_music:
                 mViewPager.setCurrentItem(2);
                 break;
-
+            case R.id.Topbar_setting:
+                Opensetting();
+                break;
+            case R.id.Topbar_music:
+                Openmusic();
+                break;
         }
+    }
+
+    private void Openmusic() {
+        Intent intent = new Intent(this, music_play_Activity.class);
+        startActivity(intent);
+    }
+
+    private void Opensetting() {
+        Intent intent = new Intent(this, login_menu_Activity.class);
+        startActivity(intent);
     }
 }

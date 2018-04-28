@@ -18,8 +18,8 @@ public class FragmentAdapter extends FragmentPagerAdapter {
 
     public FragmentAdapter(FragmentManager fm, List<Fragment> fragmentList) {
         super(fm);
-        this.fragments=fragmentList;
-        this.fm=fm;
+        this.fragments = fragmentList;
+        this.fm = fm;
     }
 
 
