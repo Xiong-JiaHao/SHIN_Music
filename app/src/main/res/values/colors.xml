@@ -6,4 +6,6 @@
     <color name="Ilike">#262626</color>
     <color name="FragmentBGColor">#505050</color>
     <color name="FindColor">#999999</color>
+    <color name="UnCheck">#666666</color>
+    <color name="Check">#444444</color>
 </resources>
