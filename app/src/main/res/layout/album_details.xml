@@ -5,6 +5,28 @@
     android:background="@color/FragmentBGColor"
     android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="5dp"
+        android:elevation="5dp">
+
+        <ImageView
+            android:id="@+id/go_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back"/>
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/btn_black"></View>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +77,6 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/album_song"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginLeft="5dp"
@@ -63,6 +84,7 @@
         android:background="@drawable/btn_black"></View>
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/album_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp">

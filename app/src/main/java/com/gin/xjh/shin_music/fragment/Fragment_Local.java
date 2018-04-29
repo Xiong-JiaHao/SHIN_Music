@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
@@ -36,12 +37,16 @@ public class Fragment_Local extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_local_music, null);
-        mRecyclerView = view.findViewById(R.id.fragment_local_music_list);
-        mFind = view.findViewById(R.id.find_local_name);
-        mCheck = view.findViewById(R.id.find_Localmusic);
+        initView(view);
         initData();
         initEvent();
         return view;
+    }
+
+    private void initView(View view) {
+        mRecyclerView = view.findViewById(R.id.fragment_local_music_list);
+        mFind = view.findViewById(R.id.find_local_name);
+        mCheck = view.findViewById(R.id.find_Localmusic);
     }
 
     private void initData() {
@@ -77,14 +82,7 @@ public class Fragment_Local extends Fragment {
     }
 
     private void find() {
-
+        Toast.makeText(getContext(), "find", Toast.LENGTH_SHORT).show();
     }
 
-//    public class Find_Local_BroadcastReceiver extends BroadcastReceiver {
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            mFind.setText("");
-//        }
-//    }
 }

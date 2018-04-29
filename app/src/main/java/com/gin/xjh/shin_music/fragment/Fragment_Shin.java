@@ -31,10 +31,14 @@ public class Fragment_Shin extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shin, null);
-        gridView = view.findViewById(R.id.gridview_shin);
+        initView(view);
         initData();
         initEvent();
         return view;
+    }
+
+    private void initView(View view) {
+        gridView = view.findViewById(R.id.gridview_shin);
     }
 
     private void initData() {

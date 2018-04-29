@@ -48,13 +48,17 @@ public class Fragment_Online extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_online_music, null);
+        initView(view);
+        initData();
+        initEvent();
+        return view;
+    }
+
+    private void initView(View view) {
         mRecyclerView = view.findViewById(R.id.fragment_recommend_music_list);
         gridView = view.findViewById(R.id.Online_music_gv);
         mFind = view.findViewById(R.id.find_online_name);
         mCheck = view.findViewById(R.id.find_Onlinemusic);
-        initData();
-        initEvent();
-        return view;
     }
 
     private void initData() {
@@ -117,15 +121,6 @@ public class Fragment_Online extends Fragment {
      * 查找数据
      */
     private void find() {
-
+        Toast.makeText(getContext(), "find", Toast.LENGTH_SHORT).show();
     }
-
-//    public class Find_Online_BroadcastReceiver extends BroadcastReceiver {
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            mFind.setText("");
-//        }
-//    }
-
 }
