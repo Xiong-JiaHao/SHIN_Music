@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -57,7 +58,29 @@ public class login_menu_Activity extends Activity implements View.OnClickListene
                 finish();
                 break;
             case R.id.User_Name:
-                Toast.makeText(this, "User_Name", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(login_menu_Activity.this);
+                LayoutInflater inflater1 = LayoutInflater.from(login_menu_Activity.this);
+                View viewDialog1 = inflater1.inflate(R.layout.login_layout, null);
+                EditText UserId = viewDialog1.findViewById(R.id.UserId);
+                EditText UserPassword = viewDialog1.findViewById(R.id.User_Password);
+                TextView register = viewDialog1.findViewById(R.id.register);
+                Button login = viewDialog1.findViewById(R.id.login);
+                register.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent registerintent = new Intent(login_menu_Activity.this, register_Activity.class);
+                        startActivity(registerintent);
+                    }
+                });
+                login.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(login_menu_Activity.this, "login", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder1.setView(viewDialog1);
+                builder1.create();
+                builder1.show();
                 break;
             case R.id.edit_user:
                 Toast.makeText(this, "edit_user", Toast.LENGTH_SHORT).show();

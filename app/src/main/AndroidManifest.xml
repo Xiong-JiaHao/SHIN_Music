@@ -20,6 +20,7 @@
         <activity android:name=".login_menu_Activity"/>
         <activity android:name=".album_details_Activity"/>
         <activity android:name=".add_question"/>
+        <activity android:name=".register_Activity"/>
     </application>
 
 </manifest>
