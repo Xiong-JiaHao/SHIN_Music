@@ -2,6 +2,5 @@
     <string name="app_name">SHIN_Music</string>
     <string name="my_appId">62882</string>
     <string name="my_appSecret">33ff1ea139954d69a2d4aa884dc30a96</string>
-    <string name="user4g">允许使用4G播放音乐（点击禁止）</string>
-    <string name="unuser4g">禁止使用4G播放音乐（点击允许）</string>
+    <string name="user4g">使用4G播放音乐</string>
 </resources>

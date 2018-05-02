@@ -1,6 +1,7 @@
 package com.gin.xjh.shin_music;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -15,8 +16,8 @@ import android.widget.Toast;
 public class login_menu_Activity extends Activity implements View.OnClickListener {
 
     private ImageView go_back,User_img,User_Sex;
-    private TextView User_Name,User_QQ,User_Sign,fourg_tv;
-    private LinearLayout edit_user,fourg,about,question;
+    private TextView User_Name,User_QQ,User_Sign;
+    private LinearLayout edit_user,about,question;
     private Button logout;
 
     @Override
@@ -35,8 +36,6 @@ public class login_menu_Activity extends Activity implements View.OnClickListene
         User_QQ = findViewById(R.id.User_QQ);
         User_Sign = findViewById(R.id.User_sign);
         edit_user = findViewById(R.id.edit_user);
-        fourg = findViewById(R.id.fourg);
-        fourg_tv = findViewById(R.id.four_tv);
         about = findViewById(R.id.about);
         question = findViewById(R.id.question);
         logout = findViewById(R.id.logout);
@@ -46,7 +45,6 @@ public class login_menu_Activity extends Activity implements View.OnClickListene
         go_back.setOnClickListener(this);
         User_Name.setOnClickListener(this);
         edit_user.setOnClickListener(this);
-        fourg.setOnClickListener(this);
         about.setOnClickListener(this);
         question.setOnClickListener(this);
         logout.setOnClickListener(this);
@@ -72,12 +70,12 @@ public class login_menu_Activity extends Activity implements View.OnClickListene
                 LayoutInflater inflater = LayoutInflater.from(login_menu_Activity.this);
                 View viewDialog = inflater.inflate(R.layout.about, null);
                 builder.setView(viewDialog);
-                //builder.setNegativeButton("关闭", null);
                 builder.create();
                 builder.show();
                 break;
             case R.id.question:
-                Toast.makeText(this, "question", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this,add_question.class);
+                startActivity(intent);
                 break;
             case R.id.logout:
                 Toast.makeText(this, "logout", Toast.LENGTH_SHORT).show();

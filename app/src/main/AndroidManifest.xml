@@ -19,6 +19,7 @@
         <activity android:name=".music_play_Activity"/>
         <activity android:name=".login_menu_Activity"/>
         <activity android:name=".album_details_Activity"/>
+        <activity android:name=".add_question"/>
     </application>
 
 </manifest>
