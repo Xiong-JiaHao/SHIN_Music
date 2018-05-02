@@ -8,4 +8,5 @@
     <color name="FindColor">#999999</color>
     <color name="UnCheck">#666666</color>
     <color name="Check">#444444</color>
+    <color name="RED">#b30a0a</color>
 </resources>

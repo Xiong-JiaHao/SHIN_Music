@@ -23,6 +23,7 @@
         <activity android:name=".register_Activity"/>
         <activity android:name=".updata_Activity"/>
         <activity android:name=".updata_password_Activity"/>
+        <activity android:name=".music_details_Activity"/>
     </application>
 
 </manifest>

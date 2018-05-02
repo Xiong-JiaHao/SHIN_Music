@@ -1,5 +1,6 @@
 package com.gin.xjh.shin_music.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.adapter.recommendmusicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.music_details_Activity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,6 +123,7 @@ public class Fragment_Online extends Fragment {
      * 查找数据
      */
     private void find() {
-        Toast.makeText(getContext(), "find", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getContext(), music_details_Activity.class);
+        startActivity(intent);
     }
 }
