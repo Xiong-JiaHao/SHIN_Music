@@ -118,6 +118,13 @@
                 android:textSize="20sp" />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/btn_black" />
+
         <LinearLayout
             android:id="@+id/updata_password"
             android:layout_width="match_parent"
@@ -145,7 +152,7 @@
             android:layout_height="2dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_black"></View>
+            android:background="@drawable/btn_black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -187,7 +194,7 @@
             android:layout_height="2dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_black"></View>
+            android:background="@drawable/btn_black" />
 
         <LinearLayout
             android:id="@+id/about"
@@ -216,7 +223,7 @@
             android:layout_height="2dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_black"></View>
+            android:background="@drawable/btn_black" />
 
         <LinearLayout
             android:id="@+id/question"
@@ -245,7 +252,7 @@
             android:layout_height="2dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_black"></View>
+            android:background="@drawable/btn_black" />
 
     </LinearLayout>
 
