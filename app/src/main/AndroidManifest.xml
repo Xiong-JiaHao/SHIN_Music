@@ -21,6 +21,8 @@
         <activity android:name=".album_details_Activity"/>
         <activity android:name=".add_question"/>
         <activity android:name=".register_Activity"/>
+        <activity android:name=".updata_Activity"/>
+        <activity android:name=".updata_password_Activity"/>
     </application>
 
 </manifest>

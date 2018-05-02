@@ -8,9 +8,11 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,8 +20,12 @@ public class login_menu_Activity extends Activity implements View.OnClickListene
 
     private ImageView go_back,User_img,User_Sex;
     private TextView User_Name,User_QQ,User_Sign;
-    private LinearLayout edit_user,about,question;
+    private LinearLayout edit_user, about, question, updata_password;
     private Button logout;
+    private Switch fourg;
+
+
+    private static int MyrequestCode = 0x110;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +46,8 @@ public class login_menu_Activity extends Activity implements View.OnClickListene
         about = findViewById(R.id.about);
         question = findViewById(R.id.question);
         logout = findViewById(R.id.logout);
+        updata_password = findViewById(R.id.updata_password);
+        fourg = findViewById(R.id.fourg);
     }
 
     private void initEvent() {
@@ -49,6 +57,17 @@ public class login_menu_Activity extends Activity implements View.OnClickListene
         about.setOnClickListener(this);
         question.setOnClickListener(this);
         logout.setOnClickListener(this);
+        updata_password.setOnClickListener(this);
+        fourg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Toast.makeText(login_menu_Activity.this, "Check", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(login_menu_Activity.this, "UnCheck", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -83,26 +102,56 @@ public class login_menu_Activity extends Activity implements View.OnClickListene
                 builder1.show();
                 break;
             case R.id.edit_user:
-                Toast.makeText(this, "edit_user", Toast.LENGTH_SHORT).show();
+                Intent editintent = new Intent(this, updata_Activity.class);
+                startActivityForResult(editintent, MyrequestCode);
+                break;
+            case R.id.updata_password:
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(login_menu_Activity.this);
+                LayoutInflater inflater2 = LayoutInflater.from(login_menu_Activity.this);
+                View viewDialog2 = inflater2.inflate(R.layout.password_validate, null);
+                EditText password = viewDialog2.findViewById(R.id.UserPassword);
+                Button submit = viewDialog2.findViewById(R.id.submit);
+                submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean flag = true;
+                        if (flag) {
+                            Intent intent = new Intent(login_menu_Activity.this, updata_password_Activity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(login_menu_Activity.this, "密码错误", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                builder2.setView(viewDialog2);
+                builder2.create();
+                builder2.show();
                 break;
             case R.id.fourg:
                 Toast.makeText(this, "4g", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.about:
-                AlertDialog.Builder builder = new AlertDialog.Builder(login_menu_Activity.this);
-                LayoutInflater inflater = LayoutInflater.from(login_menu_Activity.this);
-                View viewDialog = inflater.inflate(R.layout.about, null);
-                builder.setView(viewDialog);
-                builder.create();
-                builder.show();
+                AlertDialog.Builder builder3 = new AlertDialog.Builder(login_menu_Activity.this);
+                LayoutInflater inflater3 = LayoutInflater.from(login_menu_Activity.this);
+                View viewDialog3 = inflater3.inflate(R.layout.about, null);
+                builder3.setView(viewDialog3);
+                builder3.create();
+                builder3.show();
                 break;
             case R.id.question:
-                Intent intent = new Intent(this,add_question.class);
-                startActivity(intent);
+                Intent questionintent = new Intent(this, add_question.class);
+                startActivity(questionintent);
                 break;
             case R.id.logout:
                 Toast.makeText(this, "logout", Toast.LENGTH_SHORT).show();
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MyrequestCode && resultCode == RESULT_OK) {
+            Toast.makeText(this, "更新完成", Toast.LENGTH_SHORT).show();
         }
     }
 }
