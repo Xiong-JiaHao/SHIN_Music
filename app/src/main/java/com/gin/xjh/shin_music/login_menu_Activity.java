@@ -1,6 +1,7 @@
 package com.gin.xjh.shin_music;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -82,22 +83,20 @@ public class login_menu_Activity extends Activity implements View.OnClickListene
                 View viewDialog1 = inflater1.inflate(R.layout.login_layout, null);
                 EditText UserId = viewDialog1.findViewById(R.id.UserId);
                 EditText UserPassword = viewDialog1.findViewById(R.id.User_Password);
-                TextView register = viewDialog1.findViewById(R.id.register);
-                Button login = viewDialog1.findViewById(R.id.login);
-                register.setOnClickListener(new View.OnClickListener() {
+                builder1.setView(viewDialog1);
+                builder1.setPositiveButton("登录", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(login_menu_Activity.this, "login", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder1.setNegativeButton("注册", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
                         Intent registerintent = new Intent(login_menu_Activity.this, register_Activity.class);
                         startActivity(registerintent);
                     }
                 });
-                login.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(login_menu_Activity.this, "login", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder1.setView(viewDialog1);
                 builder1.create();
                 builder1.show();
                 break;
@@ -110,10 +109,10 @@ public class login_menu_Activity extends Activity implements View.OnClickListene
                 LayoutInflater inflater2 = LayoutInflater.from(login_menu_Activity.this);
                 View viewDialog2 = inflater2.inflate(R.layout.password_validate, null);
                 EditText password = viewDialog2.findViewById(R.id.UserPassword);
-                Button submit = viewDialog2.findViewById(R.id.submit);
-                submit.setOnClickListener(new View.OnClickListener() {
+                builder2.setView(viewDialog2);
+                builder2.setPositiveButton("提交", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(DialogInterface dialog, int which) {
                         boolean flag = true;
                         if (flag) {
                             Intent intent = new Intent(login_menu_Activity.this, updata_password_Activity.class);
@@ -123,7 +122,6 @@ public class login_menu_Activity extends Activity implements View.OnClickListene
                         }
                     }
                 });
-                builder2.setView(viewDialog2);
                 builder2.create();
                 builder2.show();
                 break;
