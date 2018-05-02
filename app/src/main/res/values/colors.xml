@@ -9,4 +9,5 @@
     <color name="UnCheck">#666666</color>
     <color name="Check">#444444</color>
     <color name="RED">#b30a0a</color>
+    <color name="BLACK">#000000</color>
 </resources>

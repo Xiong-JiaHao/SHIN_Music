@@ -22,9 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:src="@drawable/shin_bg"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:src="@drawable/shin_bg" />
 
             <ImageView
                 android:id="@+id/Topbar_setting"
@@ -68,7 +66,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
-                android:background="@drawable/btn_black" />
+                android:background="@drawable/btn_gray" />
         </LinearLayout>
     </LinearLayout>
 

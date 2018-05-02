@@ -25,7 +25,7 @@
         android:layout_height="2dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:background="@drawable/btn_black"></View>
+        android:background="@drawable/btn_gray"></View>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -81,7 +81,7 @@
         android:layout_height="2dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:background="@drawable/btn_black"></View>
+        android:background="@drawable/btn_gray"></View>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/album_rv"

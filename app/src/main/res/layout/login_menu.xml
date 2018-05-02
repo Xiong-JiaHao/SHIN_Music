@@ -20,7 +20,7 @@
                 android:id="@+id/go_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/back"/>
+                android:src="@drawable/go_back" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -30,7 +30,7 @@
             android:layout_height="2dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_black"></View>
+            android:background="@drawable/btn_gray"></View>
 
         <RelativeLayout
             android:id="@+id/User"
@@ -123,7 +123,7 @@
             android:layout_height="2dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_black" />
+            android:background="@drawable/btn_gray" />
 
         <LinearLayout
             android:id="@+id/updata_password"
@@ -152,7 +152,7 @@
             android:layout_height="2dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_black" />
+            android:background="@drawable/btn_gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -194,7 +194,7 @@
             android:layout_height="2dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_black" />
+            android:background="@drawable/btn_gray" />
 
         <LinearLayout
             android:id="@+id/about"
@@ -223,7 +223,7 @@
             android:layout_height="2dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_black" />
+            android:background="@drawable/btn_gray" />
 
         <LinearLayout
             android:id="@+id/question"
@@ -252,7 +252,7 @@
             android:layout_height="2dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_black" />
+            android:background="@drawable/btn_gray" />
 
     </LinearLayout>
 

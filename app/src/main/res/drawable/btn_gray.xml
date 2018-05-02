@@ -6,5 +6,5 @@
     <corners android:radius="5dip" />
     <!-- padding：Button里面的文字与Button边界的间隔 -->
 
-    <solid android:color="#707070"></solid>
+    <solid android:color="#909090"></solid>
 </shape>
