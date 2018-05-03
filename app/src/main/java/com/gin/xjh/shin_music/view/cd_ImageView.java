@@ -55,7 +55,7 @@ public class cd_ImageView extends android.support.v7.widget.AppCompatImageView {
         BitmapShader bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
 
         //计算缩放比例
-        mScale = (mRadius * 2.0f) / Math.min(bitmap.getHeight(), bitmap.getWidth());
+        mScale = (mRadius * 0.7f * 2.0f) / Math.min(bitmap.getHeight(), bitmap.getWidth());
 
         Matrix matrix = new Matrix();
         matrix.setScale(mScale, mScale);
@@ -69,7 +69,8 @@ public class cd_ImageView extends android.support.v7.widget.AppCompatImageView {
         xfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP);
         mPaint.setShader(bitmapShader);
         mPaint.setXfermode(xfermode);
-        canvas.drawCircle(mRadius, mRadius, (float) (mRadius * 0.75), mPaint);
+        canvas.translate(mRadius * 0.30f, mRadius * 0.30f);
+        canvas.drawCircle(mRadius * 0.7f, mRadius * 0.7f, mRadius * 0.7f, mPaint);
     }
 
     //写一个drawble转BitMap的方法
