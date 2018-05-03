@@ -4,11 +4,13 @@
     android:layout_height="match_parent"
     android:background="@color/FindColor"
     android:gravity="center"
+    android:padding="30dp"
     android:orientation="vertical">
 
     <com.gin.xjh.shin_music.view.cd_ImageView
-        android:layout_width="350dp"
-        android:layout_height="350dp"
+        android:id="@+id/album"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/dayemen" />
 
 </LinearLayout>
