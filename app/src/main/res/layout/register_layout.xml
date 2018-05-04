@@ -35,7 +35,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:text="用户名*："
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -44,8 +44,17 @@
             android:id="@+id/UserId"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="12"
             android:hint="请输入用户名" />
+
+        <ImageView
+            android:id="@+id/checkid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:src="@drawable/tick"
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -57,7 +66,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:text="密码*："
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -66,9 +75,18 @@
             android:id="@+id/UserPassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="12"
             android:hint="请输入密码"
             android:password="true" />
+
+        <ImageView
+            android:id="@+id/checkpassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:src="@drawable/tick"
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -80,7 +98,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:text="确认密码*："
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -89,9 +107,18 @@
             android:id="@+id/AgainPassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="12"
             android:hint="请再输入一遍密码"
             android:password="true" />
+
+        <ImageView
+            android:id="@+id/checkagainpassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:src="@drawable/tick"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
@@ -162,15 +189,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
+                android:id="@+id/man"
                 android:text="男" />
 
             <RadioButton
+                android:id="@+id/woman"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="女" />
 
             <RadioButton
+                android:id="@+id/alien"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

@@ -49,6 +49,22 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
     private void showbottomDialog() {
         Dialog bottomDialog = new Dialog(context, R.style.BottomDialog);
         View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_content_circle, null);
+        TextView ic_comment = contentView.findViewById(R.id.ic_comment);
+        ic_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //发消息告知弹出评论
+                Toast.makeText(context, "comment", Toast.LENGTH_SHORT).show();
+            }
+        });
+        TextView ic_play = contentView.findViewById(R.id.ic_play);
+        ic_play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //发通知告知打开音乐
+                Toast.makeText(context, "play", Toast.LENGTH_SHORT).show();
+            }
+        });
         bottomDialog.setContentView(contentView);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();
         params.width = context.getResources().getDisplayMetrics().widthPixels - DensityUtil.dp2px(context, 16f);
