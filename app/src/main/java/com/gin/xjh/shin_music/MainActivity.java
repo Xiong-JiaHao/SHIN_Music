@@ -21,6 +21,8 @@ import com.gin.xjh.shin_music.fragment.Fragment_Shin;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.Bmob;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar mTopbar;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bmob.initialize(this, "df98b1644c7d3aa94239034059791d40");
         setContentView(R.layout.activity_main);
         initView();
         initEvent();

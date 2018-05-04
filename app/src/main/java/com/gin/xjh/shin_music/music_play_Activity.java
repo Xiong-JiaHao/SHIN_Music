@@ -1,11 +1,16 @@
 package com.gin.xjh.shin_music;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -14,6 +19,7 @@ import android.widget.Toast;
 import com.gin.xjh.shin_music.adapter.FragmentAdapter;
 import com.gin.xjh.shin_music.fragment.Fragment_Lyrics;
 import com.gin.xjh.shin_music.fragment.Fragment_Music;
+import com.gin.xjh.shin_music.util.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,10 +111,11 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 fragment_VP.setCurrentItem(Index);
                 break;
             case R.id.ic_comment:
-                Toast.makeText(this, "ic_comment", Toast.LENGTH_SHORT).show();
+                Intent ic_comment_intent = new Intent(this, All_comment.class);
+                startActivity(ic_comment_intent);
                 break;
             case R.id.sz:
-                Toast.makeText(this, "sz", Toast.LENGTH_SHORT).show();
+                showbottomDialog();
                 break;
             case R.id.cycle_style:
                 Toast.makeText(this, "cycle_style", Toast.LENGTH_SHORT).show();
@@ -126,5 +133,18 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 Toast.makeText(this, "song_sheet", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void showbottomDialog() {
+        Dialog bottomDialog = new Dialog(this, R.style.BottomDialog);
+        View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content_circle, null);
+        bottomDialog.setContentView(contentView);
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();
+        params.width = getResources().getDisplayMetrics().widthPixels - DensityUtil.dp2px(this, 16f);
+        params.bottomMargin = DensityUtil.dp2px(this, 8f);
+        contentView.setLayoutParams(params);
+        bottomDialog.getWindow().setGravity(Gravity.BOTTOM);
+        bottomDialog.getWindow().setWindowAnimations(R.style.BottomDialog_Animation);
+        bottomDialog.show();
     }
 }

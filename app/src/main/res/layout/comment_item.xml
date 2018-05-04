@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/FragmentBGColor"
+    android:background="@color/FindColor"
     android:padding="5dp">
 
     <LinearLayout
@@ -12,20 +12,22 @@
         android:orientation="vertical">
 
         <TextView
+            android:layout_marginLeft="5dp"
             android:id="@+id/comment_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ginshin"
-            android:textColor="#ffffff"
+            android:textColor="@color/Ilike"
+            android:textStyle="bold"
             android:textSize="15sp" />
 
         <TextView
+            android:layout_margin="5dp"
             android:id="@+id/comment_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lines="1"
             android:text="hhhhhhhhhhhhhhhhhhh"
-            android:textColor="@color/FindColor"
             android:textSize="17sp" />
     </LinearLayout>
 

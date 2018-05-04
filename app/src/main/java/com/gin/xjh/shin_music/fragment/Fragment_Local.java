@@ -59,7 +59,6 @@ public class Fragment_Local extends Fragment {
             mSongList.clear();
         }
 
-        mSongList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             mSongList.add(new Song("反正我信了", "信", "反正我信了", "1111"));
         }

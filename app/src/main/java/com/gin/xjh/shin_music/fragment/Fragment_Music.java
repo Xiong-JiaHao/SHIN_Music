@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gin.xjh.shin_music.R;
+import com.gin.xjh.shin_music.view.cd_ImageView;
 
 /**
  * Created by Gin on 2018/4/23.
@@ -15,6 +16,7 @@ import com.gin.xjh.shin_music.R;
 
 public class Fragment_Music extends Fragment {
 
+    private cd_ImageView mAlbum;
 
     @Nullable
     @Override
@@ -26,12 +28,11 @@ public class Fragment_Music extends Fragment {
     }
 
     private void initView(View view) {
-
+        mAlbum = view.findViewById(R.id.album);
     }
 
     private void initEvent() {
-
-
+        mAlbum.start();
     }
 
 }

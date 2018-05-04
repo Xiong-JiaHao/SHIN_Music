@@ -72,7 +72,6 @@ public class Fragment_Online extends Fragment {
         } else {
             mSongList.clear();
         }
-        mSongList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             mSongList.add(new Song("反正我信了", "信", "反正我信了", "1111"));
         }

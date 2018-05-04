@@ -128,7 +128,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:background="@drawable/et"
+            android:background="@drawable/et1"
             android:gravity="start"
             android:padding="10dp" />
     </LinearLayout>
