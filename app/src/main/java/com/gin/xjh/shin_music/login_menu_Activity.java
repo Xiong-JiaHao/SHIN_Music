@@ -17,6 +17,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gin.xjh.shin_music.bean.User;
+
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+
 public class login_menu_Activity extends Activity implements View.OnClickListener {
 
     private ImageView go_back,User_img,User_Sex;
@@ -81,13 +89,35 @@ public class login_menu_Activity extends Activity implements View.OnClickListene
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(login_menu_Activity.this);
                 LayoutInflater inflater1 = LayoutInflater.from(login_menu_Activity.this);
                 View viewDialog1 = inflater1.inflate(R.layout.login_layout, null);
-                EditText UserId = viewDialog1.findViewById(R.id.UserId);
-                EditText UserPassword = viewDialog1.findViewById(R.id.User_Password);
+                final EditText UserId = viewDialog1.findViewById(R.id.UserId);
+                final EditText UserPassword = viewDialog1.findViewById(R.id.User_Password);
                 builder1.setView(viewDialog1);
                 builder1.setPositiveButton("登录", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(login_menu_Activity.this, "login", Toast.LENGTH_SHORT).show();
+                        String id = UserId.getText().toString();
+                        final String password = UserPassword.getText().toString();
+                        BmobQuery<User> query = new BmobQuery<>();
+                        query.addWhereEqualTo("UserId", id);
+                        query.findObjects(new FindListener<User>() {
+                            @Override
+                            public void done(List<User> list, BmobException e) {
+                                if (e == null) {
+                                    for(User user:list){
+                                        if(password.compareTo(user.getPassWord())==0){
+                                            //修改全局变量，保存对象，并且刷新界面
+                                            Toast.makeText(login_menu_Activity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            Toast.makeText(login_menu_Activity.this, "密码错误，请确认后重新输入", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                                else{
+                                    Toast.makeText(login_menu_Activity.this, "未找到该用户名，请核对后重新输入", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     }
                 });
                 builder1.setNegativeButton("注册", new DialogInterface.OnClickListener() {
