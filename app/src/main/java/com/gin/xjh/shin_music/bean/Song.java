@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class Song implements Serializable {
 
     private String SongName;//歌曲名字
-    private long SongId;//歌曲id
+    private String SongId;//歌曲id
     private String SingerName;//歌手名字
     private String AlbumName;//专辑名称
     private String Uri;//路径
@@ -20,11 +20,11 @@ public class Song implements Serializable {
         this.SingerName = SingerName;
         this.AlbumName = AlbumName;
         this.Uri = Uri;
-        SongId = -1;
+        SongId = "-1";
         AlbumUrl = "-1";
     }
 
-    public Song(String SongName, long Songid, String SingerName, String AlbumName, String Uri, String AlbumUrl) {
+    public Song(String SongName, String Songid, String SingerName, String AlbumName, String Uri, String AlbumUrl) {
         this.SongName = SongName;
         this.SongId = Songid;
         this.SingerName = SingerName;
@@ -34,7 +34,7 @@ public class Song implements Serializable {
     }
 
     public boolean isOnline() {
-        if (SongId == -1) {
+        if (SongId.compareTo("-1") == 0) {
             return false;
         }
         return true;
@@ -44,7 +44,7 @@ public class Song implements Serializable {
         return SongName;
     }
 
-    public long getSongId() {
+    public String getSongId() {
         return SongId;
     }
 

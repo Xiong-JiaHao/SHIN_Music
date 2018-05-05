@@ -6,16 +6,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.adapter.albumItemAdapter;
 import com.gin.xjh.shin_music.bean.Album;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 /**
  * Created by Gin on 2018/4/23.
@@ -33,7 +36,7 @@ public class Fragment_Shin extends Fragment {
         View view = inflater.inflate(R.layout.fragment_shin, null);
         initView(view);
         initData();
-        initEvent();
+        //initEvent();
         return view;
     }
 
@@ -41,24 +44,33 @@ public class Fragment_Shin extends Fragment {
         gridView = view.findViewById(R.id.gridview_shin);
     }
 
+
     private void initData() {
         dataList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            dataList.add(new Album("大爷们", "http://p3.music.126.net/AdIfGCIfxVOSe-x00EEFuw==/109951163167778043.jpg","1483027200007",35104037,"信"));
-        }
+        BmobQuery<Album> query = new BmobQuery<>();
+        query.findObjects(new FindListener<Album>() {
+            @Override
+            public void done(List<Album> list, BmobException e) {
+                Collections.sort(list, new SortByTime());
+                dataList = list;
+                initEvent();
+            }
+        });
+
     }
 
     private void initEvent() {
         //GridView
         adapter = new albumItemAdapter(getContext(), dataList);
         gridView.setAdapter(adapter);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Toast.makeText(getContext(), "check " + arg2, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
+    private class SortByTime implements java.util.Comparator {
+        @Override
+        public int compare(Object o1, Object o2) {
+            Album a = (Album) o1;
+            Album b = (Album) o2;
+            return -a.getTimes().compareTo(b.getTimes());
+        }
+    }
 }

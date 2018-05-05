@@ -3,8 +3,6 @@ package com.gin.xjh.shin_music.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,10 +60,8 @@ public class albumItemAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        //测试
-        Drawable drawable = mContext.getResources().getDrawable(R.drawable.dayemen);
-        BitmapDrawable bd = (BitmapDrawable) drawable;
-        Bitmap bitmap = bd.getBitmap();
+
+        Bitmap bitmap = getHttpBitmap(mList.get(position).getAlbumUrl());
         holder.shin_Img.setImageBitmap(bitmap);
         holder.shin_Text.setText(mList.get(position).getAlbumName());
         holder.shin_Img.setOnClickListener(new View.OnClickListener() {
@@ -83,4 +79,19 @@ public class albumItemAdapter extends BaseAdapter {
         private TextView shin_Text;
         private ImageView shin_Img;
     }
+
+    /**
+     * 获取网络图片资源
+     *
+     * @param url
+     * @return
+     */
+    public static Bitmap getHttpBitmap(String url) {
+        Bitmap bitmap = null;
+
+
+        return bitmap;
+
+    }
+
 }
