@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Comment;
+import com.gin.xjh.shin_music.util.TimesUtil;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -53,20 +55,24 @@ public class commentRecyclerViewAdapter extends RecyclerView.Adapter<commentRecy
         }
 
         public void load(Comment comment, final Context context) {
-            itemName.setText(comment.getUserName());
-            itemComment.setText(comment.getMyComment());
-            itemTimes.setText(comment.getTimes());
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    LayoutInflater inflater = LayoutInflater.from(context);
-                    View viewDialog = inflater.inflate(R.layout.comment_details, null);
-                    builder.setView(viewDialog);
-                    builder.create();
-                    builder.show();
-                }
-            });
+            try {
+                itemName.setText(comment.getUserName());
+                itemComment.setText(comment.getMyComment());
+                itemTimes.setText(TimesUtil.longToString(comment.getTimes(), "yyyy-MM-dd HH:mm:ss"));
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        LayoutInflater inflater = LayoutInflater.from(context);
+                        View viewDialog = inflater.inflate(R.layout.comment_details, null);
+                        builder.setView(viewDialog);
+                        builder.create();
+                        builder.show();
+                    }
+                });
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

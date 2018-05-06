@@ -12,7 +12,6 @@ import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.adapter.albumItemAdapter;
 import com.gin.xjh.shin_music.bean.Album;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,7 +45,6 @@ public class Fragment_Shin extends Fragment {
 
 
     private void initData() {
-        dataList = new ArrayList<>();
         BmobQuery<Album> query = new BmobQuery<>();
         query.findObjects(new FindListener<Album>() {
             @Override

@@ -3,10 +3,6 @@ package com.gin.xjh.shin_music.util;
 import android.content.Context;
 import android.util.TypedValue;
 
-/**
- * Created by XiaoJianjun on 2016/9/1.
- * 像素转换工具类.
- */
 public class DensityUtil {
     /**
      * dp转px

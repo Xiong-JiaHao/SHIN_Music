@@ -10,14 +10,20 @@ public class Comment extends BmobObject{
 
     private String UserName;//用户名称
     private String UserId;//用户ID
+    private String SongId;//歌曲
     private String MyComment;//评论内容
-    private String Times;//时间
+    private Long Times;//时间
 
-    public Comment(String UserName,String UserId, String MyComment, String Times) {
+    public Comment(String UserName, String UserId, String SongId, String MyComment, Long Times) {
         this.UserName = UserName;
         this.UserId = UserId;
+        this.SongId = SongId;
         this.MyComment = MyComment;
         this.Times = Times;
+    }
+
+    public String getSongId() {
+        return SongId;
     }
 
     public String getUserId() {
@@ -32,7 +38,7 @@ public class Comment extends BmobObject{
         return MyComment;
     }
 
-    public String getTimes() {
+    public Long getTimes() {
         return Times;
     }
 

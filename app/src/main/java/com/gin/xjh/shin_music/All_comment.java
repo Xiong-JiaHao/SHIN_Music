@@ -13,20 +13,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.gin.xjh.shin_music.adapter.commentRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Comment;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 
 public class All_comment extends Activity implements View.OnClickListener {
 
     private ImageView go_back, write_comment;
     private RecyclerView comment_rv;
 
-    private List<Comment> mCommentList = null;
+    private List<Comment> mCommentList;
     private commentRecyclerViewAdapter mCommentRecyclerViewAdapter;
 
 
@@ -36,7 +41,6 @@ public class All_comment extends Activity implements View.OnClickListener {
         setContentView(R.layout.all_comment);
         initView();
         initData();
-        initEvent();
     }
 
     private void initView() {
@@ -46,14 +50,18 @@ public class All_comment extends Activity implements View.OnClickListener {
     }
 
     private void initData() {
-        if (mCommentList == null) {
-            mCommentList = new ArrayList<>();
-        } else {
-            mCommentList.clear();
-        }
-        for (int i = 0; i < 20; i++) {
-            mCommentList.add(new Comment("ginshin", "ginshin", "hhhhhhhhhhhhhhhhhhhhhhhhhhh", "2018-5-4 18:06"));
-        }
+        BmobQuery<Comment> query = new BmobQuery<>();
+        query.addWhereEqualTo("SongId", "1");
+        query.findObjects(new FindListener<Comment>() {
+            @Override
+            public void done(List<Comment> list, BmobException e) {
+                if (e == null) {
+                    Collections.sort(list, new SortByTime());
+                    mCommentList = list;
+                    initEvent();
+                }
+            }
+        });
     }
 
     private void initEvent() {
@@ -77,19 +85,35 @@ public class All_comment extends Activity implements View.OnClickListener {
                 AlertDialog.Builder builder = new AlertDialog.Builder(All_comment.this);
                 LayoutInflater inflater = LayoutInflater.from(All_comment.this);
                 View viewDialog = inflater.inflate(R.layout.add_comment, null);
-                EditText Personal_profile = viewDialog.findViewById(R.id.Personal_profile);
+                final EditText Personal_profile = viewDialog.findViewById(R.id.Personal_profile);
                 builder.setView(viewDialog);
                 builder.setTitle("添加评论(100字以内)：");
                 builder.setPositiveButton("提交评论", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(All_comment.this, "add", Toast.LENGTH_SHORT).show();
+                        Date date = new Date();
+                        Comment comment = new Comment("ginshin", "ginshin", "1", Personal_profile.getText().toString(), date.getTime());
+                        comment.save(new SaveListener<String>() {
+                            @Override
+                            public void done(String s, BmobException e) {
+
+                            }
+                        });
                     }
                 });
                 builder.setNegativeButton("取消", null);
                 builder.create();
                 builder.show();
                 break;
+        }
+    }
+
+    private class SortByTime implements java.util.Comparator {
+        @Override
+        public int compare(Object o1, Object o2) {
+            Comment a = (Comment) o1;
+            Comment b = (Comment) o2;
+            return -a.getTimes().compareTo(b.getTimes());
         }
     }
 }
