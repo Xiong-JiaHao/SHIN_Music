@@ -11,6 +11,10 @@ public class User extends BmobObject {
     private int UserSex;
     private String Personal_profile;
 
+    public User() {
+
+    }
+
     public User(String UserId, String UserName, String PassWord, String UserQQ, int UserSex, String Personal_profile) {
         this.UserId = UserId;
         this.UserName = UserName;
@@ -42,5 +46,25 @@ public class User extends BmobObject {
 
     public String getPersonal_profile() {
         return Personal_profile;
+    }
+
+    public void setUserName(String userName) {
+        UserName = userName;
+    }
+
+    public void setPassWord(String passWord) {
+        PassWord = passWord;
+    }
+
+    public void setUserSex(int userSex) {
+        UserSex = userSex;
+    }
+
+    public void setUserQQ(String userQQ) {
+        UserQQ = userQQ;
+    }
+
+    public void setPersonal_profile(String personal_profile) {
+        Personal_profile = personal_profile;
     }
 }

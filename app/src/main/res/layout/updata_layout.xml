@@ -92,18 +92,21 @@
             android:orientation="horizontal">
 
             <RadioButton
+                android:id="@+id/man"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="男" />
 
             <RadioButton
+                android:id="@+id/woman"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="女" />
 
             <RadioButton
+                android:id="@+id/alien"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -126,6 +129,7 @@
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/UserSign"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:background="@drawable/et1"
@@ -134,6 +138,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"

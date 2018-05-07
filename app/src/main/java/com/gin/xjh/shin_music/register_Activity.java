@@ -1,6 +1,7 @@
 package com.gin.xjh.shin_music;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.gin.xjh.shin_music.User.User_state;
 import com.gin.xjh.shin_music.bean.User;
 
 import java.util.List;
@@ -64,18 +66,22 @@ public class register_Activity extends Activity implements View.OnClickListener 
                 break;
             case R.id.submit:
                 if (check()) {
-                    User user = new User(user_Id, user_Name, password, user_QQ, usersex, personal_profile);
+                    final User user = new User(user_Id, user_Name, password, user_QQ, usersex, personal_profile);
                     user.save(new SaveListener<String>() {
                         @Override
                         public void done(String s, BmobException e) {
                             if (e == null) {
+                                User_state.Login(user);
+                                Intent intent = new Intent();
+                                intent.putExtra("User", "yes");
                                 Toast.makeText(register_Activity.this, "注册成功，正在登录...", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK, intent);
+                                finish();
                             } else {
                                 Toast.makeText(register_Activity.this, "注册失败，请重新注册，如果还失败请联系我们，联系方式详见关于", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-                    finish();
                 }
                 break;
         }
@@ -83,22 +89,8 @@ public class register_Activity extends Activity implements View.OnClickListener 
 
     private boolean check() {
         user_Id = User_Id.getText().toString();
-        user_Name = User_Name.getText().toString();
         password = Password.getText().toString();
         againpassword = AgainPassWord.getText().toString();
-        user_QQ = User_QQ.getText().toString();
-        personal_profile = Personal_profile.getText().toString();
-        switch (UserSex.getCheckedRadioButtonId()) {
-            case R.id.man:
-                usersex = 0;
-                break;
-            case R.id.woman:
-                usersex = 1;
-                break;
-            case R.id.alien:
-                usersex = 2;
-                break;
-        }
         final String[] str = {""};
         checkagainpassword.setVisibility(View.VISIBLE);
         checkpassword.setVisibility(View.VISIBLE);
@@ -110,15 +102,41 @@ public class register_Activity extends Activity implements View.OnClickListener 
             public void done(List<User> list, BmobException e) {
                 if (e == null) {
                     str[0] += "用户名已有，请重新选择";
+                    User_Id.setText("");
                     checkid.setImageResource(R.drawable.fork);
                 }
             }
         });
         if (password.compareTo(againpassword) != 0) {
             str[0] += "\n两次密码不正确";
+            Password.setText("");
+            AgainPassWord.setText("");
             checkagainpassword.setImageResource(R.drawable.fork);
         }
         if (str[0].compareTo("") == 0) {
+            user_QQ = User_QQ.getText().toString();
+            personal_profile = Personal_profile.getText().toString();
+            user_Name = User_Name.getText().toString();
+            switch (UserSex.getCheckedRadioButtonId()) {
+                case R.id.man:
+                    usersex = 0;
+                    break;
+                case R.id.woman:
+                    usersex = 1;
+                    break;
+                case R.id.alien:
+                    usersex = 2;
+                    break;
+                default:
+                    usersex = 0;
+            }
+            if (user_QQ.compareTo("") == 0) {
+                user_QQ = "未知哦";
+            } else if (user_Name.compareTo("") == 0) {
+                user_Name = user_Id;
+            } else if (personal_profile.compareTo("") == 0) {
+                personal_profile = "Ta很神秘，什么都没有写";
+            }
             return true;
         } else {
             Toast.makeText(this, str[0], Toast.LENGTH_SHORT).show();
