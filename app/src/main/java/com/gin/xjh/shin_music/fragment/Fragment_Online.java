@@ -16,10 +16,10 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.adapter.recommendmusicRecyclerViewAdapter;
+import com.gin.xjh.shin_music.album_details_Activity;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_details_Activity;
 
@@ -45,6 +45,9 @@ public class Fragment_Online extends Fragment {
     private EditText mFind = null;
     private ImageView mCheck;
 
+    private int[] bitmapids = new int[]{R.drawable.newsong, R.drawable.hotsong, R.drawable.original, R.drawable.hiphop, R.drawable.acgsong, R.drawable.electricsong};
+    private String[] bitmapname = new String[]{"新歌榜", "热歌榜", "原创榜", "嘻哈榜", "ACG榜", "电音榜"};
+    private int[] ids = new int[]{0, 1, 2, 23, 22, 4};
 
     @Nullable
     @Override
@@ -79,8 +82,8 @@ public class Fragment_Online extends Fragment {
         dataList = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             Map<String, Object> map = new HashMap<>();
-            map.put("img", R.drawable.test);
-            map.put("text", "摇滚");
+            map.put("img", bitmapids[i]);
+            map.put("text", bitmapname[i]);
             dataList.add(map);
         }
 
@@ -106,7 +109,12 @@ public class Fragment_Online extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Toast.makeText(getContext(), "check " + arg2, Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(getContext(), album_details_Activity.class);
+                intent.putExtra("isAlbum", false);
+                intent.putExtra("name", bitmapname[arg2]);
+                intent.putExtra("id", ids[arg2]);
+                startActivity(intent);
             }
         });
 

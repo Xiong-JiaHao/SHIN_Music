@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:src="@drawable/test" />
+        android:src="@drawable/newsong" />
 
     <TextView
         android:id="@+id/music_text"
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="5dp"
-        android:text="流行"
+        android:text="新歌榜"
         android:textColor="@color/FindColor"
         android:textSize="15sp" />
 

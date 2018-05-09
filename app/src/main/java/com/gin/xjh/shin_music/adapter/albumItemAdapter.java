@@ -91,6 +91,7 @@ public class albumItemAdapter extends BaseAdapter {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("album",mList.get(position));
                 intent.putExtra("album",bundle);
+                intent.putExtra("isAlbum", true);
                 mContext.startActivity(intent);
             }
         });
