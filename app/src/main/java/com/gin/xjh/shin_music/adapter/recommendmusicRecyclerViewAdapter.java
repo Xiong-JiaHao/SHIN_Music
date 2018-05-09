@@ -60,7 +60,7 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
         public void load(Song song, final Context context) {
             SongName.setText(song.getSongName());
             SingerName.setText(song.toString());
-            Drawable drawable = context.getResources().getDrawable(R.drawable.dayemen);
+            Drawable drawable = context.getResources().getDrawable(R.drawable.album);
             BitmapDrawable bd = (BitmapDrawable) drawable;
             Bitmap bitmap = bd.getBitmap();
             cover.setImageBitmap(bitmap);//测试

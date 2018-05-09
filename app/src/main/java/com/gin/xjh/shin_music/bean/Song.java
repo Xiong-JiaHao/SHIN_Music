@@ -2,11 +2,13 @@ package com.gin.xjh.shin_music.bean;
 
 import java.io.Serializable;
 
+import cn.bmob.v3.BmobObject;
+
 /**
  * Created by Gin on 2018/4/24.
  */
 
-public class Song implements Serializable {
+public class Song extends BmobObject implements Serializable {
 
     private String SongName;//歌曲名字
     private String SongId;//歌曲id

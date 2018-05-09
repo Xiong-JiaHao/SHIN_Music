@@ -29,12 +29,14 @@ public class cd_ImageView extends android.support.v7.widget.AppCompatImageView {
 
         @Override
         public void run() {
-            degree += 2f;
-            if (degree > 360f) {
-                degree -= 360f;
+            synchronized (cd_ImageView.class) {
+                degree += 2f;
+                if (degree > 360f) {
+                    degree -= 360f;
+                }
+                invalidate();//重新绘制View
+                handler.postDelayed(this, 16l);
             }
-            invalidate();//重新绘制View
-            handler.postDelayed(this, 16l);
         }
     };
 

@@ -37,7 +37,7 @@
             android:id="@+id/album_img"
             android:layout_width="180dp"
             android:layout_height="180dp"
-            android:src="@drawable/dayemen" />
+            android:src="@drawable/album" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -82,6 +82,16 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:background="@drawable/btn_gray"></View>
+
+    <TextView
+        android:id="@+id/album_hint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="正在加载歌曲数据，请稍后..."
+        android:textColor="@color/FindColor"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/album_rv"
