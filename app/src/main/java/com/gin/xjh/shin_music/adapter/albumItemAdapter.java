@@ -1,9 +1,7 @@
 package com.gin.xjh.shin_music.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +13,8 @@ import android.widget.TextView;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.album_details_Activity;
 import com.gin.xjh.shin_music.bean.Album;
-import com.gin.xjh.shin_music.util.DownloadBitmapUtil;
+import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.List;
 
 public class albumItemAdapter extends BaseAdapter {
@@ -63,26 +60,10 @@ public class albumItemAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        final Bitmap[] bitmap = {null};
-        new Thread() {
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                try {
-                    bitmap[0] = DownloadBitmapUtil.getHttpBitmap(mList.get(position).getAlbumUrl());
-                    Activity activity = (Activity) holder.shin_Img.getContext();
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.shin_Img.setImageBitmap(bitmap[0]);
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+        Picasso.with(mContext).load(mList.get(position).getAlbumUrl())
+                .placeholder(R.drawable.album)
+                .error(R.drawable.album)
+                .into(holder.shin_Img);
         holder.shin_Text.setText(mList.get(position).getAlbumName());
         holder.shin_Img.setOnClickListener(new View.OnClickListener() {
             @Override

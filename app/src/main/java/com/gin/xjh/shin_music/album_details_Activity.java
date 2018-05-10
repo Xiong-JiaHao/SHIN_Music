@@ -2,7 +2,6 @@ package com.gin.xjh.shin_music;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -13,10 +12,9 @@ import android.widget.TextView;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.Song;
-import com.gin.xjh.shin_music.util.DownloadBitmapUtil;
 import com.gin.xjh.shin_music.util.TimesUtil;
+import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,24 +64,10 @@ public class album_details_Activity extends Activity implements View.OnClickList
     private void initEvent() {
         go_back.setOnClickListener(this);
         if (isAlbum) {
-            final Bitmap[] bitmap = {null};
-            new Thread() {
-                @Override
-                public void run() {
-                    // TODO Auto-generated method stub
-                    try {
-                        bitmap[0] = DownloadBitmapUtil.getHttpBitmap(album.getAlbumUrl());
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                album_img.setImageBitmap(bitmap[0]);
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }.start();
+            Picasso.with(this).load(album.getAlbumUrl())
+                    .placeholder(R.drawable.album)
+                    .error(R.drawable.album)
+                    .into(album_img);
             album_singer.setText("歌手：" + album.getSinger());
             album_name.setText(album.getAlbumName());
             try {
