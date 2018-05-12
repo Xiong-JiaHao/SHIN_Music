@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.util.Constant;
+import com.gin.xjh.shin_music.util.NetUtile;
 import com.gin.xjh.shin_music.util.TimesUtil;
 import com.squareup.picasso.Picasso;
 
@@ -83,13 +86,27 @@ public class album_details_Activity extends Activity implements View.OnClickList
     }
 
     private void updateBmobEvent() {
-
-        String str = "chouchou.can2.moe:3000/album?id=" + album.getAlbumId();
+        String str = Constant.URL_BASE + "/album?id=" + album.getAlbumId();
+        Log.d("ginshin", NetUtile.getJson(str));
+//        try {
+//            String str = Constant.URL_BASE+"/album?id=" + album.getAlbumId();
+//            JSONArray jsonArray = new JSONArray(NetUtile.getJson(str));
+//            for (int i = 0; i< jsonArray.length(); i++) {
+//                //循环遍历，依次取出JSONObject对象
+//                //用getInt和getString方法取出对应键值
+//                JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                int stu_no = jsonObject.getInt("stu_no");
+//                String stu_name = jsonObject.getString("stu_name");
+//                String stu_sex = jsonObject.getString("stu_sex");
+//
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void updateOnlineEvent() {
-
-        String str = "chouchou.can2.moe:3000/top/list?idx=" + id;
+        String str = Constant.URL_BASE + "/top/list?idx=" + id;
     }
 
     @Override
