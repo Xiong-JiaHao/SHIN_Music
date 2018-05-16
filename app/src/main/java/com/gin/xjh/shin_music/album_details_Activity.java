@@ -4,14 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gin.xjh.shin_music.Net_Request.getNetAblum;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.util.Constant;
 import com.gin.xjh.shin_music.util.TimesUtil;
 import com.squareup.picasso.Picasso;
 
@@ -22,8 +23,7 @@ import java.util.List;
 public class album_details_Activity extends Activity implements View.OnClickListener {
 
     private ImageView go_back,album_img;
-    private TextView album_name, album_singer, album_times, album_hint;
-    private RecyclerView album_rv;
+    private TextView album_name, album_singer, album_times;
 
     private List<Song> mSongList;
     private musicRecyclerViewAdapter mMusicListViewAdapter;
@@ -53,8 +53,6 @@ public class album_details_Activity extends Activity implements View.OnClickList
         album_name = findViewById(R.id.album_name);
         album_singer = findViewById(R.id.album_singer);
         album_times = findViewById(R.id.album_times);
-        album_rv = findViewById(R.id.album_rv);
-        album_hint = findViewById(R.id.album_hint);
     }
 
     private void initData() {
@@ -75,21 +73,20 @@ public class album_details_Activity extends Activity implements View.OnClickList
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            //updateBmobEvent();
+            updateBmobEvent();
         } else {
             album_name.setText(name);
-            //updateOnlineEvent();
+            updateOnlineEvent();
         }
     }
 
     private void updateBmobEvent() {
-
-        String str = "chouchou.can2.moe:3000/album?id=" + album.getAlbumId();
+        new getNetAblum().getJson(album.getAlbumId(), findViewById(R.id.album_rv), findViewById(R.id.album_hint), this);
     }
 
     private void updateOnlineEvent() {
 
-        String str = "chouchou.can2.moe:3000/top/list?idx=" + id;
+        String str = Constant.URL_BASE + "top/list?idx=" + id + "/";
     }
 
     @Override
