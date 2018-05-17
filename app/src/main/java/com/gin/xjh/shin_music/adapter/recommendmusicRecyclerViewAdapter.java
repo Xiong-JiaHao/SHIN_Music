@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -23,11 +24,11 @@ import java.util.List;
 
 public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<recommendmusicRecyclerViewAdapter.MusicViewHolder> {
     public List<Song> list;
-    private Context context;
+    private Context mContext;
 
     public recommendmusicRecyclerViewAdapter(Context context, List<Song> list) {
         this.list = list;
-        this.context = context;
+        this.mContext = context;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
     //绑定视图
     @Override
     public void onBindViewHolder(recommendmusicRecyclerViewAdapter.MusicViewHolder holder, int position) {
-        holder.load(list.get(position), context);
+        holder.load(list.get(position), mContext);
     }
 
     @Override
@@ -60,10 +61,10 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
         public void load(Song song, final Context context) {
             SongName.setText(song.getSongName());
             SingerName.setText(song.toString());
-            Drawable drawable = context.getResources().getDrawable(R.drawable.album);
-            BitmapDrawable bd = (BitmapDrawable) drawable;
-            Bitmap bitmap = bd.getBitmap();
-            cover.setImageBitmap(bitmap);//测试
+            Picasso.with(mContext).load(song.getAlbumUrl())
+                    .placeholder(R.drawable.album)
+                    .error(R.drawable.album)
+                    .into(cover);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

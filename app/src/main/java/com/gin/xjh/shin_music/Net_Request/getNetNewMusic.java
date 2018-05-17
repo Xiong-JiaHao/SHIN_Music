@@ -12,8 +12,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.gin.xjh.shin_music.Interface.RequestServices;
+import com.gin.xjh.shin_music.Interface.RequestServices_MusicList;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
+import com.gin.xjh.shin_music.adapter.recommendmusicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.util.Constant;
 
@@ -30,14 +31,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class getNetAblum {
+public class getNetNewMusic {
 
-    private RecyclerView album_rv;
-    private TextView album_hint;
+    private RecyclerView mRecyclerView;
+    private TextView music_list_hint;
     private Context mContext;
 
     private List<Song> mSongList;
-    private musicRecyclerViewAdapter mMusicRecyclerViewAdapter;
+    private recommendmusicRecyclerViewAdapter mRecommendmusicRecyclerViewAdapter;
 
     private static final int REQUEST_SUCCESS = 200;
 
@@ -53,11 +54,13 @@ public class getNetAblum {
                 if (msg.what == REQUEST_SUCCESS) {
                     try {
                         String result = (String) msg.obj;
-                        JSONArray All = new JSONArray(result);
-                        JSONObject AllObject = All.getJSONObject(0);
-                        String JSONString = AllObject.getString("songs");
+                        JSONObject AllObject = new JSONObject(result);
+                        String ListString = AllObject.getString("playlist");
+                        JSONObject ListObject = new JSONObject(ListString);
+                        String JSONString = ListObject.getString("tracks");
                         JSONArray jsonArray = new JSONArray(JSONString);
-                        for (int i = 0; i < jsonArray.length(); i++) {
+                        int len = Math.min(50,jsonArray.length());
+                        for (int i = 0; i < len; i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                             //歌手
@@ -65,21 +68,26 @@ public class getNetAblum {
                             JSONArray arArray = new JSONArray(ar);
                             JSONObject arObject = arArray.getJSONObject(0);
                             String Singer = arObject.getString("name");
+                            Long SingerId = arObject.getLong("id");
 
                             //专辑
                             String al = jsonObject.getString("al");
-                            JSONArray alArray = new JSONArray(al);
-                            JSONObject alObject = alArray.getJSONObject(0);
+                            JSONObject alObject = new JSONObject(al);
                             String AlbumName = alObject.getString("name");
                             String AlbumUri = alObject.getString("picUrl");
-                            mSongList.add(new Song(jsonObject.getString("name"), jsonObject.getLong("id"), Singer, AlbumName, AlbumUri));
+                            Song song = new Song(jsonObject.getString("name"), jsonObject.getLong("id"), Singer, SingerId, AlbumName, AlbumUri);
+                            mSongList.add(song);
                         }
-                        album_hint.setVisibility(View.GONE);
-                        mMusicRecyclerViewAdapter = new musicRecyclerViewAdapter(mContext, mSongList);
-                        album_rv.setLayoutManager(new LinearLayoutManager(mContext));
-                        album_rv.setItemAnimator(new DefaultItemAnimator());//默认动画
-                        album_rv.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
-                        album_rv.setAdapter(mMusicRecyclerViewAdapter);
+
+                        //RecyclerView
+                        mRecommendmusicRecyclerViewAdapter = new recommendmusicRecyclerViewAdapter(mContext, mSongList);
+                        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+                        mRecyclerView.setItemAnimator(new DefaultItemAnimator());//默认动画
+                        mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
+                        mRecyclerView.setAdapter(mRecommendmusicRecyclerViewAdapter);
+
+                        //取消加载提醒
+                        music_list_hint.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -88,16 +96,16 @@ public class getNetAblum {
         };
     }
 
-    public void getJson(String id, View album_rv, View album_hint, Context mContext) {
-        this.album_rv = (RecyclerView) album_rv;
-        this.album_hint = (TextView) album_hint;
+    public void getJson(int id, View mRecyclerView, View music_list_hint, Context mContext) {
+        this.mRecyclerView = (RecyclerView) mRecyclerView;
+        this.music_list_hint = (TextView) music_list_hint;
         this.mContext = mContext;
         mSongList = new ArrayList<>();
         obtainMainHandler();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constant.URL_BASE)
                 .build();
-        RequestServices requestServices = retrofit.create(RequestServices.class);
+        RequestServices_MusicList requestServices = retrofit.create(RequestServices_MusicList.class);
         retrofit2.Call<ResponseBody> call = requestServices.getString(id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override

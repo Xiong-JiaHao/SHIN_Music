@@ -13,6 +13,7 @@ public class Song extends BmobObject implements Serializable {
     private String SongName;//歌曲名字
     private Long SongId;//歌曲id
     private String SingerName;//歌手名字
+    private Long SingerId;//歌手ID
     private String AlbumName;//专辑名称
     private String Uri;//路径
     private String AlbumUrl;//专辑图片路径
@@ -26,10 +27,11 @@ public class Song extends BmobObject implements Serializable {
         AlbumUrl = "-1";
     }
 
-    public Song(String SongName, Long Songid, String SingerName, String AlbumName, String AlbumUrl) {
+    public Song(String SongName, Long Songid, String SingerName, Long SingerId, String AlbumName, String AlbumUrl) {
         this.SongName = SongName;
         this.SongId = Songid;
         this.SingerName = SingerName;
+        this.SingerId = SingerId;
         this.AlbumName = AlbumName;
         this.AlbumUrl = AlbumUrl;
         Uri = null;
@@ -68,6 +70,14 @@ public class Song extends BmobObject implements Serializable {
 
     public String getAlbumUrl() {
         return AlbumUrl;
+    }
+
+    public Long getSingerId() {
+        return SingerId;
+    }
+
+    public void setSingerId(Long singerId) {
+        SingerId = singerId;
     }
 
     @Override

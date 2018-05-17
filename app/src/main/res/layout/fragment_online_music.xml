@@ -56,6 +56,16 @@
         android:gravity="center"
         android:text="热门音乐" />
 
+    <TextView
+        android:id="@+id/new_Song_hint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="正在加载歌曲数据，请稍后..."
+        android:textColor="@color/FindColor"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_recommend_music_list"
         android:layout_width="match_parent"

@@ -17,6 +17,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 
+import com.gin.xjh.shin_music.Net_Request.getNetNewMusic;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.adapter.recommendmusicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.album_details_Activity;
@@ -34,10 +35,6 @@ import java.util.Map;
 
 public class Fragment_Online extends Fragment {
 
-    private List<Song> mSongList = null;
-    private RecyclerView mRecyclerView;
-    private recommendmusicRecyclerViewAdapter mRecommendmusicRecyclerViewAdapter;
-
     private GridView gridView;
     private List<Map<String, Object>> dataList;
     private SimpleAdapter adapter;
@@ -45,40 +42,32 @@ public class Fragment_Online extends Fragment {
     private EditText mFind = null;
     private ImageView mCheck;
 
-    private int[] bitmapids = new int[]{R.drawable.newsong, R.drawable.hotsong, R.drawable.original, R.drawable.hiphop, R.drawable.acgsong, R.drawable.electricsong};
-    private String[] bitmapname = new String[]{"新歌榜", "热歌榜", "原创榜", "嘻哈榜", "ACG榜", "电音榜"};
-    private int[] ids = new int[]{0, 1, 2, 23, 22, 4};
-
+    private int[] bitmapids = new int[]{R.drawable.top, R.drawable.hitfmtop, R.drawable.billboard, R.drawable.classical, R.drawable.hiphop, R.drawable.electricsong};
+    private String[] bitmapname = new String[]{"中国Top榜", "HitFMTop榜", "Billboard榜", "金曲榜", "嘻哈榜", "电音榜"};
+    private int[] ids = new int[]{14, 9, 6, 17, 18, 4};
+    private String[] bitmapUrl = new String[]{"http://p1.music.126.net/d8faOLHxwWPta02fskrdDQ==/2057186255569164.jpg",
+                                                "http://p1.music.126.net/ZRvvfxWy6l12Kzth56Jzaw==/2034096511385987.jpg",
+                                                "http://p1.music.126.net/BmeUMF4Cr0f343lCwj1_7Q==/2105564767199852.jpg",
+                                                "http://p1.music.126.net/N2whh2Prf0l8QHmCpShrcQ==/19140298416347251.jpg",
+                                                "http://p1.music.126.net/tgLdvFIFcKAx24QCrYdYPw==/19071029184053433.jpg",
+                                                "http://chuantu.biz/t6/313/1526562910x-1404793351.png"};
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_online_music, null);
         initView(view);
         initData();
-        initEvent();
+        initEvent(view);
         return view;
     }
 
     private void initView(View view) {
-        mRecyclerView = view.findViewById(R.id.fragment_recommend_music_list);
         gridView = view.findViewById(R.id.Online_music_gv);
         mFind = view.findViewById(R.id.find_online_name);
         mCheck = view.findViewById(R.id.find_Onlinemusic);
     }
 
     private void initData() {
-        /**
-         * 测试
-         */
-        if (mSongList == null) {
-            mSongList = new ArrayList<>();
-        } else {
-            mSongList.clear();
-        }
-        for (int i = 0; i < 10; i++) {
-            mSongList.add(new Song("反正我信了", "信", "反正我信了"));
-        }
-
         dataList = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             Map<String, Object> map = new HashMap<>();
@@ -89,15 +78,7 @@ public class Fragment_Online extends Fragment {
 
     }
 
-    private void initEvent() {
-
-        //RecyclerView
-        mRecommendmusicRecyclerViewAdapter = new recommendmusicRecyclerViewAdapter(getContext(), mSongList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());//默认动画
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        mRecyclerView.setAdapter(mRecommendmusicRecyclerViewAdapter);
-
+    private void initEvent(View view) {
 
         //GridView
         String[] from = {"img", "text"};
@@ -114,9 +95,13 @@ public class Fragment_Online extends Fragment {
                 intent.putExtra("isAlbum", false);
                 intent.putExtra("name", bitmapname[arg2]);
                 intent.putExtra("id", ids[arg2]);
+                intent.putExtra("url",bitmapUrl[arg2]);
                 startActivity(intent);
             }
         });
+
+        //RecyclerView
+        new getNetNewMusic().getJson(0,view.findViewById(R.id.fragment_recommend_music_list),view.findViewById(R.id.new_Song_hint),getContext());
 
         mCheck.setOnClickListener(new View.OnClickListener() {
             @Override
