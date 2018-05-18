@@ -18,11 +18,11 @@ public class Song extends BmobObject implements Serializable {
     private String Uri;//路径
     private String AlbumUrl;//专辑图片路径
 
-    public Song(String SongName, String SingerName, String AlbumName) {
+    public Song(String SongName, String SingerName, String AlbumName, String Url) {
         this.SongName = SongName;
         this.SingerName = SingerName;
         this.AlbumName = AlbumName;
-        Uri = null;
+        this.Uri = Url;
         SongId = -1L;
         AlbumUrl = "-1";
     }

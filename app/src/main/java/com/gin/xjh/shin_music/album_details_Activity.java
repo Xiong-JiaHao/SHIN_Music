@@ -87,7 +87,7 @@ public class album_details_Activity extends Activity implements View.OnClickList
                 .placeholder(R.drawable.album)
                 .error(R.drawable.album)
                 .into(album_img);
-            album_name.setTextSize(30);
+            album_name.setTextSize(25);
             album_name.setText(name);
             updateOnlineEvent();
         }

@@ -1,5 +1,6 @@
 package com.gin.xjh.shin_music;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -12,11 +13,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gin.xjh.shin_music.adapter.FragmentAdapter;
 import com.gin.xjh.shin_music.fragment.Fragment_Local;
 import com.gin.xjh.shin_music.fragment.Fragment_Online;
 import com.gin.xjh.shin_music.fragment.Fragment_Shin;
+import com.zhy.m.permission.MPermissions;
+import com.zhy.m.permission.PermissionDenied;
+import com.zhy.m.permission.PermissionGrant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int mSreenWidth;
 
 
+    private static final int REQUECT_CODE_SDCARD = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +188,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Topbar_music.setOnClickListener(this);
         Topbar_setting.setOnClickListener(this);
 
+
+        MPermissions.requestPermissions(MainActivity.this, REQUECT_CODE_SDCARD, Manifest.permission.READ_EXTERNAL_STORAGE);
+
     }
 
     /**
@@ -225,5 +234,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void Opensetting() {
         Intent intent = new Intent(this, login_menu_Activity.class);
         startActivity(intent);
+    }
+
+
+    @PermissionGrant(REQUECT_CODE_SDCARD)
+    public void requestSdcardSuccess() {
+
+    }
+
+    @PermissionDenied(REQUECT_CODE_SDCARD)
+    public void requestSdcardFailed() {
+        Toast.makeText(this, "未允许读取SD卡的权限，无法获取本地歌曲", Toast.LENGTH_SHORT).show();
     }
 }

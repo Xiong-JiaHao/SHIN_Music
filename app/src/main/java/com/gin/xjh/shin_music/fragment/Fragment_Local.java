@@ -1,6 +1,8 @@
 package com.gin.xjh.shin_music.fragment;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,11 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
+import com.zhy.m.permission.MPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,8 @@ public class Fragment_Local extends Fragment {
     private EditText mFind = null;
     private ImageView mCheck;
 
+    private TextView mSongNum, mMusic_hint;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -47,21 +53,30 @@ public class Fragment_Local extends Fragment {
         mRecyclerView = view.findViewById(R.id.fragment_local_music_list);
         mFind = view.findViewById(R.id.find_local_name);
         mCheck = view.findViewById(R.id.find_Localmusic);
+        mSongNum = view.findViewById(R.id.SongNum);
+        mMusic_hint = view.findViewById(R.id.music_hint);
     }
 
     private void initData() {
-        /**
-         * 测试
-         */
         if (mSongList == null) {
             mSongList = new ArrayList<>();
         } else {
             mSongList.clear();
         }
 
-        for (int i = 0; i < 10; i++) {
-            mSongList.add(new Song("反正我信了", "信", "反正我信了"));
+        Cursor cursor = getContext().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (cursor.moveToNext()) {
+                String SongName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                String SingerName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                String AlbumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                String Url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                mSongList.add(new Song(SongName, SingerName, AlbumName, Url));
+            }
         }
+        cursor.close();
+        mSongNum.setText("歌曲数：" + mSongList.size());
     }
 
     private void initEvent() {
@@ -71,6 +86,7 @@ public class Fragment_Local extends Fragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mMusicListViewAdapter);
 
+        mMusic_hint.setVisibility(View.GONE);
 
         mCheck.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +98,13 @@ public class Fragment_Local extends Fragment {
 
     private void find() {
         Toast.makeText(getContext(), "find", Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        MPermissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 }
