@@ -24,7 +24,7 @@ public class Song extends BmobObject implements Serializable {
         this.AlbumName = AlbumName;
         this.Uri = Url;
         SongId = -1L;
-        AlbumUrl = "-1";
+        AlbumUrl = null;
     }
 
     public Song(String SongName, Long Songid, String SingerName, Long SingerId, String AlbumName, String AlbumUrl) {

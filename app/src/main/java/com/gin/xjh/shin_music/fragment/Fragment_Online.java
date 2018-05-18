@@ -4,10 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +12,11 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.gin.xjh.shin_music.Net_Request.getNetNewMusic;
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.adapter.recommendmusicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.album_details_Activity;
-import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_details_Activity;
 
 import java.util.ArrayList;
@@ -115,7 +110,14 @@ public class Fragment_Online extends Fragment {
      * 查找数据
      */
     private void find() {
+        String name = mFind.getText().toString();
+        if (name.compareTo("") == 0 || name.length() == 0) {
+            Toast.makeText(getContext(), "请输入搜索名称再点击按钮", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(getContext(), music_details_Activity.class);
+        intent.putExtra("name", mFind.getText().toString());
+        intent.putExtra("isOnline", true);
         startActivity(intent);
     }
 }

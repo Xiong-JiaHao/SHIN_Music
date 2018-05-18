@@ -1,5 +1,6 @@
 package com.gin.xjh.shin_music.fragment;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,10 +21,14 @@ import android.widget.Toast;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.music_details_Activity;
 import com.zhy.m.permission.MPermissions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Gin on 2018/4/23.
@@ -97,7 +102,27 @@ public class Fragment_Local extends Fragment {
     }
 
     private void find() {
-        Toast.makeText(getContext(), "find", Toast.LENGTH_SHORT).show();
+        String name = mFind.getText().toString();
+        if (name.compareTo("") == 0 || name.length() == 0) {
+            Toast.makeText(getContext(), "请输入搜索名称再点击按钮", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        List<Song> mFindSongList = new ArrayList<>();
+        Pattern pattern = Pattern.compile(name);
+        for (Song song : mSongList) {
+            Matcher matcher = pattern.matcher(song.getSongName());
+            if (matcher.find()) {
+                mFindSongList.add(song);
+            }
+        }
+
+        Intent intent = new Intent(getContext(), music_details_Activity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("songlist", (Serializable) mFindSongList);
+        intent.putExtra("songlist", bundle);
+        intent.putExtra("name", name);
+        intent.putExtra("isOnline", false);
+        startActivity(intent);
     }
 
 

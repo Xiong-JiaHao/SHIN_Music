@@ -27,7 +27,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="通过搜索"
+                android:text="通过搜索 "
                 android:textSize="17sp" />
 
             <TextView
@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="得到如下歌曲"
+                android:text=" 得到如下歌曲"
                 android:textSize="17sp" />
 
 
@@ -57,6 +57,16 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:background="@drawable/btn_gray" />
+
+    <TextView
+        android:id="@+id/mFind_hint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="正在加载歌曲数据，请稍后..."
+        android:textColor="@color/FindColor"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/music_rv"
