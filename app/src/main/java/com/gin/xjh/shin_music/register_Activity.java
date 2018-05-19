@@ -91,6 +91,18 @@ public class register_Activity extends Activity implements View.OnClickListener 
         user_Id = User_Id.getText().toString();
         password = Password.getText().toString();
         againpassword = AgainPassWord.getText().toString();
+        if(user_Id.compareTo("")==0||user_Id.length()==0){
+            Toast.makeText(this, "请输入用户名后进行注册", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(password.compareTo("")==0||password.length()==0){
+            Toast.makeText(this, "请输入密码后进行注册", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(againpassword.compareTo("")==0||againpassword.length()==0){
+            Toast.makeText(this, "请输入确认密码后进行注册", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         final String[] str = {""};
         checkagainpassword.setVisibility(View.VISIBLE);
         checkpassword.setVisibility(View.VISIBLE);
