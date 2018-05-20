@@ -17,6 +17,7 @@ public class Song extends BmobObject implements Serializable {
     private String AlbumName;//专辑名称
     private String Uri;//路径
     private String AlbumUrl;//专辑图片路径
+    private Long SongTime;//歌曲时间
 
     public Song(String SongName, String SingerName, String AlbumName, String Url) {
         this.SongName = SongName;
@@ -74,6 +75,14 @@ public class Song extends BmobObject implements Serializable {
 
     public Long getSingerId() {
         return SingerId;
+    }
+
+    public Long getSongTime() {
+        return SongTime;
+    }
+
+    public void setSongTime(Long songTime) {
+        SongTime = songTime;
     }
 
     public void setSingerId(Long singerId) {

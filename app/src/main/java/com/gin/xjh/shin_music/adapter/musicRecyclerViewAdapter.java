@@ -49,6 +49,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
     private void showbottomDialog() {
         Dialog bottomDialog = new Dialog(context, R.style.BottomDialog);
         View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_content_circle, null);
+        bottomDialog.setCanceledOnTouchOutside(true);
         TextView ic_comment = contentView.findViewById(R.id.ic_comment);
         ic_comment.setOnClickListener(new View.OnClickListener() {
             @Override

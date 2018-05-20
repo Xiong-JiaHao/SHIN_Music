@@ -77,7 +77,10 @@ public class Fragment_Local extends Fragment {
                 String SingerName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
                 String AlbumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
                 String Url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                mSongList.add(new Song(SongName, SingerName, AlbumName, Url));
+                String AlbumId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                Song song = new Song(SongName, SingerName, AlbumName, Url);
+                song.setSongTime(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+                mSongList.add(song);
             }
         }
         cursor.close();
