@@ -136,7 +136,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     }
 
     private void showbottomDialog() {
-        Dialog bottomDialog = new Dialog(this, R.style.BottomDialog);
+        final Dialog bottomDialog = new Dialog(this, R.style.BottomDialog);
         bottomDialog.setCanceledOnTouchOutside(true);
         View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content_circle_inplay, null);
         TextView ic_comment2 = contentView.findViewById(R.id.ic_comment);
@@ -146,6 +146,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 //发消息告知弹出评论
                 Intent ic_comment_intent = new Intent(music_play_Activity.this, All_comment.class);
                 startActivity(ic_comment_intent);
+                bottomDialog.dismiss();
             }
         });
         bottomDialog.setContentView(contentView);
