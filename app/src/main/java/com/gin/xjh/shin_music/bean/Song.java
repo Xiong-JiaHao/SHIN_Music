@@ -15,7 +15,7 @@ public class Song extends BmobObject implements Serializable {
     private String SingerName;//歌手名字
     private Long SingerId;//歌手ID
     private String AlbumName;//专辑名称
-    private String Uri;//路径
+    private String Url;//路径
     private String AlbumUrl;//专辑图片路径
     private Long SongTime;//歌曲时间
 
@@ -23,7 +23,7 @@ public class Song extends BmobObject implements Serializable {
         this.SongName = SongName;
         this.SingerName = SingerName;
         this.AlbumName = AlbumName;
-        this.Uri = Url;
+        this.Url = Url;
         SongId = -1L;
         AlbumUrl = null;
     }
@@ -35,7 +35,7 @@ public class Song extends BmobObject implements Serializable {
         this.SingerId = SingerId;
         this.AlbumName = AlbumName;
         this.AlbumUrl = AlbumUrl;
-        Uri = null;
+        Url = null;
     }
 
     public boolean isOnline() {
@@ -61,8 +61,8 @@ public class Song extends BmobObject implements Serializable {
         return AlbumName;
     }
 
-    public String getUri() {
-        return Uri;
+    public String getUrl() {
+        return Url;
     }
 
     public String getAlbumUrl() {
@@ -77,8 +77,8 @@ public class Song extends BmobObject implements Serializable {
         return SongTime;
     }
 
-    public void setUri(String uri) {
-        Uri = uri;
+    public void setUrl(String url) {
+        Url = url;
     }
 
     public void setSongTime(Long songTime) {

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.provider.MediaStore;
 
+import com.gin.xjh.shin_music.Net_Request.getNetMusicUrl;
 import com.gin.xjh.shin_music.bean.Song;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class MusicUtil {
     }
 
     public static Song getNowSong(){
-        if(SongList!=null){
+        if (SongList != null) {
             return SongList.get(index);
         }
         return null;
@@ -61,18 +62,18 @@ public class MusicUtil {
     public static void changeType(){
         synchronized (MusicUtil.class){
             play_state++;
-            play_state%=3;
+            play_state %= 3;
         }
     }
 
     public static void changeSongList(List<Song> list){
         SongList = list;
-        listSize=list.size();
+        listSize = list.size();
     }
 
     public static void addSong(Song song){
-        if(SongList==null){
-            SongList=new ArrayList<>();
+        if (SongList == null) {
+            SongList = new ArrayList<>();
         }
         SongList.add(index,song);
         listSize++;
@@ -88,11 +89,11 @@ public class MusicUtil {
     }
 
     private static void play(){
-        isPlay=true;
+        isPlay = true;
     }
 
     private static void pause(){
-        isPlay=false;
+        isPlay = false;
     }
 
     public static void playorpause(){
@@ -109,41 +110,24 @@ public class MusicUtil {
         mediaPlayer.release();
     }
 
-    public void playMusic(Song song){
-        if (mediaPlayer == null) {
-            mediaPlayer = new MediaPlayer();
-        }
-        try {
-            mediaPlayer.reset();
-            if(song.getUri()==null){
-                //获取网络歌曲
-            }
-            mediaPlayer.setDataSource(song.getUri());
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mediaPlayer.start();
-    }
-
     public static void pre(){
-        if(play_state==ORDER_CYCLE||play_state==SINGLE_CYCLE){
-            if(index==0){
-                index=listSize-1;
+        if (play_state == ORDER_CYCLE || play_state == SINGLE_CYCLE) {
+            if (index == 0) {
+                index = listSize - 1;
             }
             else{
                 index--;
             }
         }
         else {
-            index=new Random().nextInt(listSize-1);
+            index = new Random().nextInt(listSize - 1);
         }
     }
 
     public static void next(){
-        if(play_state==ORDER_CYCLE||play_state==SINGLE_CYCLE){
+        if (play_state == ORDER_CYCLE || play_state == SINGLE_CYCLE) {
             index++;
-            if(index==listSize){
+            if (index == listSize) {
                 index=0;
             }
         }
@@ -153,13 +137,12 @@ public class MusicUtil {
     }
 
     public static void autonext(){
-        if(play_state==ORDER_CYCLE){
+        if (play_state == ORDER_CYCLE) {
             index++;
-            if(index==listSize){
+            if (index == listSize) {
                 index=0;
             }
-        }
-        else if(play_state==DISORDERLY_CYCLE){
+        } else if (play_state == DISORDERLY_CYCLE) {
             index=new Random().nextInt(listSize-1);
         }
     }
@@ -177,13 +160,32 @@ public class MusicUtil {
                 String AlbumId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
                 Song song = new Song(SongName, SingerName, AlbumName, Url);
                 song.setSongTime(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-                if(song.getSongTime()>=60000){
+                if (song.getSongTime() >= 60000) {
                     mSongList.add(song);
                 }
             }
         }
         cursor.close();
         return mSongList;
+    }
+
+    public void playMusic(Song song) {
+        if (mediaPlayer == null) {
+            mediaPlayer = new MediaPlayer();
+        }
+        try {
+            if (song.getUrl() == null) {
+                //获取网络歌曲
+                new getNetMusicUrl().getJson(song, mediaPlayer);
+            } else {
+                mediaPlayer.reset();
+                mediaPlayer.setDataSource(song.getUrl());
+                mediaPlayer.prepare();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaPlayer.start();
     }
 
 }

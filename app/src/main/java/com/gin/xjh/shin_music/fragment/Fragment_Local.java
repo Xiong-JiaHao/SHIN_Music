@@ -64,7 +64,7 @@ public class Fragment_Local extends Fragment {
     }
 
     private void initData() {
-        mSongList = MusicUtil.getSongList();
+        mSongList = MusicUtil.getLocalMusic(getContext());
     }
 
     private void initEvent() {
