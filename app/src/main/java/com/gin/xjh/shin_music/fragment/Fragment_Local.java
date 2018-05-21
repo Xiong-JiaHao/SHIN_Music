@@ -22,6 +22,7 @@ import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_details_Activity;
+import com.gin.xjh.shin_music.util.MusicUtil;
 import com.zhy.m.permission.MPermissions;
 
 import java.io.Serializable;
@@ -63,28 +64,7 @@ public class Fragment_Local extends Fragment {
     }
 
     private void initData() {
-        if (mSongList == null) {
-            mSongList = new ArrayList<>();
-        } else {
-            mSongList.clear();
-        }
-
-        Cursor cursor = getContext().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-            while (cursor.moveToNext()) {
-                String SongName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                String SingerName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                String AlbumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                String Url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                String AlbumId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
-                Song song = new Song(SongName, SingerName, AlbumName, Url);
-                song.setSongTime(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-                mSongList.add(song);
-            }
-        }
-        cursor.close();
-        mSongNum.setText("歌曲数：" + mSongList.size());
+        mSongList = MusicUtil.getSongList();
     }
 
     private void initEvent() {
@@ -93,6 +73,7 @@ public class Fragment_Local extends Fragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());//默认动画
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mMusicListViewAdapter);
+        mSongNum.setText("歌曲数：" + mSongList.size());
 
         mMusic_hint.setVisibility(View.GONE);
 

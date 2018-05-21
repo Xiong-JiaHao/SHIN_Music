@@ -45,10 +45,6 @@ public class Song extends BmobObject implements Serializable {
         return true;
     }
 
-    public void setUri(String uri) {
-        Uri = uri;
-    }
-
     public String getSongName() {
         return SongName;
     }
@@ -79,6 +75,10 @@ public class Song extends BmobObject implements Serializable {
 
     public Long getSongTime() {
         return SongTime;
+    }
+
+    public void setUri(String uri) {
+        Uri = uri;
     }
 
     public void setSongTime(Long songTime) {
