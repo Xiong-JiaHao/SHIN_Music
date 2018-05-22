@@ -42,7 +42,7 @@ public class MusicUtil {
         return play_state;
     }
 
-    private static boolean isPlayMusic(){
+    public static boolean isPlayMusic() {
         return isPlay;
     }
 

@@ -20,6 +20,7 @@ import com.gin.xjh.shin_music.adapter.FragmentAdapter;
 import com.gin.xjh.shin_music.fragment.Fragment_Lyrics;
 import com.gin.xjh.shin_music.fragment.Fragment_Music;
 import com.gin.xjh.shin_music.util.DensityUtil;
+import com.gin.xjh.shin_music.util.MusicUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,13 +119,23 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 showbottomDialog();
                 break;
             case R.id.cycle_style:
-                Toast.makeText(this, "cycle_style", Toast.LENGTH_SHORT).show();
+                MusicUtil.changeType();
+                if (MusicUtil.getPlay_state() == MusicUtil.SINGLE_CYCLE) {
+                    cycle_style.setImageResource(R.drawable.single_cycle);
+                } else if (MusicUtil.getPlay_state() == MusicUtil.ORDER_CYCLE) {
+                    cycle_style.setImageResource(R.drawable.order_cycle);
+                } else {
+                    cycle_style.setImageResource(R.drawable.disorderly_cycle);
+                }
                 break;
             case R.id.leftto:
                 Toast.makeText(this, "leftto", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.music_play:
-                Toast.makeText(this, "music_play", Toast.LENGTH_SHORT).show();
+                MusicUtil.playorpause();
+                if (MusicUtil.isPlayMusic()) {
+
+                }
                 break;
             case R.id.rightto:
                 Toast.makeText(this, "rightto", Toast.LENGTH_SHORT).show();
