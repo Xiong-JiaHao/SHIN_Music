@@ -27,7 +27,7 @@ import java.util.List;
 
 public class music_play_Activity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageView go_back, change_style, ic_comment, sz;
+    private ImageView go_back, change_style, ic_comment, setting;
     private ImageView leftto, music_play, rightto, cycle_style, song_sheet;
     private TextView Song_Name, Singer_Name, change_flag, nowtime, endtime;
     private SeekBar time_seekbar;
@@ -50,7 +50,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         go_back = findViewById(R.id.go_back);
         change_style = findViewById(R.id.change_style);
         ic_comment = findViewById(R.id.ic_comment);
-        sz = findViewById(R.id.sz);
+        setting = findViewById(R.id.settings);
         leftto = findViewById(R.id.leftto);
         music_play = findViewById(R.id.music_play);
         rightto = findViewById(R.id.rightto);
@@ -75,7 +75,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         go_back.setOnClickListener(this);
         change_style.setOnClickListener(this);
         ic_comment.setOnClickListener(this);
-        sz.setOnClickListener(this);
+        setting.setOnClickListener(this);
         cycle_style.setOnClickListener(this);
         leftto.setOnClickListener(this);
         music_play.setOnClickListener(this);
@@ -115,8 +115,8 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 Intent ic_comment_intent = new Intent(this, All_comment.class);
                 startActivity(ic_comment_intent);
                 break;
-            case R.id.sz:
-                showbottomDialog();
+            case R.id.settings:
+                showSettingsbottomDialog();
                 break;
             case R.id.cycle_style:
                 MusicUtil.changeType();
@@ -134,7 +134,9 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             case R.id.music_play:
                 MusicUtil.playorpause();
                 if (MusicUtil.isPlayMusic()) {
-
+                    music_play.setImageResource(R.drawable.music_play);
+                } else {
+                    music_play.setImageResource(R.drawable.music_stop);
                 }
                 break;
             case R.id.rightto:
@@ -146,7 +148,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void showbottomDialog() {
+    private void showSettingsbottomDialog() {
         final Dialog bottomDialog = new Dialog(this, R.style.BottomDialog);
         bottomDialog.setCanceledOnTouchOutside(true);
         View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content_circle_inplay, null);
@@ -160,6 +162,20 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 bottomDialog.dismiss();
             }
         });
+        bottomDialog.setContentView(contentView);
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();
+        params.width = getResources().getDisplayMetrics().widthPixels - DensityUtil.dp2px(this, 16f);
+        params.bottomMargin = DensityUtil.dp2px(this, 8f);
+        contentView.setLayoutParams(params);
+        bottomDialog.getWindow().setGravity(Gravity.BOTTOM);
+        bottomDialog.getWindow().setWindowAnimations(R.style.BottomDialog_Animation);
+        bottomDialog.show();
+    }
+
+    private void showListbottomDialog() {
+        final Dialog bottomDialog = new Dialog(this, R.style.BottomDialog);
+        bottomDialog.setCanceledOnTouchOutside(true);
+        View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content_circle_setting, null);
         bottomDialog.setContentView(contentView);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();
         params.width = getResources().getDisplayMetrics().widthPixels - DensityUtil.dp2px(this, 16f);
