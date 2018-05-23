@@ -3,7 +3,6 @@ package com.gin.xjh.shin_music.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,8 +16,8 @@ import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_play_Activity;
 import com.gin.xjh.shin_music.util.DensityUtil;
+import com.gin.xjh.shin_music.util.MusicUtil;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -103,10 +102,8 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, music_play_Activity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("songlist", (Serializable) list);
-                    intent.putExtra("index", position);
-                    intent.putExtra("songlist", bundle);
+                    MusicUtil.changeSongList(list);
+                    MusicUtil.setIndex(position);
                     context.startActivity(intent);
                 }
             });

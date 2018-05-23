@@ -13,9 +13,9 @@ import android.widget.TextView;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_play_Activity;
+import com.gin.xjh.shin_music.util.MusicUtil;
 import com.squareup.picasso.Picasso;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -69,10 +69,9 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, music_play_Activity.class);
+                    MusicUtil.setIndex(position);
+                    MusicUtil.changeSongList(list);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("songlist", (Serializable) list);
-                    intent.putExtra("index", position);
-                    intent.putExtra("songlist", bundle);
                     context.startActivity(intent);
                 }
             });

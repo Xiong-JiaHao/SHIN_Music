@@ -50,10 +50,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.music_play);
-        Intent intent = getIntent();
-        mSongList = (List<Song>) intent.getBundleExtra("songlist").get("songlist");
-        MusicUtil.changeSongList(mSongList);
-        MusicUtil.setIndex(intent.getIntExtra("index", 0));
+        mSongList = MusicUtil.getSongList();
         Toast.makeText(this, "" + MusicUtil.getIndex(), Toast.LENGTH_SHORT).show();
         initView();
         initEvent();
