@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.provider.MediaStore;
 
-import com.gin.xjh.shin_music.Net_Request.getNetMusicUrl;
+import com.gin.xjh.shin_music.Net_Request.getNetMusicLrc;
 import com.gin.xjh.shin_music.bean.Song;
 
 import java.io.IOException;
@@ -184,7 +184,7 @@ public class MusicUtil {
         try {
             if (song.getUrl() == null) {
                 //获取网络歌曲
-                new getNetMusicUrl().getJson(song, mediaPlayer);
+                new getNetMusicLrc().getJson(song, mediaPlayer);
             } else {
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(song.getUrl());

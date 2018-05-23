@@ -7,11 +7,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import com.gin.xjh.shin_music.Interface.RequestServices_MusicUrl;
+import com.gin.xjh.shin_music.Interface.RequestServices_MusicLrc;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.util.Constant;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,7 +21,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class getNetMusicUrl {
+public class getNetMusicLrc {
 
     private Context mContext;
 
@@ -44,18 +43,9 @@ public class getNetMusicUrl {
                     try {
                         String result = (String) msg.obj;
                         JSONObject AllObject = new JSONObject(result);
-                        String JSONString = AllObject.getString("data");
-                        JSONArray jsonArray = new JSONArray(JSONString);
-                        JSONObject jsonObject = jsonArray.getJSONObject(0);
-                        String url = jsonObject.getString("url");
-                        song.setUrl(url);
-                        try {
-                            mediaPlayer.reset();
-                            mediaPlayer.setDataSource(url);
-                            mediaPlayer.prepare();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        String JSONString = AllObject.getString("lrc");
+                        JSONObject jsonObject = new JSONObject(JSONString);
+                        String lyric = jsonObject.getString("lyric");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -71,7 +61,7 @@ public class getNetMusicUrl {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constant.URL_BASE)
                 .build();
-        RequestServices_MusicUrl requestServices = retrofit.create(RequestServices_MusicUrl.class);
+        RequestServices_MusicLrc requestServices = retrofit.create(RequestServices_MusicLrc.class);
         retrofit2.Call<ResponseBody> call = requestServices.getString(song.getSongId());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
