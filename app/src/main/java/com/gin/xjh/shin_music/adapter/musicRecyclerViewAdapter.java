@@ -2,6 +2,8 @@ package com.gin.xjh.shin_music.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,8 +15,10 @@ import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.music_play_Activity;
 import com.gin.xjh.shin_music.util.DensityUtil;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -38,7 +42,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
     //绑定视图
     @Override
     public void onBindViewHolder(musicRecyclerViewAdapter.MusicViewHolder holder, int position) {
-        holder.load(list.get(position), context);
+        holder.load(list.get(position), context, position);
     }
 
     @Override
@@ -46,9 +50,9 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
         return list.size();
     }
 
-    private void showbottomDialog() {
+    private void showbottomDialog(final int position) {
         Dialog bottomDialog = new Dialog(context, R.style.BottomDialog);
-        View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_content_circle, null);
+        final View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_content_circle, null);
         bottomDialog.setCanceledOnTouchOutside(true);
         TextView ic_comment = contentView.findViewById(R.id.ic_comment);
         ic_comment.setOnClickListener(new View.OnClickListener() {
@@ -62,8 +66,13 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
         ic_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //发通知告知打开音乐
-                Toast.makeText(context, "play", Toast.LENGTH_SHORT).show();
+                //发通知告知打开音乐，添加到列表中
+//                Intent intent = new Intent(context, music_play_Activity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("songlist", (Serializable) list);
+//                intent.putExtra("index",position);
+//                intent.putExtra("songlist",bundle);
+//                context.startActivity(intent);
             }
         });
         bottomDialog.setContentView(contentView);
@@ -87,20 +96,25 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
             sz = itemView.findViewById(R.id.music_sz);
         }
 
-        public void load(Song song, final Context context) {
+        public void load(Song song, final Context context, final int position) {
             SongName.setText(song.getSongName());
             SingerName.setText(song.toString());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "check it", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, music_play_Activity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("songlist", (Serializable) list);
+                    intent.putExtra("index", position);
+                    intent.putExtra("songlist", bundle);
+                    context.startActivity(intent);
                 }
             });
 
             sz.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showbottomDialog();
+                    showbottomDialog(position);
                 }
             });
         }

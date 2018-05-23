@@ -53,6 +53,10 @@ public class MusicUtil {
         return null;
     }
 
+    public static int getListSize() {
+        return listSize;
+    }
+
     public static MediaPlayer getMediaPlayer(){
         if(mediaPlayer == null)
             mediaPlayer = new MediaPlayer();
@@ -86,6 +90,10 @@ public class MusicUtil {
 
     public static void setSeekTo(int i){
         mediaPlayer.seekTo(i);
+    }
+
+    public static void setIndex(int i) {
+        index = i;
     }
 
     private static void play(){

@@ -7,6 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.adapter.FragmentAdapter;
+import com.gin.xjh.shin_music.adapter.musiclistRecyclerViewAdapter;
+import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.fragment.Fragment_Lyrics;
 import com.gin.xjh.shin_music.fragment.Fragment_Music;
 import com.gin.xjh.shin_music.util.DensityUtil;
@@ -37,11 +43,18 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     private FragmentAdapter adapter;
     private int Index;
 
+    private List<Song> mSongList;
+    private musiclistRecyclerViewAdapter musiclistRecyclerViewAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.music_play);
+        Intent intent = getIntent();
+        mSongList = (List<Song>) intent.getBundleExtra("songlist").get("songlist");
+        MusicUtil.changeSongList(mSongList);
+        MusicUtil.setIndex(intent.getIntExtra("index", 0));
+        Toast.makeText(this, "" + MusicUtil.getIndex(), Toast.LENGTH_SHORT).show();
         initView();
         initEvent();
     }
@@ -143,7 +156,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 Toast.makeText(this, "rightto", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.song_sheet:
-                Toast.makeText(this, "song_sheet", Toast.LENGTH_SHORT).show();
+                showListbottomDialog();
                 break;
         }
     }
@@ -176,6 +189,29 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         final Dialog bottomDialog = new Dialog(this, R.style.BottomDialog);
         bottomDialog.setCanceledOnTouchOutside(true);
         View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content_circle_setting, null);
+        RecyclerView music_list_rv = contentView.findViewById(R.id.music_list_rv);
+        musiclistRecyclerViewAdapter = new musiclistRecyclerViewAdapter(this, mSongList);
+        music_list_rv.setLayoutManager(new LinearLayoutManager(this));
+        music_list_rv.setItemAnimator(new DefaultItemAnimator());//默认动画
+        music_list_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        music_list_rv.setAdapter(musiclistRecyclerViewAdapter);
+
+        TextView play_style_name = contentView.findViewById(R.id.play_style_name);
+        TextView play_style_num = contentView.findViewById(R.id.play_style_num);
+        ImageView play_style_img = contentView.findViewById(R.id.play_style_img);
+
+        if (MusicUtil.getPlay_state() == MusicUtil.SINGLE_CYCLE) {
+            play_style_img.setImageResource(R.drawable.single_cycle);
+            play_style_name.setText("单曲循环");
+        } else if (MusicUtil.getPlay_state() == MusicUtil.ORDER_CYCLE) {
+            play_style_img.setImageResource(R.drawable.order_cycle);
+            play_style_name.setText("顺序播放");
+        } else {
+            play_style_img.setImageResource(R.drawable.disorderly_cycle);
+            play_style_name.setText("随机播放");
+        }
+        play_style_num.setText("" + MusicUtil.getListSize());
+
         bottomDialog.setContentView(contentView);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();
         params.width = getResources().getDisplayMetrics().widthPixels - DensityUtil.dp2px(this, 16f);

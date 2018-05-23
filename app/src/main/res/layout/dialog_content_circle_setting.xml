@@ -52,7 +52,7 @@
         android:background="@drawable/btn_black" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/play_style_rv"
+        android:id="@+id/music_list_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

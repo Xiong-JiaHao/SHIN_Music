@@ -1,21 +1,21 @@
 package com.gin.xjh.shin_music.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.music_play_Activity;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -39,7 +39,7 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
     //绑定视图
     @Override
     public void onBindViewHolder(recommendmusicRecyclerViewAdapter.MusicViewHolder holder, int position) {
-        holder.load(list.get(position), mContext);
+        holder.load(list.get(position), mContext, position);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
             cover = itemView.findViewById(R.id.cover);
         }
 
-        public void load(Song song, final Context context) {
+        public void load(Song song, final Context context, final int position) {
             SongName.setText(song.getSongName());
             SingerName.setText(song.toString());
             Picasso.with(mContext).load(song.getAlbumUrl())
@@ -68,7 +68,12 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "check it", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(mContext, music_play_Activity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("songlist", (Serializable) list);
+                    intent.putExtra("index", position);
+                    intent.putExtra("songlist", bundle);
+                    context.startActivity(intent);
                 }
             });
         }
