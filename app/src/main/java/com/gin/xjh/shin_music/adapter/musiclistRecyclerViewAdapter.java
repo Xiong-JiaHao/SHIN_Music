@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,23 +47,25 @@ public class musiclistRecyclerViewAdapter extends RecyclerView.Adapter<musiclist
     public class MusicViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView SongName;
         private ImageView removeSong;
+        private LinearLayout music;
 
         public MusicViewHolder(View itemView) {
             super(itemView);
             SongName = itemView.findViewById(R.id.itemSong);
             removeSong = itemView.findViewById(R.id.removeSong);
+            music = itemView.findViewById(R.id.music);
         }
 
         public void load(Song song, final Context context) {
             SongName.setText(song.getSongName() + " - " + song.getSingerName());
-            SongName.setOnClickListener(this);
+            music.setOnClickListener(this);
             removeSong.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.itemSong:
+                case R.id.music:
                     Toast.makeText(context, "itemSong", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.removeSong:
