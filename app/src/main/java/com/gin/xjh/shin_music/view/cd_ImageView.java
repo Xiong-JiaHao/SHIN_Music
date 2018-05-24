@@ -22,7 +22,8 @@ public class cd_ImageView extends android.support.v7.widget.AppCompatImageView {
 
     private float mScale; //图片的缩放比例
 
-    private float degree = 0;//角度
+    private volatile float degree = 0;//角度
+
 
     private Handler handler = new Handler();
     private Runnable runnable = new Runnable() {

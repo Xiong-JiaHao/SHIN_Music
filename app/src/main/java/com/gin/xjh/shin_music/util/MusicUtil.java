@@ -131,6 +131,7 @@ public class MusicUtil {
         else {
             index = new Random().nextInt(listSize - 1);
         }
+        play();
     }
 
     public static void next(){
@@ -143,6 +144,7 @@ public class MusicUtil {
         else {
             index=new Random().nextInt(listSize-1);
         }
+        play();
     }
 
     public static void autonext(){

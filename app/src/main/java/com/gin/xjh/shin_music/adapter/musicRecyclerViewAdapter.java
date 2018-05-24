@@ -65,13 +65,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
         ic_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //发通知告知打开音乐，添加到列表中
-//                Intent intent = new Intent(context, music_play_Activity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("songlist", (Serializable) list);
-//                intent.putExtra("index",position);
-//                intent.putExtra("songlist",bundle);
-//                context.startActivity(intent);
+
             }
         });
         bottomDialog.setContentView(contentView);

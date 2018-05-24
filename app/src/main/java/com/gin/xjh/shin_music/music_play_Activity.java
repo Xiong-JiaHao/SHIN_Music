@@ -112,6 +112,9 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             }
         });
 
+        if (MusicUtil.isPlayMusic()) {
+            music_play.setImageResource(R.drawable.music_stop);
+        }
     }
 
     @Override
@@ -142,39 +145,53 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 }
                 break;
             case R.id.leftto:
-                MusicUtil.pre();
+                if (!MusicUtil.isPlayMusic()) {
+                    music_play.setImageResource(R.drawable.music_stop);
+                    Intent playintent = new Intent(getApplicationContext(), Fragment_Music.class);
+                    playintent.putExtra("action",Fragment_Music.MUSIC_NOTIFICATION_ACTION_PLAY);
+                    sendBroadcast(playintent);
+                }
+                else{
+                    Intent playintent = new Intent(getApplicationContext(), Fragment_Music.class);
+                    playintent.putExtra("action",Fragment_Music.MUSIC_NOTIFICATION_ACTION_CHANGEIMG);
+                    sendBroadcast(playintent);
+                }
                 Intent startIntent2 = new Intent(this, MusicService.class);
                 startIntent2.putExtra("action", MusicService.PREVIOUSMUSIC);
                 startService(startIntent2);
-                if (!MusicUtil.isPlayMusic()) {
-                    MusicUtil.playorpause();
-                    music_play.setImageResource(R.drawable.music_stop);
-                } else {
-                    MusicUtil.play();
-                }
                 changSong();
                 break;
             case R.id.music_play:
-                if (MusicUtil.isPlayMusic()) {
+                if (!MusicUtil.isPlayMusic()) {
                     music_play.setImageResource(R.drawable.music_stop);
+                    Intent playintent = new Intent(getApplicationContext(), Fragment_Music.class);
+                    playintent.putExtra("action",Fragment_Music.MUSIC_NOTIFICATION_ACTION_PAUSE);
+                    sendBroadcast(playintent);
                 } else {
                     music_play.setImageResource(R.drawable.music_play);
+                    Intent playintent = new Intent(getApplicationContext(), Fragment_Music.class);
+                    playintent.putExtra("action",Fragment_Music.MUSIC_NOTIFICATION_ACTION_PLAY);
+                    sendBroadcast(playintent);
                 }
                 Intent startIntent1 = new Intent(this, MusicService.class);
                 startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
                 startService(startIntent1);
                 break;
             case R.id.rightto:
-                MusicUtil.next();
+                if (!MusicUtil.isPlayMusic()) {
+                    music_play.setImageResource(R.drawable.music_stop);
+                    Intent playintent = new Intent(getApplicationContext(), Fragment_Music.class);
+                    playintent.putExtra("action",Fragment_Music.MUSIC_NOTIFICATION_ACTION_PLAY);
+                    sendBroadcast(playintent);
+                }
+                else {
+                    Intent playintent = new Intent(getApplicationContext(), Fragment_Music.class);
+                    playintent.putExtra("action",Fragment_Music.MUSIC_NOTIFICATION_ACTION_CHANGEIMG);
+                    sendBroadcast(playintent);
+                }
                 Intent startIntent3 = new Intent(this, MusicService.class);
                 startIntent3.putExtra("action", MusicService.NEXTMUSIC);
                 startService(startIntent3);
-                if (!MusicUtil.isPlayMusic()) {
-                    MusicUtil.playorpause();
-                    music_play.setImageResource(R.drawable.music_stop);
-                } else {
-                    MusicUtil.play();
-                }
                 changSong();
                 break;
             case R.id.song_sheet:
@@ -278,6 +295,9 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         } else {
             Song_Name.setText(song.getSongName());
             Singer_Name.setText(song.getSingerName());
+            Intent intent1 = new Intent(this, Fragment_Music.class);
+            intent1.putExtra("action", Fragment_Music.MUSIC_NOTIFICATION_ACTION_CHANGEIMG);
+            sendBroadcast(intent1);
         }
     }
 }
