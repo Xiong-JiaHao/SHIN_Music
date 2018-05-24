@@ -104,6 +104,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                     Intent intent = new Intent(context, music_play_Activity.class);
                     MusicUtil.changeSongList(list);
                     MusicUtil.setIndex(position);
+                    MusicUtil.play();
                     context.startActivity(intent);
                 }
             });

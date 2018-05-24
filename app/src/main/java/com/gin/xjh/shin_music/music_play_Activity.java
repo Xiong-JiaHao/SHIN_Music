@@ -26,6 +26,7 @@ import com.gin.xjh.shin_music.adapter.musiclistRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.fragment.Fragment_Lyrics;
 import com.gin.xjh.shin_music.fragment.Fragment_Music;
+import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.DensityUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 
@@ -54,6 +55,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         mSongList = MusicUtil.getSongList();
         Toast.makeText(this, "" + MusicUtil.getIndex(), Toast.LENGTH_SHORT).show();
         initView();
+        changSong();
         initEvent();
     }
 
@@ -140,18 +142,40 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 }
                 break;
             case R.id.leftto:
-                Toast.makeText(this, "leftto", Toast.LENGTH_SHORT).show();
+                MusicUtil.pre();
+                Intent startIntent2 = new Intent(this, MusicService.class);
+                startIntent2.putExtra("action", MusicService.PREVIOUSMUSIC);
+                startService(startIntent2);
+                if (!MusicUtil.isPlayMusic()) {
+                    MusicUtil.playorpause();
+                    music_play.setImageResource(R.drawable.music_stop);
+                } else {
+                    MusicUtil.play();
+                }
+                changSong();
                 break;
             case R.id.music_play:
-                MusicUtil.playorpause();
                 if (MusicUtil.isPlayMusic()) {
-                    music_play.setImageResource(R.drawable.music_play);
-                } else {
                     music_play.setImageResource(R.drawable.music_stop);
+                } else {
+                    music_play.setImageResource(R.drawable.music_play);
                 }
+                Intent startIntent1 = new Intent(this, MusicService.class);
+                startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
+                startService(startIntent1);
                 break;
             case R.id.rightto:
-                Toast.makeText(this, "rightto", Toast.LENGTH_SHORT).show();
+                MusicUtil.next();
+                Intent startIntent3 = new Intent(this, MusicService.class);
+                startIntent3.putExtra("action", MusicService.NEXTMUSIC);
+                startService(startIntent3);
+                if (!MusicUtil.isPlayMusic()) {
+                    MusicUtil.playorpause();
+                    music_play.setImageResource(R.drawable.music_stop);
+                } else {
+                    MusicUtil.play();
+                }
+                changSong();
                 break;
             case R.id.song_sheet:
                 if (MusicUtil.getListSize() > 0) {
@@ -243,5 +267,17 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         WindowManager.LayoutParams layoutParams = bottomDialog.getWindow().getAttributes();
         params.height = 1000;
         bottomDialog.getWindow().setAttributes(layoutParams);
+    }
+
+    private void changSong() {
+        Song song = MusicUtil.getNowSong();
+        if (song == null) {
+            Song_Name.setText("未知");
+            Singer_Name.setText("未知");
+
+        } else {
+            Song_Name.setText(song.getSongName());
+            Singer_Name.setText(song.getSingerName());
+        }
     }
 }

@@ -2,7 +2,6 @@ package com.gin.xjh.shin_music.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,7 +70,7 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
                     Intent intent = new Intent(mContext, music_play_Activity.class);
                     MusicUtil.setIndex(position);
                     MusicUtil.changeSongList(list);
-                    Bundle bundle = new Bundle();
+                    MusicUtil.play();
                     context.startActivity(intent);
                 }
             });

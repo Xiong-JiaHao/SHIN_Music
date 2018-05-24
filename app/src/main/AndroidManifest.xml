@@ -49,6 +49,7 @@
         <activity android:name=".updata_password_Activity"/>
         <activity android:name=".music_details_Activity"/>
         <activity android:name=".All_comment"/>
+        <service android:name=".service.MusicService"/>
     </application>
 
 </manifest>

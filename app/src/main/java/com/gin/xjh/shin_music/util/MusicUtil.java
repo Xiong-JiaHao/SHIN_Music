@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.provider.MediaStore;
 
-import com.gin.xjh.shin_music.Net_Request.getNetMusicLrc;
 import com.gin.xjh.shin_music.bean.Song;
 
 import java.io.IOException;
@@ -96,12 +95,14 @@ public class MusicUtil {
         index = i;
     }
 
-    private static void play(){
+    public static void play() {
         isPlay = true;
+        playMusic(SongList.get(index));
     }
 
     private static void pause(){
         isPlay = false;
+        stopMusic();
     }
 
     public static void playorpause(){
@@ -177,14 +178,16 @@ public class MusicUtil {
         return mSongList;
     }
 
-    public void playMusic(Song song) {
+    private static void playMusic(Song song) {
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
         }
         try {
             if (song.getUrl() == null) {
                 //获取网络歌曲
-                new getNetMusicLrc().getJson(song, mediaPlayer);
+                mediaPlayer.reset();
+                mediaPlayer.setDataSource(Constant.MUSIC_URL + song.getSongId() + Constant.SUFFIX_MP3);
+                mediaPlayer.prepare();
             } else {
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(song.getUrl());
@@ -194,6 +197,11 @@ public class MusicUtil {
             e.printStackTrace();
         }
         mediaPlayer.start();
+    }
+
+
+    private static void stopMusic() {
+        mediaPlayer.pause();
     }
 
 }
