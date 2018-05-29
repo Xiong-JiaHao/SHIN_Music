@@ -49,9 +49,11 @@ public class Fragment_Shin extends Fragment {
         query.findObjects(new FindListener<Album>() {
             @Override
             public void done(List<Album> list, BmobException e) {
-                Collections.sort(list, new SortByTime());
-                dataList = list;
-                initEvent();
+                if(list!=null){
+                    Collections.sort(list, new SortByTime());
+                    dataList = list;
+                    initEvent();
+                }
             }
         });
 

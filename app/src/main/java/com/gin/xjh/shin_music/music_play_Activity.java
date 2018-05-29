@@ -147,14 +147,12 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             case R.id.leftto:
                 if (!MusicUtil.isPlayMusic()) {
                     music_play.setImageResource(R.drawable.music_stop);
-                    Intent playintent = new Intent(getApplicationContext(), Fragment_Music.class);
-                    playintent.putExtra("action",Fragment_Music.MUSIC_NOTIFICATION_ACTION_PLAY);
-                    sendBroadcast(playintent);
+                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
                 }
                 else{
-                    Intent playintent = new Intent(getApplicationContext(), Fragment_Music.class);
-                    playintent.putExtra("action",Fragment_Music.MUSIC_NOTIFICATION_ACTION_CHANGEIMG);
-                    sendBroadcast(playintent);
+                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_CHANGEIMG);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
                 }
                 Intent startIntent2 = new Intent(this, MusicService.class);
                 startIntent2.putExtra("action", MusicService.PREVIOUSMUSIC);
@@ -164,14 +162,12 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             case R.id.music_play:
                 if (!MusicUtil.isPlayMusic()) {
                     music_play.setImageResource(R.drawable.music_stop);
-                    Intent playintent = new Intent(getApplicationContext(), Fragment_Music.class);
-                    playintent.putExtra("action",Fragment_Music.MUSIC_NOTIFICATION_ACTION_PAUSE);
-                    sendBroadcast(playintent);
+                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
                 } else {
                     music_play.setImageResource(R.drawable.music_play);
-                    Intent playintent = new Intent(getApplicationContext(), Fragment_Music.class);
-                    playintent.putExtra("action",Fragment_Music.MUSIC_NOTIFICATION_ACTION_PLAY);
-                    sendBroadcast(playintent);
+                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PAUSE);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
                 }
                 Intent startIntent1 = new Intent(this, MusicService.class);
                 startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
@@ -180,14 +176,12 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             case R.id.rightto:
                 if (!MusicUtil.isPlayMusic()) {
                     music_play.setImageResource(R.drawable.music_stop);
-                    Intent playintent = new Intent(getApplicationContext(), Fragment_Music.class);
-                    playintent.putExtra("action",Fragment_Music.MUSIC_NOTIFICATION_ACTION_PLAY);
-                    sendBroadcast(playintent);
+                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
                 }
                 else {
-                    Intent playintent = new Intent(getApplicationContext(), Fragment_Music.class);
-                    playintent.putExtra("action",Fragment_Music.MUSIC_NOTIFICATION_ACTION_CHANGEIMG);
-                    sendBroadcast(playintent);
+                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_CHANGEIMG);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
                 }
                 Intent startIntent3 = new Intent(this, MusicService.class);
                 startIntent3.putExtra("action", MusicService.NEXTMUSIC);
@@ -296,7 +290,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             Song_Name.setText(song.getSongName());
             Singer_Name.setText(song.getSingerName());
             Intent intent1 = new Intent(this, Fragment_Music.class);
-            intent1.putExtra("action", Fragment_Music.MUSIC_NOTIFICATION_ACTION_CHANGEIMG);
+            intent1.putExtra("action", Fragment_Music.MUSIC_ACTION_CHANGEIMG);
             sendBroadcast(intent1);
         }
     }
