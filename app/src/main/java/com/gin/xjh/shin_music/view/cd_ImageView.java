@@ -10,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
@@ -22,24 +21,22 @@ public class cd_ImageView extends android.support.v7.widget.AppCompatImageView {
 
     private float mScale; //图片的缩放比例
 
-    private volatile float degree = 0;//角度
-
-
-    private Handler handler = new Handler();
-    private Runnable runnable = new Runnable() {
-
-        @Override
-        public void run() {
-            synchronized (cd_ImageView.class) {
-                degree += 2f;
-                if (degree > 360f) {
-                    degree -= 360f;
-                }
-                invalidate();//重新绘制View
-                handler.postDelayed(this, 16l);
-            }
-        }
-    };
+//    private volatile float degree = 0;//角度
+//    private Handler handler = new Handler();
+//    private Runnable runnable = new Runnable() {
+//
+//        @Override
+//        public void run() {
+//            synchronized (cd_ImageView.class) {
+//                degree += 2f;
+//                if (degree > 360f) {
+//                    degree -= 360f;
+//                }
+//                invalidate();//重新绘制View
+//                handler.postDelayed(this, 16l);
+//            }
+//        }
+//    };
 
     public cd_ImageView(Context context) {
         super(context);
@@ -85,7 +82,7 @@ public class cd_ImageView extends android.support.v7.widget.AppCompatImageView {
         //画圆形，指定好中心点坐标、半径、画笔
         mPaint.setShader(bitmapShader);
         canvas.translate(mRadius * 0.30f, mRadius * 0.30f);
-        canvas.rotate(degree, mRadius * 0.7f, mRadius * 0.7f);
+        //canvas.rotate(degree, mRadius * 0.7f, mRadius * 0.7f);
         canvas.drawCircle(mRadius * 0.7f, mRadius * 0.7f, mRadius * 0.7f, mPaint);
 
     }
@@ -105,17 +102,17 @@ public class cd_ImageView extends android.support.v7.widget.AppCompatImageView {
         return bitmap;
     }
 
-    public void start() {
-        handler.post(runnable);
-    }
+//    public void start() {
+//        handler.post(runnable);
+//    }
+//
+//    public void pause() {
+//        handler.removeCallbacks(runnable);
+//    }
 
-    public void pause() {
-        handler.removeCallbacks(runnable);
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        handler.removeCallbacksAndMessages(null);
-    }
+//    @Override
+//    protected void onDetachedFromWindow() {
+//        super.onDetachedFromWindow();
+//        handler.removeCallbacksAndMessages(null);
+//    }
 }

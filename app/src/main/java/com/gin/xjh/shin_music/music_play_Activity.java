@@ -1,10 +1,14 @@
 package com.gin.xjh.shin_music;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -45,15 +49,24 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     private FragmentAdapter adapter;
     private int Index;
 
+    private SongBroadCast mSongBroadCast;
+
     private List<Song> mSongList;
     private musiclistRecyclerViewAdapter musiclistRecyclerViewAdapter;
+
+
+    public static final String MUSIC_ACTION_CHANGE = "MusicNotificaion.To.CHANGE";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.music_play);
         mSongList = MusicUtil.getSongList();
-        Toast.makeText(this, "" + MusicUtil.getIndex(), Toast.LENGTH_SHORT).show();
+        mSongBroadCast = new SongBroadCast();
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(MUSIC_ACTION_CHANGE);
+        broadcastManager.registerReceiver(mSongBroadCast, intentFilter);
         initView();
         changSong();
         initEvent();
@@ -147,27 +160,24 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             case R.id.leftto:
                 if (!MusicUtil.isPlayMusic()) {
                     music_play.setImageResource(R.drawable.music_stop);
-                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
                 }
-                else{
-                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_CHANGEIMG);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
-                }
+                Intent playintent1 = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
+                android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent1);
                 Intent startIntent2 = new Intent(this, MusicService.class);
                 startIntent2.putExtra("action", MusicService.PREVIOUSMUSIC);
                 startService(startIntent2);
-                changSong();
                 break;
             case R.id.music_play:
-                if (!MusicUtil.isPlayMusic()) {
+                if (MusicUtil.getListSize() == 0) {
+                    Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
+                } else if (!MusicUtil.isPlayMusic()) {
                     music_play.setImageResource(R.drawable.music_stop);
-                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
+                    Intent playintent2 = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent2);
                 } else {
                     music_play.setImageResource(R.drawable.music_play);
-                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PAUSE);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
+                    Intent playintent2 = new Intent(Fragment_Music.MUSIC_ACTION_PAUSE);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent2);
                 }
                 Intent startIntent1 = new Intent(this, MusicService.class);
                 startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
@@ -176,17 +186,12 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             case R.id.rightto:
                 if (!MusicUtil.isPlayMusic()) {
                     music_play.setImageResource(R.drawable.music_stop);
-                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
                 }
-                else {
-                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_CHANGEIMG);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
-                }
+                Intent playintent3 = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
+                android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent3);
                 Intent startIntent3 = new Intent(this, MusicService.class);
                 startIntent3.putExtra("action", MusicService.NEXTMUSIC);
                 startService(startIntent3);
-                changSong();
                 break;
             case R.id.song_sheet:
                 if (MusicUtil.getListSize() > 0) {
@@ -289,9 +294,26 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         } else {
             Song_Name.setText(song.getSongName());
             Singer_Name.setText(song.getSingerName());
-            Intent intent1 = new Intent(this, Fragment_Music.class);
-            intent1.putExtra("action", Fragment_Music.MUSIC_ACTION_CHANGEIMG);
-            sendBroadcast(intent1);
+            Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
+            android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(intent1);
         }
+    }
+
+    public class SongBroadCast extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case MUSIC_ACTION_CHANGE:
+                    changSong();
+                    break;
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mSongBroadCast);
+        super.onDestroy();
     }
 }

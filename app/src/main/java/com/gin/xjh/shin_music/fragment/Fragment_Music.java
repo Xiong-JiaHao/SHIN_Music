@@ -11,6 +11,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.util.MusicUtil;
@@ -27,9 +30,11 @@ public class Fragment_Music extends Fragment {
 
     public static final String MUSIC_ACTION_PLAY = "MusicNotificaion.To.PLAY";
     public static final String MUSIC_ACTION_PAUSE = "MusicNotificaion.To.PAUSE";
-    public static final String MUSIC_ACTION_CHANGEIMG = "MusicNotificaion.To.CHANGEIMG";
 
     private CDBroadCast cdBroadCast = null;
+
+    private Animation animation;
+    private LinearInterpolator lin;
 
     @Nullable
     @Override
@@ -40,7 +45,6 @@ public class Fragment_Music extends Fragment {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(MUSIC_ACTION_PLAY);
         intentFilter.addAction(MUSIC_ACTION_PAUSE);
-        intentFilter.addAction(MUSIC_ACTION_CHANGEIMG);
         broadcastManager.registerReceiver(cdBroadCast,intentFilter);
         initView(view);
         initEvent();
@@ -49,21 +53,42 @@ public class Fragment_Music extends Fragment {
 
     private void initView(View view) {
         mAlbum = view.findViewById(R.id.album);
-        Picasso.with(getContext()).load(MusicUtil.getNowSong().getAlbumUrl())
-                .placeholder(R.drawable.album)
-                .error(R.drawable.album)
-                .into(mAlbum);
+        if (MusicUtil.getListSize() > 0) {
+            Picasso.with(getContext()).load(MusicUtil.getNowSong().getAlbumUrl())
+                    .placeholder(R.drawable.album)
+                    .error(R.drawable.album)
+                    .into(mAlbum);
+        }
+
+        animation = AnimationUtils.loadAnimation(getContext(), R.anim.img_animation);
+        lin = new LinearInterpolator();//设置动画匀速运动
+        animation.setInterpolator(lin);
     }
 
     private void initEvent() {
         if (MusicUtil.isPlayMusic()) {
-            mAlbum.start();
+            start();
         } else {
-            mAlbum.pause();
+            pause();
         }
 
     }
 
+    private void start() {
+        mAlbum.clearAnimation();
+        mAlbum.setAnimation(animation);
+    }
+
+    private void pause() {
+        mAlbum.clearAnimation();
+    }
+
+    @Override
+    public void onDestroy() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(cdBroadCast);
+        mAlbum.clearAnimation();
+        super.onDestroy();
+    }
 
     public class CDBroadCast extends BroadcastReceiver {
 
@@ -75,26 +100,14 @@ public class Fragment_Music extends Fragment {
                             .placeholder(R.drawable.album)
                             .error(R.drawable.album)
                             .into(mAlbum);
-                    mAlbum.start();
+                    start();
                     break;
                 case MUSIC_ACTION_PAUSE:
-                    mAlbum.pause();
-                    break;
-
-                case MUSIC_ACTION_CHANGEIMG:
-                    Picasso.with(getContext()).load(MusicUtil.getNowSong().getAlbumUrl())
-                            .placeholder(R.drawable.album)
-                            .error(R.drawable.album)
-                            .into(mAlbum);
+                    pause();
                     break;
             }
         }
     }
 
-    @Override
-    public void onDestroy() {
-        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getActivity());
-        broadcastManager.unregisterReceiver(cdBroadCast);
-        super.onDestroy();
-    }
+
 }
