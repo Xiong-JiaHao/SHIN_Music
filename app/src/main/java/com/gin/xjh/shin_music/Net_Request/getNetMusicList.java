@@ -74,7 +74,10 @@ public class getNetMusicList {
                             JSONObject alObject = new JSONObject(al);
                             String AlbumName = alObject.getString("name");
                             String AlbumUri = alObject.getString("picUrl");
-                            Song song = new Song(jsonObject.getString("name"), jsonObject.getLong("id"), Singer, SingerId, AlbumName, AlbumUri);
+                            Song song = new Song(jsonObject.getString("name"), jsonObject.getLong("id"), Singer, SingerId, AlbumName, AlbumUri, jsonObject.getLong("dt"));
+
+                            song.setSongTime(jsonObject.getLong("dt"));
+
                             mSongList.add(song);
                         }
 

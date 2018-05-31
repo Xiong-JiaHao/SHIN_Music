@@ -72,7 +72,7 @@ public class findNetMusic {
                             String al = jsonObject.getString("album");
                             JSONObject alObject = new JSONObject(al);
                             String AlbumName = alObject.getString("name");
-                            Song song = new Song(jsonObject.getString("name"), jsonObject.getLong("id"), Singer, SingerId, AlbumName, null);
+                            Song song = new Song(jsonObject.getString("name"), jsonObject.getLong("id"), Singer, SingerId, AlbumName, null, null);
                             mSongList.add(song);
                         }
 

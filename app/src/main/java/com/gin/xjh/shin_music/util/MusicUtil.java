@@ -27,6 +27,7 @@ public class MusicUtil {
 
     private static MediaPlayer mediaPlayer;
 
+    private static int playTime;
 
 
     public static List<Song> getSongList() {
@@ -120,6 +121,7 @@ public class MusicUtil {
     }
 
     public static void pre(){
+        playTime = 0;
         if (play_state == ORDER_CYCLE || play_state == SINGLE_CYCLE) {
             if (index == 0) {
                 index = listSize - 1;
@@ -135,6 +137,7 @@ public class MusicUtil {
     }
 
     public static void next(){
+        playTime = 0;
         if (play_state == ORDER_CYCLE || play_state == SINGLE_CYCLE) {
             index++;
             if (index == listSize) {
@@ -148,6 +151,7 @@ public class MusicUtil {
     }
 
     public static void autonext(){
+        playTime = 0;
         if (play_state == ORDER_CYCLE) {
             index++;
             if (index == listSize) {

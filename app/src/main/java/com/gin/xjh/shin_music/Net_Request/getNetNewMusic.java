@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.gin.xjh.shin_music.Interface.RequestServices_MusicList;
-import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.adapter.recommendmusicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.util.Constant;
@@ -75,7 +74,8 @@ public class getNetNewMusic {
                             JSONObject alObject = new JSONObject(al);
                             String AlbumName = alObject.getString("name");
                             String AlbumUri = alObject.getString("picUrl");
-                            Song song = new Song(jsonObject.getString("name"), jsonObject.getLong("id"), Singer, SingerId, AlbumName, AlbumUri);
+                            Song song = new Song(jsonObject.getString("name"), jsonObject.getLong("id"), Singer, SingerId, AlbumName, AlbumUri, jsonObject.getLong("dt"));
+
                             mSongList.add(song);
                         }
 

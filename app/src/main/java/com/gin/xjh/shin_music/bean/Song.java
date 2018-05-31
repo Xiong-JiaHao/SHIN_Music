@@ -17,7 +17,11 @@ public class Song extends BmobObject implements Serializable {
     private String AlbumName;//专辑名称
     private String Url;//路径
     private String AlbumUrl;//专辑图片路径
-    private Long SongTime;//歌曲时间
+    private Long SongTime = null;//歌曲时间
+
+    public Song() {
+
+    }
 
     public Song(String SongName, String SingerName, String AlbumName, String Url) {
         this.SongName = SongName;
@@ -28,13 +32,14 @@ public class Song extends BmobObject implements Serializable {
         AlbumUrl = null;
     }
 
-    public Song(String SongName, Long Songid, String SingerName, Long SingerId, String AlbumName, String AlbumUrl) {
+    public Song(String SongName, Long Songid, String SingerName, Long SingerId, String AlbumName, String AlbumUrl, Long SongTime) {
         this.SongName = SongName;
         this.SongId = Songid;
         this.SingerName = SingerName;
         this.SingerId = SingerId;
         this.AlbumName = AlbumName;
         this.AlbumUrl = AlbumUrl;
+        this.SongTime = SongTime;
         Url = null;
     }
 
@@ -83,6 +88,10 @@ public class Song extends BmobObject implements Serializable {
 
     public void setSongTime(Long songTime) {
         SongTime = songTime;
+    }
+
+    public void setAlbumUrl(String albumUrl) {
+        AlbumUrl = albumUrl;
     }
 
     public void setSingerId(Long singerId) {

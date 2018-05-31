@@ -25,6 +25,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gin.xjh.shin_music.Net_Request.getNetMusicDetail;
 import com.gin.xjh.shin_music.adapter.FragmentAdapter;
 import com.gin.xjh.shin_music.adapter.musiclistRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
@@ -33,7 +34,9 @@ import com.gin.xjh.shin_music.fragment.Fragment_Music;
 import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.DensityUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.util.TimesUtil;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +58,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     private musiclistRecyclerViewAdapter musiclistRecyclerViewAdapter;
 
 
-    public static final String MUSIC_ACTION_CHANGE = "MusicNotificaion.To.CHANGE";
+    public static final String MUSIC_ACTION_CHANGE = "MusicNotificaion.To.Change";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -294,6 +297,15 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         } else {
             Song_Name.setText(song.getSongName());
             Singer_Name.setText(song.getSingerName());
+            try {
+                if (song.getSongTime() == null) {
+                    new getNetMusicDetail().getJson(this);
+                } else {
+                    endtime.setText(TimesUtil.longToString(song.getSongTime(), "mm:ss"));
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
             android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(intent1);
         }
