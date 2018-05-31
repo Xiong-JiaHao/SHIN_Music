@@ -52,19 +52,10 @@ public class getNetMusicDetail {
                         String urlString = jsonObject.getString("al");
                         JSONObject urlObject = new JSONObject(urlString);
                         String url = urlObject.getString("picUrl");
-                        Song song = MusicUtil.getNowSong();
-                        Song newsong = new Song();
-                        newsong.setSongTime(time);
                         MusicUtil.getSongList().get(MusicUtil.getIndex()).setSongTime(time);
                         MusicUtil.getSongList().get(MusicUtil.getIndex()).setAlbumUrl(url);
                         Intent intent = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
                         android.support.v4.content.LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-                        newsong.update(song.getObjectId(), new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-
-                            }
-                        });
 
                     } catch (JSONException e) {
                         e.printStackTrace();
