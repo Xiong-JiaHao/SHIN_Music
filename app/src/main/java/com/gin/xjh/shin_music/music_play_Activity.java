@@ -164,8 +164,6 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 if (!MusicUtil.isPlayMusic()) {
                     music_play.setImageResource(R.drawable.music_stop);
                 }
-                Intent playintent1 = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
-                android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent1);
                 Intent startIntent2 = new Intent(this, MusicService.class);
                 startIntent2.putExtra("action", MusicService.PREVIOUSMUSIC);
                 startService(startIntent2);
@@ -175,12 +173,12 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
                 } else if (!MusicUtil.isPlayMusic()) {
                     music_play.setImageResource(R.drawable.music_stop);
-                    Intent playintent2 = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent2);
+                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
                 } else {
                     music_play.setImageResource(R.drawable.music_play);
-                    Intent playintent2 = new Intent(Fragment_Music.MUSIC_ACTION_PAUSE);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent2);
+                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PAUSE);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
                 }
                 Intent startIntent1 = new Intent(this, MusicService.class);
                 startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
@@ -190,8 +188,6 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 if (!MusicUtil.isPlayMusic()) {
                     music_play.setImageResource(R.drawable.music_stop);
                 }
-                Intent playintent3 = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
-                android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent3);
                 Intent startIntent3 = new Intent(this, MusicService.class);
                 startIntent3.putExtra("action", MusicService.NEXTMUSIC);
                 startService(startIntent3);
@@ -306,7 +302,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
+            Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_CHANGE);
             android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(intent1);
         }
     }

@@ -1,5 +1,7 @@
 package com.gin.xjh.shin_music.fragment;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +13,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 
 import com.gin.xjh.shin_music.R;
@@ -30,11 +30,11 @@ public class Fragment_Music extends Fragment {
 
     public static final String MUSIC_ACTION_PLAY = "MusicNotificaion.To.PLAY";
     public static final String MUSIC_ACTION_PAUSE = "MusicNotificaion.To.PAUSE";
-
+    public static final String MUSIC_ACTION_CHANGE = "MusicNotificaion.To.CHANGEMUSIC";
     private CDBroadCast cdBroadCast = null;
 
-    private Animation animation;
-    private LinearInterpolator lin;
+    private float currentValue = 0f;
+    private ObjectAnimator objAnim = null;
 
     @Nullable
     @Override
@@ -60,27 +60,15 @@ public class Fragment_Music extends Fragment {
                     .into(mAlbum);
         }
 
-        animation = AnimationUtils.loadAnimation(getContext(), R.anim.img_animation);
-        lin = new LinearInterpolator();//设置动画匀速运动
-        animation.setInterpolator(lin);
     }
 
     private void initEvent() {
         if (MusicUtil.isPlayMusic()) {
-            start();
+            startAnimation();
         } else {
-            pause();
+            pauseAnimation();
         }
 
-    }
-
-    private void start() {
-        mAlbum.clearAnimation();
-        mAlbum.setAnimation(animation);
-    }
-
-    private void pause() {
-        mAlbum.clearAnimation();
     }
 
     @Override
@@ -100,14 +88,69 @@ public class Fragment_Music extends Fragment {
                             .placeholder(R.drawable.album)
                             .error(R.drawable.album)
                             .into(mAlbum);
-                    start();
+                    startAnimation();
                     break;
                 case MUSIC_ACTION_PAUSE:
-                    pause();
+                    pauseAnimation();
+                    break;
+                case MUSIC_ACTION_CHANGE:
+                    stopAnimation();
+                    startAnimation();
                     break;
             }
         }
     }
 
 
+    /**
+     * 开始动画
+     */
+    public void startAnimation() {
+
+        // 设置动画，从上次停止位置开始,这里是顺时针旋转360度
+        objAnim = ObjectAnimator.ofFloat(mAlbum, "Rotation",
+                currentValue - 360, currentValue);
+        // 设置持续时间
+        objAnim.setDuration(20000);
+        //设置插值器
+        objAnim.setInterpolator(new LinearInterpolator());
+        // 设置循环播放
+        objAnim.setRepeatCount(ObjectAnimator.INFINITE);
+        // 设置动画监听
+        objAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                // TODO Auto-generated method stub
+                // 监听动画执行的位置，以便下次开始时，从当前位置开始
+                currentValue = (Float) animation.getAnimatedValue();
+
+            }
+        });
+        objAnim.start();
+    }
+
+    /**
+     * 停止动画
+     */
+    public void stopAnimation() {
+        objAnim.end();
+        currentValue = 0;// 重置起始位置
+    }
+
+    /**
+     * 暂停动画
+     */
+    public void pauseAnimation() {
+        objAnim.cancel();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        // 控件被移除时，取消动画
+        objAnim.cancel();
+        mAlbum.clearAnimation();// 清除此ImageView身上的动画
+    }
 }
