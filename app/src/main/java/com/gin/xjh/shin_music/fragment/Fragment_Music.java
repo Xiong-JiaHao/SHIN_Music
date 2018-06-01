@@ -1,7 +1,6 @@
 package com.gin.xjh.shin_music.fragment;
 
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +32,6 @@ public class Fragment_Music extends Fragment {
     public static final String MUSIC_ACTION_CHANGE = "MusicNotificaion.To.CHANGEMUSIC";
     private CDBroadCast cdBroadCast = null;
 
-    private float currentValue = 0f;
     private ObjectAnimator objAnim = null;
 
     @Nullable
@@ -45,6 +43,7 @@ public class Fragment_Music extends Fragment {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(MUSIC_ACTION_PLAY);
         intentFilter.addAction(MUSIC_ACTION_PAUSE);
+        intentFilter.addAction(MUSIC_ACTION_CHANGE);
         broadcastManager.registerReceiver(cdBroadCast,intentFilter);
         initView(view);
         initEvent();
@@ -60,15 +59,18 @@ public class Fragment_Music extends Fragment {
                     .into(mAlbum);
         }
 
+        objAnim = ObjectAnimator.ofFloat(mAlbum, "rotation", 0.0f, 360.0f);
+        objAnim.setDuration(20000);
+        objAnim.setInterpolator(new LinearInterpolator());
+        objAnim.setRepeatCount(-1);
+        objAnim.setRepeatMode(ObjectAnimator.RESTART);
+
     }
 
     private void initEvent() {
         if (MusicUtil.isPlayMusic()) {
-            startAnimation();
-        } else {
-            pauseAnimation();
+            objAnim.start();
         }
-
     }
 
     @Override
@@ -88,61 +90,25 @@ public class Fragment_Music extends Fragment {
                             .placeholder(R.drawable.album)
                             .error(R.drawable.album)
                             .into(mAlbum);
-                    startAnimation();
+                    if (objAnim.isPaused()) {
+                        objAnim.resume();
+                    } else {
+                        objAnim.start();
+                    }
                     break;
                 case MUSIC_ACTION_PAUSE:
-                    pauseAnimation();
+                    objAnim.pause();
                     break;
                 case MUSIC_ACTION_CHANGE:
-                    stopAnimation();
-                    startAnimation();
+                    Picasso.with(getContext()).load(MusicUtil.getNowSong().getAlbumUrl())
+                            .placeholder(R.drawable.album)
+                            .error(R.drawable.album)
+                            .into(mAlbum);
+                    objAnim.end();
+                    objAnim.start();
                     break;
             }
         }
-    }
-
-
-    /**
-     * 开始动画
-     */
-    public void startAnimation() {
-
-        // 设置动画，从上次停止位置开始,这里是顺时针旋转360度
-        objAnim = ObjectAnimator.ofFloat(mAlbum, "Rotation",
-                currentValue - 360, currentValue);
-        // 设置持续时间
-        objAnim.setDuration(20000);
-        //设置插值器
-        objAnim.setInterpolator(new LinearInterpolator());
-        // 设置循环播放
-        objAnim.setRepeatCount(ObjectAnimator.INFINITE);
-        // 设置动画监听
-        objAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                // TODO Auto-generated method stub
-                // 监听动画执行的位置，以便下次开始时，从当前位置开始
-                currentValue = (Float) animation.getAnimatedValue();
-
-            }
-        });
-        objAnim.start();
-    }
-
-    /**
-     * 停止动画
-     */
-    public void stopAnimation() {
-        objAnim.end();
-        currentValue = 0;// 重置起始位置
-    }
-
-    /**
-     * 暂停动画
-     */
-    public void pauseAnimation() {
-        objAnim.cancel();
     }
 
     @Override

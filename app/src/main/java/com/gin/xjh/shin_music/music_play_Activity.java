@@ -171,6 +171,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             case R.id.music_play:
                 if (MusicUtil.getListSize() == 0) {
                     Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
+                    break;
                 } else if (!MusicUtil.isPlayMusic()) {
                     music_play.setImageResource(R.drawable.music_stop);
                     Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
