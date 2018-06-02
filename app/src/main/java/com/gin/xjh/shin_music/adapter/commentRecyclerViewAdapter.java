@@ -6,14 +6,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Comment;
+import com.gin.xjh.shin_music.bean.User;
 import com.gin.xjh.shin_music.util.TimesUtil;
 
 import java.text.ParseException;
 import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 /**
  * Created by Gin on 2018/4/24.
@@ -54,7 +60,7 @@ public class commentRecyclerViewAdapter extends RecyclerView.Adapter<commentRecy
             itemTimes = itemView.findViewById(R.id.comment_time);
         }
 
-        public void load(Comment comment, final Context context) {
+        public void load(final Comment comment, final Context context) {
             try {
                 itemName.setText(comment.getUserName());
                 itemComment.setText(comment.getMyComment());
@@ -65,6 +71,39 @@ public class commentRecyclerViewAdapter extends RecyclerView.Adapter<commentRecy
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         LayoutInflater inflater = LayoutInflater.from(context);
                         View viewDialog = inflater.inflate(R.layout.comment_details, null);
+
+                        final TextView User_name = viewDialog.findViewById(R.id.User_name);
+                        final ImageView User_sex = viewDialog.findViewById(R.id.User_sex);
+                        final TextView User_QQ = viewDialog.findViewById(R.id.User_QQ);
+                        final TextView User_sign = viewDialog.findViewById(R.id.User_sign);
+                        final TextView comment_content = viewDialog.findViewById(R.id.comment_content);
+                        final String Userid = comment.getUserId();
+                        User_name.setText(comment.getUserName());
+                        comment_content.setText(comment.getMyComment());
+                        BmobQuery<User> query = new BmobQuery<>();
+                        query.addWhereEqualTo("UserId", Userid);
+                        query.findObjects(new FindListener<User>() {
+                            @Override
+                            public void done(List<User> list, BmobException e) {
+                                if (e == null) {
+                                    User user = list.get(0);
+                                    switch (user.getUserSex()) {
+                                        case 0:
+                                            User_sex.setImageResource(R.drawable.man);
+                                            break;
+                                        case 1:
+                                            User_sex.setImageResource(R.drawable.woman);
+                                            break;
+                                        case 2:
+                                            User_sex.setImageResource(R.drawable.alien);
+                                            break;
+                                    }
+                                    User_QQ.setText("QQ:" + user.getUserQQ());
+                                    User_sign.setText(user.getPersonal_profile());
+                                }
+                            }
+                        });
+
                         builder.setView(viewDialog);
                         builder.create();
                         builder.show();

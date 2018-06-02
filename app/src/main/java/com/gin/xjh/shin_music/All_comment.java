@@ -12,9 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.gin.xjh.shin_music.User.User_state;
 import com.gin.xjh.shin_music.adapter.commentRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Comment;
+import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.util.MusicUtil;
 
 import java.util.Collections;
 import java.util.Date;
@@ -81,6 +85,14 @@ public class All_comment extends BaseActivity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.write_comment:
+                //判读是否有资格写评论，如果没有提示需要登入
+                if (!User_state.getState()) {
+                    Toast.makeText(this, "需要登入后才具有评论功能", Toast.LENGTH_SHORT).show();
+                    break;
+                } else if (MusicUtil.getListSize() == 0) {
+                    Toast.makeText(this, "当前没有歌曲", Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(All_comment.this);
                 LayoutInflater inflater = LayoutInflater.from(All_comment.this);
                 View viewDialog = inflater.inflate(R.layout.add_comment, null);
@@ -91,13 +103,22 @@ public class All_comment extends BaseActivity implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Date date = new Date();
-                        Comment comment = new Comment("ginshin", "ginshin", "1", Personal_profile.getText().toString(), date.getTime());
-                        comment.save(new SaveListener<String>() {
-                            @Override
-                            public void done(String s, BmobException e) {
+                        User user = User_state.getLoginUser();
 
-                            }
-                        });
+                        //评论内容的判空
+                        String comment = Personal_profile.getText().toString();
+                        if (comment.length() == 0 && comment.equals("")) {
+                            Toast.makeText(All_comment.this, "请输入内容后点击提交", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Comment mComment = new Comment(user.getUserName(), user.getUserId(), "1", comment, date.getTime());
+                            mComment.save(new SaveListener<String>() {
+                                @Override
+                                public void done(String s, BmobException e) {
+                                    //更新评论列表
+
+                                }
+                            });
+                        }
                     }
                 });
                 builder.setNegativeButton("取消", null);
