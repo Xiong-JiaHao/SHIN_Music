@@ -1,6 +1,5 @@
 package com.gin.xjh.shin_music;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,7 +25,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
-public class All_comment extends Activity implements View.OnClickListener {
+public class All_comment extends BaseActivity implements View.OnClickListener {
 
     private ImageView go_back, write_comment;
     private RecyclerView comment_rv;

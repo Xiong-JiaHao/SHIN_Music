@@ -1,6 +1,5 @@
 package com.gin.xjh.shin_music;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,7 +17,7 @@ import com.gin.xjh.shin_music.bean.Song;
 
 import java.util.List;
 
-public class music_details_Activity extends Activity implements View.OnClickListener {
+public class music_details_Activity extends BaseActivity implements View.OnClickListener {
 
     private ImageView go_back;
     private TextView find_name, mFind_hint;

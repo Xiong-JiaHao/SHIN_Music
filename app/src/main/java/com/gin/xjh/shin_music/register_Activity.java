@@ -1,6 +1,5 @@
 package com.gin.xjh.shin_music;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,7 +20,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
-public class register_Activity extends Activity implements View.OnClickListener {
+public class register_Activity extends BaseActivity implements View.OnClickListener {
 
 
     private ImageView go_back, checkid, checkpassword, checkagainpassword;

@@ -1,12 +1,11 @@
 package com.gin.xjh.shin_music;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 
-public class add_question extends Activity implements View.OnClickListener {
+public class add_question extends BaseActivity implements View.OnClickListener {
 
     private ImageView go_back;
 

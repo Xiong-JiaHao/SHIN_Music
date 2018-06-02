@@ -1,6 +1,5 @@
 package com.gin.xjh.shin_music;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +25,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class login_menu_Activity extends Activity implements View.OnClickListener {
+public class login_menu_Activity extends BaseActivity implements View.OnClickListener {
 
     private ImageView go_back,User_img,User_Sex;
     private TextView User_Name,User_QQ,User_Sign;

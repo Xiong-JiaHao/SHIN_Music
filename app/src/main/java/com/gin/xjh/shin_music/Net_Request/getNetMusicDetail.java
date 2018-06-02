@@ -8,7 +8,6 @@ import android.os.Message;
 import android.util.Log;
 
 import com.gin.xjh.shin_music.Interface.RequestServices_MusicDetail;
-import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_play_Activity;
 import com.gin.xjh.shin_music.util.Constant;
 import com.gin.xjh.shin_music.util.MusicUtil;
@@ -19,8 +18,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.UpdateListener;
 import okhttp3.ResponseBody;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,7 +45,7 @@ public class getNetMusicDetail {
                         String JSONString = AllObject.getString("songs");
                         JSONArray jsonArray = new JSONArray(JSONString);
                         JSONObject jsonObject = jsonArray.getJSONObject(0);
-                        Long time = jsonObject.getLong("dt");
+                        int time = jsonObject.getInt("dt");
                         String urlString = jsonObject.getString("al");
                         JSONObject urlObject = new JSONObject(urlString);
                         String url = urlObject.getString("picUrl");

@@ -295,7 +295,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             Song_Name.setText(song.getSongName());
             Singer_Name.setText(song.getSingerName());
             try {
-                if (song.getSongTime() == null) {
+                if (song.getSongTime() == 0) {
                     new getNetMusicDetail().getJson(this);
                 } else {
                     endtime.setText(TimesUtil.longToString(song.getSongTime(), "mm:ss"));
@@ -303,6 +303,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            time_seekbar.setMax(song.getSongTime());
             Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_CHANGE);
             android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(intent1);
         }

@@ -33,14 +33,16 @@
         android:hardwareAccelerated="false"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".music_play_Activity"/>
+        <activity android:name=".music_play_Activity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".login_menu_Activity"/>
         <activity android:name=".album_details_Activity"/>
         <activity android:name=".add_question"/>

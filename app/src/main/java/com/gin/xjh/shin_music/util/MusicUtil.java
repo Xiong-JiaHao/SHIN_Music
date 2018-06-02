@@ -27,7 +27,7 @@ public class MusicUtil {
 
     private static MediaPlayer mediaPlayer;
 
-    private static int playTime;
+    private static int playTime = 0;
 
 
     public static List<Song> getSongList() {
@@ -96,9 +96,19 @@ public class MusicUtil {
         index = i;
     }
 
+    public static int getPlayTime() {
+        return playTime;
+    }
+
+    public static void setPlayTime(int playTime) {
+        MusicUtil.playTime = playTime;
+    }
+
     public static void play() {
         isPlay = true;
         playMusic(SongList.get(index));
+        //还原暂停播放
+        setSeekTo(playTime);
     }
 
     private static void pause(){
@@ -117,6 +127,7 @@ public class MusicUtil {
 
     public static void clean() {
         mediaPlayer.stop();
+        mediaPlayer.reset();
         mediaPlayer.release();
     }
 
@@ -174,7 +185,7 @@ public class MusicUtil {
                 String Url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
                 String AlbumId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
                 Song song = new Song(SongName, SingerName, AlbumName, Url);
-                song.setSongTime(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+                song.setSongTime(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
                 if (song.getSongTime() >= 60000) {
                     mSongList.add(song);
                 }
@@ -207,6 +218,7 @@ public class MusicUtil {
 
 
     private static void stopMusic() {
+        playTime = mediaPlayer.getCurrentPosition();
         mediaPlayer.pause();
     }
 

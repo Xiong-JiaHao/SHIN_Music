@@ -1,6 +1,5 @@
 package com.gin.xjh.shin_music;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,7 +26,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class album_details_Activity extends Activity implements View.OnClickListener {
+public class album_details_Activity extends BaseActivity implements View.OnClickListener {
 
     private ImageView go_back,album_img;
     private RecyclerView album_rv;
