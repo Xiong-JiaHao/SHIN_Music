@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -57,8 +60,29 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     private List<Song> mSongList;
     private musiclistRecyclerViewAdapter musiclistRecyclerViewAdapter;
 
+    private boolean isChange = false;
+    private Thread thread;
+
 
     public static final String MUSIC_ACTION_CHANGE = "MusicNotificaion.To.Change";
+
+    private static final int REQUEST_SUCCESS = 200;
+    private Handler mHandler = null;
+
+    private void obtainMainHandler() {
+        if (mHandler != null) {
+            return;
+        }
+        mHandler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == REQUEST_SUCCESS) {
+                    String time = (String) msg.obj;
+                    nowtime.setText(time);
+                }
+            }
+        };
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,6 +119,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     }
 
     private void initEvent() {
+        obtainMainHandler();
         fragments.add(new Fragment_Music());
         fragments.add(new Fragment_Lyrics());
         Index = 0;
@@ -114,22 +139,27 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         time_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                MusicUtil.setSeekTo(progress);
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                isChange = true;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                MusicUtil.setSeekTo(seekBar.getProgress());
+                isChange = false;
+                thread = new Thread(new SeekBarThread());
+                thread.start();
             }
         });
 
         if (MusicUtil.isPlayMusic()) {
             music_play.setImageResource(R.drawable.music_stop);
+            thread = new Thread(new SeekBarThread());
+            thread.start();
         }
     }
 
@@ -303,7 +333,8 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            time_seekbar.setMax(song.getSongTime());
+            time_seekbar.setProgress(MusicUtil.getPlayTime());
+            time_seekbar.setMax(MusicUtil.getSumTime());
             Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_CHANGE);
             android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(intent1);
         }
@@ -317,6 +348,33 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 case MUSIC_ACTION_CHANGE:
                     changSong();
                     break;
+            }
+        }
+    }
+
+    class SeekBarThread implements Runnable {
+
+        @Override
+        public void run() {
+            while (!isChange && MusicUtil.isPlayMusic() && time_seekbar.getProgress() < time_seekbar.getMax()) {
+                // 将SeekBar位置设置到当前播放位置
+                int time = MusicUtil.getPlayTime();
+                time_seekbar.setProgress(time);
+                try {
+                    Message msg = new Message();
+                    msg.what = REQUEST_SUCCESS;
+                    msg.obj = TimesUtil.longToString((long) time, "mm:ss");
+                    mHandler.sendMessage(msg);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    // 每1000毫秒更新一次位置
+                    Thread.sleep(1000);
+                    //播放进度
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -97,11 +97,11 @@ public class MusicUtil {
     }
 
     public static int getPlayTime() {
-        return playTime;
+        return mediaPlayer.getCurrentPosition();
     }
 
-    public static void setPlayTime(int playTime) {
-        MusicUtil.playTime = playTime;
+    public static int getSumTime() {
+        return mediaPlayer.getDuration();
     }
 
     public static void play() {

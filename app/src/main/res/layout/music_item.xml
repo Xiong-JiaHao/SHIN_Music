@@ -6,7 +6,7 @@
     android:padding="5dp">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:orientation="vertical">
@@ -16,6 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="如果你还在就好了"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textColor="#ffffff"
             android:textSize="17sp" />
 
@@ -24,6 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="信 - 反正我信了"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textColor="@color/FindColor"
             android:textSize="15sp" />
     </LinearLayout>
