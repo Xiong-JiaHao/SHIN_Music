@@ -1,5 +1,6 @@
 package com.gin.xjh.shin_music;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -180,8 +181,16 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 fragment_VP.setCurrentItem(Index);
                 break;
             case R.id.ic_comment:
-                Intent ic_comment_intent = new Intent(this, All_comment.class);
-                startActivity(ic_comment_intent);
+                Song song = MusicUtil.getNowSong();
+                if (song == null || song.isOnline()) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("song", song);
+                    Intent ic_comment_intent = new Intent(this, All_comment.class);
+                    ic_comment_intent.putExtra("song", bundle);
+                    startActivity(ic_comment_intent);
+                } else {
+                    Toast.makeText(music_play_Activity.this, "该歌曲不支持评论功能", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.settings:
                 showSettingsbottomDialog();
@@ -241,17 +250,29 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     private void showSettingsbottomDialog() {
         final Dialog bottomDialog = new Dialog(this, R.style.BottomDialog);
         bottomDialog.setCanceledOnTouchOutside(true);
         View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content_circle_inplay, null);
         TextView ic_comment2 = contentView.findViewById(R.id.ic_comment);
+        final Song song = MusicUtil.getNowSong();
+        if (song.isOnline()) {
+            ic_comment2.setTextColor(R.color.Check);
+        }
         ic_comment2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //发消息告知弹出评论
-                Intent ic_comment_intent = new Intent(music_play_Activity.this, All_comment.class);
-                startActivity(ic_comment_intent);
+                if (song == null || song.isOnline()) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("song", song);
+                    Intent ic_comment_intent = new Intent(music_play_Activity.this, All_comment.class);
+                    ic_comment_intent.putExtra("song", bundle);
+                    startActivity(ic_comment_intent);
+                } else {
+                    Toast.makeText(music_play_Activity.this, "该歌曲不支持评论功能", Toast.LENGTH_SHORT).show();
+                }
                 bottomDialog.dismiss();
             }
         });
