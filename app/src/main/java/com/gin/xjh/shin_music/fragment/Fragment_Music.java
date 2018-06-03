@@ -73,6 +73,12 @@ public class Fragment_Music extends Fragment {
     }
 
     private void initEvent() {
+        mAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //跳转到专辑
+            }
+        });
         if (MusicUtil.isPlayMusic()) {
             objAnim.start();
         }

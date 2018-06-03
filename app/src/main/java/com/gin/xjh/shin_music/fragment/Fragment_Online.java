@@ -115,9 +115,18 @@ public class Fragment_Online extends Fragment {
             Toast.makeText(getContext(), "请输入搜索名称再点击按钮", Toast.LENGTH_SHORT).show();
             return;
         }
+        mFind.setText("");
         Intent intent = new Intent(getContext(), music_details_Activity.class);
-        intent.putExtra("name", mFind.getText().toString());
+        intent.putExtra("name", name);
         intent.putExtra("isOnline", true);
         startActivity(intent);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (mFind != null) {
+            mFind.setText("");
+        }
+        super.setUserVisibleHint(isVisibleToUser);
     }
 }

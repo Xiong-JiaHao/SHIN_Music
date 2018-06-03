@@ -23,6 +23,7 @@
             android:background="@drawable/btn_white"
             android:cursorVisible="false"
             android:gravity="center"
+            android:singleLine="true"
             android:hint="搜索网络歌曲"
             android:imeOptions="actionSearch"
             android:maxLines="1"

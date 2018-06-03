@@ -70,9 +70,13 @@ public class findNetMusic {
 
                             //专辑
                             String al = jsonObject.getString("album");
+                            String id = String.valueOf(jsonObject.getLong("id"));
                             JSONObject alObject = new JSONObject(al);
                             String AlbumName = alObject.getString("name");
+                            Long time = alObject.getLong("publishTime");
                             Song song = new Song(jsonObject.getString("name"), jsonObject.getLong("id"), Singer, SingerId, AlbumName, null, 0);
+                            song.setAlbumTime(time);
+                            song.setAlbumId(id);
                             mSongList.add(song);
                         }
 

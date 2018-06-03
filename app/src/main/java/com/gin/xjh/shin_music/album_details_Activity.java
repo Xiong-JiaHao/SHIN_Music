@@ -102,6 +102,10 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
             public void done(List<Song> list, BmobException e) {
                 if (e == null) {
                     mSongList = list;
+                    for (int i = 0; i < mSongList.size(); i++) {
+                        mSongList.get(i).setAlbumId(album.getAlbumId());
+                        mSongList.get(i).setAlbumTime(album.getTimes());
+                    }
                     album_hint.setVisibility(View.GONE);
                     mMusicRecyclerViewAdapter = new musicRecyclerViewAdapter(mContext, mSongList);
                     album_rv.setLayoutManager(new LinearLayoutManager(mContext));

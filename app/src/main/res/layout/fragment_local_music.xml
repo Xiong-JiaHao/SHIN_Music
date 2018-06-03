@@ -21,6 +21,7 @@
             android:layout_toLeftOf="@id/find_Localmusic"
             android:background="@drawable/btn_white"
             android:cursorVisible="false"
+            android:singleLine="true"
             android:gravity="center"
             android:hint="搜索本地歌曲，下拉自动搜索"
             android:imeOptions="actionSearch"

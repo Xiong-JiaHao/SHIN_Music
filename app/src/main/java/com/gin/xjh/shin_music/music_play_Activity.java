@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -53,7 +52,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
 
     private List<Fragment> fragments = new ArrayList<>();
     private FragmentAdapter adapter;
-    private int Index;
+    private int Index = 0;
 
     private SongBroadCast mSongBroadCast;
 
@@ -61,28 +60,31 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     private musiclistRecyclerViewAdapter musiclistRecyclerViewAdapter;
 
     private boolean isChange = false;
-    private Thread thread;
 
 
     public static final String MUSIC_ACTION_CHANGE = "MusicNotificaion.To.Change";
 
-    private static final int REQUEST_SUCCESS = 200;
-    private Handler mHandler = null;
+    private static final int UPDATEUI = 200;
 
-    private void obtainMainHandler() {
-        if (mHandler != null) {
-            return;
-        }
-        mHandler = new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message msg) {
-                if (msg.what == REQUEST_SUCCESS) {
-                    String time = (String) msg.obj;
-                    nowtime.setText(time);
+    //实时刷新UI
+    private Handler UIHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == UPDATEUI && !isChange) {
+                String timeStr = null;
+                int time = MusicUtil.getPlayTime();
+                try {
+                    timeStr = TimesUtil.longToString(time, "mm:ss");
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
+                time_seekbar.setProgress(time);
+                nowtime.setText(timeStr);
+                UIHandler.sendEmptyMessageDelayed(UPDATEUI, 1000);//自己给自己刷新
             }
-        };
-    }
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,7 +121,6 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     }
 
     private void initEvent() {
-        obtainMainHandler();
         fragments.add(new Fragment_Music());
         fragments.add(new Fragment_Lyrics());
         Index = 0;
@@ -151,15 +152,15 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             public void onStopTrackingTouch(SeekBar seekBar) {
                 MusicUtil.setSeekTo(seekBar.getProgress());
                 isChange = false;
-                thread = new Thread(new SeekBarThread());
-                thread.start();
+                //恢复UI刷新
+                UIHandler.sendEmptyMessage(UPDATEUI);
             }
         });
 
         if (MusicUtil.isPlayMusic()) {
             music_play.setImageResource(R.drawable.music_stop);
-            thread = new Thread(new SeekBarThread());
-            thread.start();
+            //恢复UI刷新
+            UIHandler.sendEmptyMessage(UPDATEUI);
         }
     }
 
@@ -171,6 +172,11 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.change_style:
                 Index ^= 1;
+                if (Index == 0) {
+                    change_flag.setText("词");
+                } else {
+                    change_flag.setText("CD");
+                }
                 fragment_VP.setCurrentItem(Index);
                 break;
             case R.id.ic_comment:
@@ -206,10 +212,14 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     music_play.setImageResource(R.drawable.music_stop);
                     Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
                     android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
+                    //恢复UI刷新
+                    UIHandler.sendEmptyMessage(UPDATEUI);
                 } else {
                     music_play.setImageResource(R.drawable.music_play);
                     Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PAUSE);
                     android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
+                    //停止UI刷新
+                    UIHandler.removeMessages(UPDATEUI);
                 }
                 Intent startIntent1 = new Intent(this, MusicService.class);
                 startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
@@ -352,36 +362,18 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    class SeekBarThread implements Runnable {
-
-        @Override
-        public void run() {
-            while (!isChange && MusicUtil.isPlayMusic() && time_seekbar.getProgress() < time_seekbar.getMax()) {
-                // 将SeekBar位置设置到当前播放位置
-                int time = MusicUtil.getPlayTime();
-                time_seekbar.setProgress(time);
-                try {
-                    Message msg = new Message();
-                    msg.what = REQUEST_SUCCESS;
-                    msg.obj = TimesUtil.longToString((long) time, "mm:ss");
-                    mHandler.sendMessage(msg);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    // 每1000毫秒更新一次位置
-                    Thread.sleep(1000);
-                    //播放进度
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //停止UI刷新
+        UIHandler.removeMessages(UPDATEUI);
     }
 
     @Override
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mSongBroadCast);
         super.onDestroy();
+        //停止UI刷新
+        UIHandler.removeMessages(UPDATEUI);
     }
 }

@@ -1,9 +1,7 @@
 package com.gin.xjh.shin_music.fragment;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -99,7 +97,7 @@ public class Fragment_Local extends Fragment {
                 mFindSongList.add(song);
             }
         }
-
+        mFind.setText("");
         Intent intent = new Intent(getContext(), music_details_Activity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("songlist", (Serializable) mFindSongList);
@@ -116,4 +114,11 @@ public class Fragment_Local extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (mFind != null) {
+            mFind.setText("");
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+    }
 }

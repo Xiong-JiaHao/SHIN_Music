@@ -19,16 +19,18 @@
             android:src="@drawable/volume" />
 
         <SeekBar
+            android:id="@+id/volumeSeekBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="8" />
 
         <ImageView
+            android:id="@+id/albumdetails"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:src="@drawable/threepoint" />
+            android:src="@drawable/albumdetails" />
 
     </LinearLayout>
 
