@@ -183,8 +183,8 @@ public class MusicUtil {
                 String SingerName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
                 String AlbumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
                 String Url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                String AlbumId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
                 Song song = new Song(SongName, SingerName, AlbumName, Url);
+                song.setAlbumId(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
                 song.setSongTime(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
                 if (song.getSongTime() >= 60000) {
                     mSongList.add(song);
