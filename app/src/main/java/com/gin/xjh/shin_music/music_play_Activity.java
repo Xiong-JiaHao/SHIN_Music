@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -137,6 +138,16 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         music_play.setOnClickListener(this);
         rightto.setOnClickListener(this);
         song_sheet.setOnClickListener(this);
+
+        MediaPlayer mMediaPlayer = MusicUtil.getMediaPlayer();
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                Intent startIntent = new Intent(music_play_Activity.this, MusicService.class);
+                startIntent.putExtra("action", MusicService.AUTONEXTMUSIC);
+                startService(startIntent);
+            }
+        });
 
         time_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

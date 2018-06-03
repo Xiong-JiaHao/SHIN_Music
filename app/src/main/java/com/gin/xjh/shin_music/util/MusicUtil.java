@@ -58,8 +58,9 @@ public class MusicUtil {
     }
 
     public static MediaPlayer getMediaPlayer(){
-        if(mediaPlayer == null)
+        if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
+        }
         return mediaPlayer;
     }
 
@@ -171,6 +172,7 @@ public class MusicUtil {
         } else if (play_state == DISORDERLY_CYCLE) {
             index=new Random().nextInt(listSize-1);
         }
+        play();
     }
 
     public static List<Song> getLocalMusic(Context context){
