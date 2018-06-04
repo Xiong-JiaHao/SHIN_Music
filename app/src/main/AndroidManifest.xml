@@ -42,6 +42,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".music_play_Activity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity android:name=".login_menu_Activity"/>
         <activity android:name=".album_details_Activity"/>

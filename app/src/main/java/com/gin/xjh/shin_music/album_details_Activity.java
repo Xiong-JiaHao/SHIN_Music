@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gin.xjh.shin_music.Net_Request.getNetAlbumList;
 import com.gin.xjh.shin_music.Net_Request.getNetMusicList;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Album;
@@ -94,13 +95,13 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
 
     private void updateBmobEvent() {
         album_rv = findViewById(R.id.album_rv);
-        album_hint=findViewById(R.id.album_hint);
+        album_hint = findViewById(R.id.album_hint);
         BmobQuery<Song> query = new BmobQuery<>();
         query.addWhereEqualTo("AlbumName", album.getAlbumName());
         query.findObjects(new FindListener<Song>() {
             @Override
             public void done(List<Song> list, BmobException e) {
-                if (e == null) {
+                if (list.size() != 0) {
                     mSongList = list;
                     for (int i = 0; i < mSongList.size(); i++) {
                         mSongList.get(i).setAlbumId(album.getAlbumId());
@@ -112,6 +113,8 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
                     album_rv.setItemAnimator(new DefaultItemAnimator());//默认动画
                     album_rv.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
                     album_rv.setAdapter(mMusicRecyclerViewAdapter);
+                } else {
+                    new getNetAlbumList().getJson(album.getAlbumId(), findViewById(R.id.album_rv), findViewById(R.id.album_hint), mContext);
                 }
             }
         });
@@ -119,7 +122,7 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
     }
 
     private void updateOnlineEvent() {
-        new getNetMusicList().getJson(id, findViewById(R.id.album_rv), findViewById(R.id.album_hint), this);
+        new getNetMusicList().getJson(id, findViewById(R.id.album_rv), findViewById(R.id.album_hint), mContext);
     }
 
     @Override

@@ -23,10 +23,12 @@ import java.util.List;
 public class musiclistRecyclerViewAdapter extends RecyclerView.Adapter<musiclistRecyclerViewAdapter.MusicViewHolder> {
     public List<Song> list;
     private Context context;
+    private TextView Songnum;
 
-    public musiclistRecyclerViewAdapter(Context context, List<Song> list) {
+    public musiclistRecyclerViewAdapter(Context context, List<Song> list, TextView Songnum) {
         this.list = list;
         this.context = context;
+        this.Songnum = Songnum;
     }
 
     @Override
@@ -58,7 +60,7 @@ public class musiclistRecyclerViewAdapter extends RecyclerView.Adapter<musiclist
         public void load(final int position) {
             Song song = list.get(position);
             SongName.setText(song.getSongName() + " - " + song.getSingerName());
-            itemView.setOnClickListener(new View.OnClickListener() {
+            SongName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     MusicUtil.setIndex(position);
@@ -70,9 +72,18 @@ public class musiclistRecyclerViewAdapter extends RecyclerView.Adapter<musiclist
             removeSong.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    removeData(position);
                 }
             });
         }
+    }
+
+    public void removeData(int position) {
+        int num = MusicUtil.getListSize() - 1;
+        list.remove(position);
+        MusicUtil.removeSong(position);
+        notifyItemRemoved(position);
+        notifyDataSetChanged();
+        Songnum.setText(num + "");
     }
 }

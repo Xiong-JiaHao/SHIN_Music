@@ -84,8 +84,8 @@ public class MusicUtil {
         listSize++;
     }
 
-    public static void removeSong(){
-        SongList.remove(index);
+    public static void removeSong(int num) {
+        SongList.remove(num);
         listSize--;
     }
 

@@ -58,7 +58,6 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
 
     private SongBroadCast mSongBroadCast;
 
-    private List<Song> mSongList;
     private musiclistRecyclerViewAdapter musiclistRecyclerViewAdapter;
 
     private boolean isChange = false;
@@ -92,15 +91,14 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.music_play);
-        mSongList = MusicUtil.getSongList();
         mSongBroadCast = new SongBroadCast();
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(MUSIC_ACTION_CHANGE);
         broadcastManager.registerReceiver(mSongBroadCast, intentFilter);
         initView();
-        changSong();
         initEvent();
+        changSong();
     }
 
     private void initView() {
@@ -152,7 +150,8 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         time_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                MusicUtil.setSeekTo(progress);
+                if (fromUser)
+                    MusicUtil.setSeekTo(progress);
             }
 
             @Override
@@ -301,16 +300,17 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         final Dialog bottomDialog = new Dialog(this, R.style.BottomDialog);
         bottomDialog.setCanceledOnTouchOutside(true);
         View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content_circle_setting, null);
-        RecyclerView music_list_rv = contentView.findViewById(R.id.music_list_rv);
-        musiclistRecyclerViewAdapter = new musiclistRecyclerViewAdapter(this, mSongList);
-        music_list_rv.setLayoutManager(new LinearLayoutManager(this));
-        music_list_rv.setItemAnimator(new DefaultItemAnimator());//默认动画
-        music_list_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        music_list_rv.setAdapter(musiclistRecyclerViewAdapter);
 
         final TextView play_style_name = contentView.findViewById(R.id.play_style_name);
         TextView play_style_num = contentView.findViewById(R.id.play_style_num);
         final ImageView play_style_img = contentView.findViewById(R.id.play_style_img);
+
+        RecyclerView music_list_rv = contentView.findViewById(R.id.music_list_rv);
+        musiclistRecyclerViewAdapter = new musiclistRecyclerViewAdapter(this, MusicUtil.getSongList(), play_style_num);
+        music_list_rv.setLayoutManager(new LinearLayoutManager(this));
+        music_list_rv.setItemAnimator(new DefaultItemAnimator());//默认动画
+        music_list_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        music_list_rv.setAdapter(musiclistRecyclerViewAdapter);
 
         if (MusicUtil.getPlay_state() == MusicUtil.SINGLE_CYCLE) {
             play_style_img.setImageResource(R.drawable.single_cycle);
@@ -407,5 +407,11 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         super.onDestroy();
         //停止UI刷新
         UIHandler.removeMessages(UPDATEUI);
+    }
+
+    @Override
+    protected void onRestart() {
+        changSong();
+        super.onRestart();
     }
 }

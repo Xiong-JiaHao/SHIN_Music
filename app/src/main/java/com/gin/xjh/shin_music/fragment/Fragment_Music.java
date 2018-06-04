@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 
 import com.gin.xjh.shin_music.R;
+import com.gin.xjh.shin_music.album_details_Activity;
+import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.view.cd_ImageView;
@@ -78,7 +80,17 @@ public class Fragment_Music extends Fragment {
         mAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //跳转到专辑
+                //调转到专辑
+                Song song = MusicUtil.getNowSong();
+                if (song.isOnline()) {
+                    Intent intent = new Intent(getContext(), album_details_Activity.class);
+                    Bundle bundle = new Bundle();
+                    Album album = new Album(song.getAlbumName(), song.getAlbumUrl(), song.getAlbumTime(), song.getAlbumId(), song.getSingerName());
+                    bundle.putSerializable("album", album);
+                    intent.putExtra("album", bundle);
+                    intent.putExtra("isAlbum", true);
+                    startActivity(intent);
+                }
             }
         });
         if (MusicUtil.isPlayMusic()) {

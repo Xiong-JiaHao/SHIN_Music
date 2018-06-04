@@ -16,6 +16,10 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 
 import com.gin.xjh.shin_music.R;
+import com.gin.xjh.shin_music.album_details_Activity;
+import com.gin.xjh.shin_music.bean.Album;
+import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.util.MusicUtil;
 
 /**
  * Created by Gin on 2018/4/23.
@@ -80,14 +84,18 @@ public class Fragment_Lyrics extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.albumdetails:
-//                Intent intent = new Intent(getContext(), album_details_Activity.class);
-//                Bundle bundle = new Bundle();
-//                Song song = MusicUtil.getNowSong();
-//                Album album = new Album(song.getAlbumName(),song.getAlbumUrl(),song.getAlbumTime(),song.getAlbumId(),song.getSingerName());
-//                bundle.putSerializable("album",album);
-//                intent.putExtra("album",bundle);
-//                intent.putExtra("isAlbum", true);
-//                startActivity(intent);
+                //调转到专辑
+                Song song = MusicUtil.getNowSong();
+                if (song.isOnline()) {
+                    Intent intent = new Intent(getContext(), album_details_Activity.class);
+                    Bundle bundle = new Bundle();
+                    Album album = new Album(song.getAlbumName(), song.getAlbumUrl(), song.getAlbumTime(), song.getAlbumId(), song.getSingerName());
+                    bundle.putSerializable("album", album);
+                    intent.putExtra("album", bundle);
+                    intent.putExtra("isAlbum", true);
+                    startActivity(intent);
+                }
+
                 break;
         }
     }
