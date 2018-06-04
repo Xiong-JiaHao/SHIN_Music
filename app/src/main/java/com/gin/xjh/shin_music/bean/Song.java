@@ -120,4 +120,40 @@ public class Song extends BmobObject implements Serializable {
     public String toString() {
         return SingerName + " - " + AlbumName;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Song song = (Song) obj;
+        if (!song.getSongName().equals(SongName)) {
+            return false;
+        }
+        if (!song.getSongId().equals(SongId)) {
+            return false;
+        }
+        if (!song.getSingerName().equals(SingerName)) {
+            return false;
+        }
+        if (!song.getSingerId().equals(SingerId)) {
+            return false;
+        }
+        if (!song.getAlbumName().equals(AlbumName)) {
+            return false;
+        }
+        if (!song.getUrl().equals(Url)) {
+            return false;
+        }
+        if (!song.getAlbumUrl().equals(AlbumUrl)) {
+            return false;
+        }
+        if (song.getSongTime() == SongTime) {
+            return false;
+        }
+        if (!song.getAlbumTime().equals(AlbumTime)) {
+            return false;
+        }
+        if (!song.getAlbumId().equals(AlbumId)) {
+            return false;
+        }
+        return true;
+    }
 }

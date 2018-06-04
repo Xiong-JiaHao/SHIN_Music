@@ -1,17 +1,18 @@
 package com.gin.xjh.shin_music.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.music_play_Activity;
+import com.gin.xjh.shin_music.util.MusicUtil;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class musiclistRecyclerViewAdapter extends RecyclerView.Adapter<musiclist
     //绑定视图
     @Override
     public void onBindViewHolder(musiclistRecyclerViewAdapter.MusicViewHolder holder, int position) {
-        holder.load(list.get(position), context);
+        holder.load(position);
     }
 
     @Override
@@ -44,34 +45,34 @@ public class musiclistRecyclerViewAdapter extends RecyclerView.Adapter<musiclist
         return list.size();
     }
 
-    public class MusicViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MusicViewHolder extends RecyclerView.ViewHolder {
         private TextView SongName;
         private ImageView removeSong;
-        private LinearLayout music;
 
         public MusicViewHolder(View itemView) {
             super(itemView);
             SongName = itemView.findViewById(R.id.itemSong);
             removeSong = itemView.findViewById(R.id.removeSong);
-            music = itemView.findViewById(R.id.music);
         }
 
-        public void load(Song song, final Context context) {
+        public void load(final int position) {
+            Song song = list.get(position);
             SongName.setText(song.getSongName() + " - " + song.getSingerName());
-            music.setOnClickListener(this);
-            removeSong.setOnClickListener(this);
-        }
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MusicUtil.setIndex(position);
+                    MusicUtil.play();
+                    Intent playintent = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(context).sendBroadcast(playintent);
+                }
+            });
+            removeSong.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.music:
-                    Toast.makeText(context, "itemSong", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.removeSong:
-                    Toast.makeText(context, "removeSong", Toast.LENGTH_SHORT).show();
-                    break;
-            }
+                }
+            });
         }
     }
 }

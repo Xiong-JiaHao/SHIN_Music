@@ -55,36 +55,58 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
     @SuppressLint("ResourceAsColor")
     private void showbottomDialog(final int position) {
         final Dialog bottomDialog = new Dialog(context, R.style.BottomDialog);
-        final View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_content_circle, null);
-        bottomDialog.setCanceledOnTouchOutside(true);
         final Song song = list.get(position);
-        TextView ic_comment = contentView.findViewById(R.id.ic_comment);
+        View contentView=null;
         if(song.isOnline()){
-            ic_comment.setTextColor(R.color.Check);
-        }
-        ic_comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //发消息告知弹出评论
-                if (song.isOnline()) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("song", song);
-                    Intent ic_comment_intent = new Intent(context, All_comment.class);
-                    ic_comment_intent.putExtra("song", bundle);
-                    context.startActivity(ic_comment_intent);
-                } else {
-                    Toast.makeText(context, "该歌曲不支持评论功能", Toast.LENGTH_SHORT).show();
-                }
-                bottomDialog.dismiss();
-            }
-        });
-        TextView ic_play = contentView.findViewById(R.id.ic_play);
-        ic_play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            contentView = LayoutInflater.from(context).inflate(R.layout.dialog_content_circle, null);
 
+            TextView ic_play = contentView.findViewById(R.id.ic_play);
+            ic_play.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    List<Song> mlist = MusicUtil.getSongList();
+                    boolean isFlag = true;
+                    //判断是不是存在歌曲
+                    for(Song nowsong:mlist){
+                        if(nowsong.equals(song)){
+                            isFlag=false;
+                            break;
+                        }
+                    }
+                    if(isFlag){
+                        MusicUtil.addSong(song);
+                    }
+                    else{
+                        Toast.makeText(context, "该歌曲已经存在歌单中，请勿重复添加", Toast.LENGTH_SHORT).show();
+                    }
+                    bottomDialog.dismiss();
+                }
+            });
+            TextView ic_comment = contentView.findViewById(R.id.ic_comment);
+            if(song.isOnline()){
+                ic_comment.setTextColor(R.color.Check);
             }
-        });
+            ic_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //发消息告知弹出评论
+                    if (song.isOnline()) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("song", song);
+                        Intent ic_comment_intent = new Intent(context, All_comment.class);
+                        ic_comment_intent.putExtra("song", bundle);
+                        context.startActivity(ic_comment_intent);
+                    } else {
+                        Toast.makeText(context, "该歌曲不支持评论功能", Toast.LENGTH_SHORT).show();
+                    }
+                    bottomDialog.dismiss();
+                }
+            });
+        }
+        else{
+            contentView = LayoutInflater.from(context).inflate(R.layout.dialog_content_circle_local, null);
+        }
+        bottomDialog.setCanceledOnTouchOutside(true);
         bottomDialog.setContentView(contentView);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();
         params.width = context.getResources().getDisplayMetrics().widthPixels - DensityUtil.dp2px(context, 16f);

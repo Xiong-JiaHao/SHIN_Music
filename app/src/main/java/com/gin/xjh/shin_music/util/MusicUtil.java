@@ -80,7 +80,7 @@ public class MusicUtil {
         if (SongList == null) {
             SongList = new ArrayList<>();
         }
-        SongList.add(index,song);
+        SongList.add(index + 1, song);
         listSize++;
     }
 
@@ -95,6 +95,7 @@ public class MusicUtil {
 
     public static void setIndex(int i) {
         index = i;
+        playTime = 0;
     }
 
     public static int getPlayTime() {
