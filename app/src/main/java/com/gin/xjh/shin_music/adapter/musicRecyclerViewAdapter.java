@@ -90,11 +90,11 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                     File mf = new File(list.get(position).getUrl());
                     if (mf.exists()) {
                         mf.delete();
-                        list.remove(position);
                         Toast.makeText(context, "删除成功", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(context, "该文件不存在", Toast.LENGTH_LONG).show();
                     }
+                    list.remove(position);
                     notifyItemRemoved(position);
                     notifyDataSetChanged();
                 }
