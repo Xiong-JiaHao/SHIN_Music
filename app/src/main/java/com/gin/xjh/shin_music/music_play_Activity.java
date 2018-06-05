@@ -380,8 +380,10 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             }
             time_seekbar.setProgress(MusicUtil.getPlayTime());
             time_seekbar.setMax(MusicUtil.getSumTime());
-            Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_CHANGE);
-            android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(intent1);
+            if(MusicUtil.isPlayMusic()){
+                Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_CHANGE);
+                android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(intent1);
+            }
         }
     }
 
