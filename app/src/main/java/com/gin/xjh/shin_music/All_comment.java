@@ -116,12 +116,14 @@ public class All_comment extends BaseActivity implements View.OnClickListener {
                         if (comment.length() == 0 && comment.equals("")) {
                             Toast.makeText(All_comment.this, "请输入内容后点击提交", Toast.LENGTH_SHORT).show();
                         } else {
-                            Comment mComment = new Comment(user.getUserName(), user.getUserId(), song.getSongId(), comment, date.getTime());
+                            final Comment mComment = new Comment(user.getUserName(), user.getUserId(), song.getSongId(), comment, date.getTime());
                             mComment.save(new SaveListener<String>() {
                                 @Override
                                 public void done(String s, BmobException e) {
                                     //更新评论列表
-
+                                    if (e == null) {
+                                        mCommentRecyclerViewAdapter.addData(mComment);
+                                    }
                                 }
                             });
                         }

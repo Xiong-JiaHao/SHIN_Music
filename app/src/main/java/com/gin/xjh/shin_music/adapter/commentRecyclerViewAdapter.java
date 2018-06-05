@@ -114,4 +114,11 @@ public class commentRecyclerViewAdapter extends RecyclerView.Adapter<commentRecy
             }
         }
     }
+
+    public void addData(Comment comment) {
+//      在list中添加数据，并通知条目加入一条
+        list.add(0, comment);
+        //添加动画
+        notifyItemInserted(0);
+    }
 }
