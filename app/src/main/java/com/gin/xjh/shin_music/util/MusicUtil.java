@@ -159,11 +159,11 @@ public class MusicUtil {
         if (play_state == ORDER_CYCLE || play_state == SINGLE_CYCLE) {
             index++;
             if (index == listSize) {
-                index=0;
+                index = 0;
             }
         }
         else {
-            index=new Random().nextInt(listSize-1);
+            index = new Random().nextInt(listSize-1);
         }
         play();
     }
@@ -173,10 +173,10 @@ public class MusicUtil {
         if (play_state == ORDER_CYCLE) {
             index++;
             if (index == listSize) {
-                index=0;
+                index = 0;
             }
         } else if (play_state == DISORDERLY_CYCLE) {
-            index=new Random().nextInt(listSize-1);
+            index = new Random().nextInt(listSize-1);
         }
         play();
     }

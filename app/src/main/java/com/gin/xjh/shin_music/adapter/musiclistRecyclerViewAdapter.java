@@ -3,6 +3,7 @@ package com.gin.xjh.shin_music.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,23 +81,29 @@ public class musiclistRecyclerViewAdapter extends RecyclerView.Adapter<musiclist
     }
 
     public void removeData(int position) {
-        int num = MusicUtil.getListSize() - 1;
-        list.remove(position);
-        notifyItemRemoved(position);
-        if (num == 0) {
+        int size = MusicUtil.getListSize() - 1;
+        if (size == 0) {
+            list.clear();
             MusicUtil.playorpause();
             MusicUtil.removeSong(position);
             Intent intent = new Intent(context, MainActivity.class);
             context.startActivity(intent);
         } else {
-            if (position == MusicUtil.getIndex()) {
+            int num = MusicUtil.getIndex();
+            if (position == num) {
+                MusicUtil.removeSong(num);
+                MusicUtil.setIndex((num - 1 + size) % size);
+                Log.d("xjhxx", "" + MusicUtil.getListSize());
                 MusicUtil.autonext();
+                list = MusicUtil.getSongList();
+                notifyItemRemoved(position);
                 Intent Musicintent = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
                 android.support.v4.content.LocalBroadcastManager.getInstance(context).sendBroadcast(Musicintent);
+            } else {
+                MusicUtil.removeSong(position);
             }
-            MusicUtil.removeSong(position);
             notifyDataSetChanged();
-            Songnum.setText(num + "");
+            Songnum.setText(size + "");
         }
     }
 }

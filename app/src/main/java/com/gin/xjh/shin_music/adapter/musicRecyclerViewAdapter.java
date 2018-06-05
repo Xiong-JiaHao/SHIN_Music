@@ -2,9 +2,11 @@ package com.gin.xjh.shin_music.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -87,7 +89,10 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
             ic_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    File mf = new File(list.get(position).getUrl());
+                    ContentResolver mResolver = context.getContentResolver();
+                    String[] str = new String[]{song.getSongName()};
+                    mResolver.delete(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, MediaStore.Audio.Media.TITLE + " like ?", str);
+                    File mf = new File(song.getUrl());
                     if (mf.exists()) {
                         mf.delete();
                         Toast.makeText(context, "删除成功", Toast.LENGTH_LONG).show();
@@ -97,6 +102,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                     list.remove(position);
                     notifyItemRemoved(position);
                     notifyDataSetChanged();
+                    bottomDialog.dismiss();
                 }
             });
         }
@@ -129,6 +135,10 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                 }
             }
         });
+        TextView ic_singer = contentView.findViewById(R.id.ic_singer);
+        TextView ic_album = contentView.findViewById(R.id.ic_album);
+        ic_album.setText(song.getAlbumName());
+        ic_singer.setText(song.getSingerName());
         bottomDialog.setCanceledOnTouchOutside(true);
         bottomDialog.setContentView(contentView);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();
