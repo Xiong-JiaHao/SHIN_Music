@@ -16,8 +16,8 @@ public class MusicUtil {
 
     private static List<Song> SongList = null;//当前音乐播放列表
 
-    private static int index;//当前播放歌曲编号
-    private static int listSize;
+    private static int index = 0;//当前播放歌曲编号
+    private static int listSize = 0;
     private volatile static boolean isPlay = false;//是否正在播放
     private static int play_state = 0;//播放状态
 
@@ -85,6 +85,11 @@ public class MusicUtil {
     }
 
     public static void removeSong(int num) {
+        if(listSize==1){
+            listSize = 0;
+            SongList = null;
+            return;
+        }
         SongList.remove(num);
         listSize--;
     }

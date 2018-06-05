@@ -21,6 +21,7 @@ import com.gin.xjh.shin_music.music_play_Activity;
 import com.gin.xjh.shin_music.util.DensityUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -64,22 +65,28 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
             ic_play.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    List<Song> mlist = MusicUtil.getSongList();
-                    boolean isFlag = true;
-                    //判断是不是存在歌曲
-                    for(Song nowsong:mlist){
-                        if(nowsong.equals(song)){
-                            isFlag=false;
-                            break;
+                    if (MusicUtil.getListSize() == 0) {
+                        ArrayList<Song> mSong = new ArrayList<>();
+                        mSong.add(song);
+                        MusicUtil.changeSongList(mSong);
+                        MusicUtil.play();
+                    } else {
+                        List<Song> mlist = MusicUtil.getSongList();
+                        boolean isFlag = true;
+                        //判断是不是存在歌曲
+                        for (Song nowsong : mlist) {
+                            if (nowsong.equals(song)) {
+                                isFlag = false;
+                                break;
+                            }
                         }
+                        if (isFlag) {
+                            MusicUtil.addSong(song);
+                        } else {
+                            Toast.makeText(context, "该歌曲已经存在，请勿重复添加", Toast.LENGTH_SHORT).show();
+                        }
+                        bottomDialog.dismiss();
                     }
-                    if(isFlag){
-                        MusicUtil.addSong(song);
-                    }
-                    else{
-                        Toast.makeText(context, "该歌曲已经存在歌单中，请勿重复添加", Toast.LENGTH_SHORT).show();
-                    }
-                    bottomDialog.dismiss();
                 }
             });
             TextView ic_comment = contentView.findViewById(R.id.ic_comment);

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gin.xjh.shin_music.MainActivity;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_play_Activity;
@@ -81,9 +82,21 @@ public class musiclistRecyclerViewAdapter extends RecyclerView.Adapter<musiclist
     public void removeData(int position) {
         int num = MusicUtil.getListSize() - 1;
         list.remove(position);
-        MusicUtil.removeSong(position);
         notifyItemRemoved(position);
-        notifyDataSetChanged();
-        Songnum.setText(num + "");
+        if (num == 0) {
+            MusicUtil.playorpause();
+            MusicUtil.removeSong(position);
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+        } else {
+            if (position == MusicUtil.getIndex()) {
+                MusicUtil.autonext();
+                Intent Musicintent = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
+                android.support.v4.content.LocalBroadcastManager.getInstance(context).sendBroadcast(Musicintent);
+            }
+            MusicUtil.removeSong(position);
+            notifyDataSetChanged();
+            Songnum.setText(num + "");
+        }
     }
 }

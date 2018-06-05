@@ -139,19 +139,7 @@ public class Song extends BmobObject implements Serializable {
         if (!song.getAlbumName().equals(AlbumName)) {
             return false;
         }
-        if (!song.getUrl().equals(Url)) {
-            return false;
-        }
-        if (!song.getAlbumUrl().equals(AlbumUrl)) {
-            return false;
-        }
-        if (song.getSongTime() == SongTime) {
-            return false;
-        }
-        if (!song.getAlbumTime().equals(AlbumTime)) {
-            return false;
-        }
-        if (!song.getAlbumId().equals(AlbumId)) {
+        if (song.getSongTime() != SongTime) {
             return false;
         }
         return true;
