@@ -6,6 +6,20 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/ic_play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableLeft="@drawable/ic_play"
+        android:drawablePadding="16dp"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:text="下一首播放"
+        android:textColor="@color/Check"
+        android:textSize="14sp" />
+
+    <TextView
         android:id="@+id/ic_singer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

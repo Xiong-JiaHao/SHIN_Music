@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gin.xjh.shin_music.Net_Request.getNetAlbumList;
@@ -17,6 +18,7 @@ import com.gin.xjh.shin_music.Net_Request.getNetMusicList;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.util.TimesUtil;
 import com.squareup.picasso.Picasso;
 
@@ -32,6 +34,7 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
     private ImageView go_back,album_img;
     private RecyclerView album_rv;
     private TextView album_name, album_singer, album_times, album_hint;
+    private LinearLayout addAll;
 
     private List<Song> mSongList;
     private musicRecyclerViewAdapter mMusicRecyclerViewAdapter;
@@ -64,10 +67,12 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
         album_name = findViewById(R.id.album_name);
         album_singer = findViewById(R.id.album_singer);
         album_times = findViewById(R.id.album_times);
+        addAll = findViewById(R.id.addAll);
     }
 
     private void initEvent() {
         go_back.setOnClickListener(this);
+        addAll.setOnClickListener(this);
         mContext = this;
         if (isAlbum) {
             Picasso.with(this).load(album.getAlbumUrl())
@@ -131,6 +136,30 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
             case R.id.go_back:
                 finish();
                 break;
+            case R.id.addAll:
+                addAllSong();
         }
+    }
+
+    private void addAllSong() {
+        if (MusicUtil.getListSize() == 0) {
+            MusicUtil.changeSongList(mSongList);
+            MusicUtil.play();
+        } else {
+            List<Song> nowSongList = MusicUtil.getSongList();
+            for (Song song : mSongList) {
+                boolean isFlag = true;
+                for (Song nowsong : nowSongList) {
+                    if (nowsong.equals(song)) {
+                        isFlag = false;
+                        break;
+                    }
+                }
+                if (isFlag) {
+                    MusicUtil.addSong(song);
+                }
+            }
+        }
+
     }
 }

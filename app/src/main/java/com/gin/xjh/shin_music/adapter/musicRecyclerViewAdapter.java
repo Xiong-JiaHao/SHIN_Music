@@ -21,6 +21,7 @@ import com.gin.xjh.shin_music.music_play_Activity;
 import com.gin.xjh.shin_music.util.DensityUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,37 +61,8 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
         View contentView=null;
         if(song.isOnline()){
             contentView = LayoutInflater.from(context).inflate(R.layout.dialog_content_circle, null);
-
-            TextView ic_play = contentView.findViewById(R.id.ic_play);
-            ic_play.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (MusicUtil.getListSize() == 0) {
-                        ArrayList<Song> mSong = new ArrayList<>();
-                        mSong.add(song);
-                        MusicUtil.changeSongList(mSong);
-                        MusicUtil.play();
-                    } else {
-                        List<Song> mlist = MusicUtil.getSongList();
-                        boolean isFlag = true;
-                        //判断是不是存在歌曲
-                        for (Song nowsong : mlist) {
-                            if (nowsong.equals(song)) {
-                                isFlag = false;
-                                break;
-                            }
-                        }
-                        if (isFlag) {
-                            MusicUtil.addSong(song);
-                        } else {
-                            Toast.makeText(context, "该歌曲已经存在，请勿重复添加", Toast.LENGTH_SHORT).show();
-                        }
-                        bottomDialog.dismiss();
-                    }
-                }
-            });
             TextView ic_comment = contentView.findViewById(R.id.ic_comment);
-            if(song.isOnline()){
+            if (song.isOnline()) {
                 ic_comment.setTextColor(R.color.Check);
             }
             ic_comment.setOnClickListener(new View.OnClickListener() {
@@ -109,10 +81,54 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                     bottomDialog.dismiss();
                 }
             });
-        }
-        else{
+        } else {
             contentView = LayoutInflater.from(context).inflate(R.layout.dialog_content_circle_local, null);
+            TextView ic_delete = contentView.findViewById(R.id.ic_delete);
+            ic_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    File mf = new File(list.get(position).getUrl());
+                    if (mf.exists()) {
+                        mf.delete();
+                        list.remove(position);
+                        notifyItemRemoved(position);
+                        notifyDataSetChanged();
+                        Toast.makeText(context, "删除成功", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, "该文件不存在", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
         }
+
+        TextView ic_play = contentView.findViewById(R.id.ic_play);
+        ic_play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (MusicUtil.getListSize() == 0) {
+                    ArrayList<Song> mSong = new ArrayList<>();
+                    mSong.add(song);
+                    MusicUtil.changeSongList(mSong);
+                    MusicUtil.play();
+                } else {
+                    List<Song> mlist = MusicUtil.getSongList();
+                    boolean isFlag = true;
+                    //判断是不是存在歌曲
+                    for (Song nowsong : mlist) {
+                        if (nowsong.equals(song)) {
+                            isFlag = false;
+                            break;
+                        }
+                    }
+                    if (isFlag) {
+                        MusicUtil.addSong(song);
+                    } else {
+                        Toast.makeText(context, "该歌曲已经存在，请勿重复添加", Toast.LENGTH_SHORT).show();
+                    }
+                    bottomDialog.dismiss();
+                }
+            }
+        });
         bottomDialog.setCanceledOnTouchOutside(true);
         bottomDialog.setContentView(contentView);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();

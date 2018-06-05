@@ -191,19 +191,22 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 fragment_VP.setCurrentItem(Index);
                 break;
             case R.id.ic_comment:
-                Song song = MusicUtil.getNowSong();
-                if (song == null || song.isOnline()) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("song", song);
-                    Intent ic_comment_intent = new Intent(this, All_comment.class);
-                    ic_comment_intent.putExtra("song", bundle);
-                    startActivity(ic_comment_intent);
-                } else {
-                    Toast.makeText(music_play_Activity.this, "该歌曲不支持评论功能", Toast.LENGTH_SHORT).show();
+                if (MusicUtil.getListSize() > 0) {
+                    Song song = MusicUtil.getNowSong();
+                    if (song == null || song.isOnline()) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("song", song);
+                        Intent ic_comment_intent = new Intent(this, All_comment.class);
+                        ic_comment_intent.putExtra("song", bundle);
+                        startActivity(ic_comment_intent);
+                    } else {
+                        Toast.makeText(music_play_Activity.this, "该歌曲不支持评论功能", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
             case R.id.settings:
-                showSettingsbottomDialog();
+                if (MusicUtil.getListSize() > 0)
+                    showSettingsbottomDialog();
                 break;
             case R.id.cycle_style:
                 MusicUtil.changeType();
