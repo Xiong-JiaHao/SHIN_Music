@@ -41,7 +41,7 @@ public class Fragment_Local extends Fragment {
     private EditText mFind = null;
     private ImageView mCheck;
 
-    private TextView mSongNum, mMusic_hint;
+    private TextView mMusic_hint;
 
     @Nullable
     @Override
@@ -57,7 +57,6 @@ public class Fragment_Local extends Fragment {
         mRecyclerView = view.findViewById(R.id.fragment_local_music_list);
         mFind = view.findViewById(R.id.find_local_name);
         mCheck = view.findViewById(R.id.find_Localmusic);
-        mSongNum = view.findViewById(R.id.SongNum);
         mMusic_hint = view.findViewById(R.id.music_hint);
     }
 
@@ -71,7 +70,6 @@ public class Fragment_Local extends Fragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());//默认动画
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mMusicListViewAdapter);
-        mSongNum.setText("歌曲数：" + mSongList.size());
 
         mMusic_hint.setVisibility(View.GONE);
 

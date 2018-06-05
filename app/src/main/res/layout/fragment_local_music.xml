@@ -49,13 +49,6 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/SongNum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="歌曲数：10" />
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_local_music_list"

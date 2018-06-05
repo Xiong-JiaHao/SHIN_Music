@@ -289,6 +289,25 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 bottomDialog.dismiss();
             }
         });
+        TextView ic_delete = contentView.findViewById(R.id.ic_delete);
+        ic_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int num = MusicUtil.getIndex();
+                if (num == 0) {
+                    MusicUtil.playorpause();
+                    MusicUtil.removeSong(0);
+                    Intent intent = new Intent(music_play_Activity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    MusicUtil.autonext();
+                    Intent Musicintent = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(music_play_Activity.this).sendBroadcast(Musicintent);
+                    MusicUtil.removeSong(num);
+                    bottomDialog.dismiss();
+                }
+            }
+        });
         bottomDialog.setContentView(contentView);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();
         params.width = getResources().getDisplayMetrics().widthPixels - DensityUtil.dp2px(this, 16f);

@@ -91,12 +91,12 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                     if (mf.exists()) {
                         mf.delete();
                         list.remove(position);
-                        notifyItemRemoved(position);
-                        notifyDataSetChanged();
                         Toast.makeText(context, "删除成功", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(context, "该文件不存在", Toast.LENGTH_LONG).show();
                     }
+                    notifyItemRemoved(position);
+                    notifyDataSetChanged();
                 }
             });
         }
