@@ -23,6 +23,7 @@ import com.gin.xjh.shin_music.util.TimesUtil;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -143,7 +144,12 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
 
     private void addAllSong() {
         if (MusicUtil.getListSize() == 0) {
-            MusicUtil.changeSongList(mSongList);
+            List<Song> mList = new ArrayList<>();
+            for (int i = 0; i < mSongList.size(); i++) {
+                mList.add(mSongList.get(i));
+            }
+            MusicUtil.changeSongList(mList);
+            MusicUtil.changeSongList(mList);
             MusicUtil.play();
         } else {
             List<Song> nowSongList = MusicUtil.getSongList();

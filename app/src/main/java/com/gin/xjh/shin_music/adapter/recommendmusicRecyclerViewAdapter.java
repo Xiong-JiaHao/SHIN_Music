@@ -15,6 +15,7 @@ import com.gin.xjh.shin_music.music_play_Activity;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,7 +70,11 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, music_play_Activity.class);
                     MusicUtil.setIndex(position);
-                    MusicUtil.changeSongList(list);
+                    List<Song> mList = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++) {
+                        mList.add(list.get(i));
+                    }
+                    MusicUtil.changeSongList(mList);
                     MusicUtil.play();
                     context.startActivity(intent);
                 }

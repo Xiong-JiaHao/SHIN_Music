@@ -112,7 +112,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
             @Override
             public void onClick(View v) {
                 if (MusicUtil.getListSize() == 0) {
-                    ArrayList<Song> mSong = new ArrayList<>();
+                    List<Song> mSong = new ArrayList<>();
                     mSong.add(song);
                     MusicUtil.changeSongList(mSong);
                     MusicUtil.play();
@@ -168,7 +168,11 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, music_play_Activity.class);
-                    MusicUtil.changeSongList(list);
+                    List<Song> mList = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++) {
+                        mList.add(list.get(i));
+                    }
+                    MusicUtil.changeSongList(mList);
                     MusicUtil.setIndex(position);
                     MusicUtil.play();
                     context.startActivity(intent);
