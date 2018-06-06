@@ -39,6 +39,7 @@ import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.DensityUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.util.TimesUtil;
+import com.gin.xjh.shin_music.view.LyricView;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -234,11 +235,15 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     music_play.setImageResource(R.drawable.music_stop);
                     Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
                     android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
+                    playintent = new Intent(LyricView.LYRIC_ACTION_PLAY);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
                     //恢复UI刷新
                     UIHandler.sendEmptyMessage(UPDATEUI);
                 } else {
                     music_play.setImageResource(R.drawable.music_play);
                     Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PAUSE);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
+                    playintent = new Intent(LyricView.LYRIC_ACTION_PAUSE);
                     android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
                     //停止UI刷新
                     UIHandler.removeMessages(UPDATEUI);
@@ -405,6 +410,8 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             }
             time_seekbar.setProgress(MusicUtil.getPlayTime());
             time_seekbar.setMax(MusicUtil.getSumTime());
+            Intent playintent = new Intent(Fragment_Lyrics.LYRIC_ACTION_CHANGE);
+            android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
             if(MusicUtil.isPlayMusic()){
                 Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_CHANGE);
                 android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(intent1);

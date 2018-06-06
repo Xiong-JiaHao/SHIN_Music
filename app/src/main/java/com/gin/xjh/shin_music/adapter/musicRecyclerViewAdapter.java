@@ -89,9 +89,10 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
             ic_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String where = MediaStore.Video.Media.DATA;
+                    where += "='" + song.getUrl() + "'";
                     ContentResolver mResolver = context.getContentResolver();
-                    String[] str = new String[]{song.getSongName()};
-                    mResolver.delete(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, MediaStore.Audio.Media.TITLE + " like ?", str);
+                    mResolver.delete(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, where, null);
                     File mf = new File(song.getUrl());
                     if (mf.exists()) {
                         mf.delete();

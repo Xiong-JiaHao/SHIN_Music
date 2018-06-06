@@ -1,15 +1,16 @@
 package com.gin.xjh.shin_music.Net_Request;
 
-import android.content.Context;
-import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.gin.xjh.shin_music.Interface.RequestServices_MusicLrc;
-import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.util.Constant;
+import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.view.LyricView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,10 +24,9 @@ import retrofit2.Retrofit;
 
 public class getNetMusicLrc {
 
-    private Context mContext;
 
-    private Song song;
-    private MediaPlayer mediaPlayer;
+    private TextView hint;
+    private LyricView lyricView;
 
     private static final int REQUEST_SUCCESS = 200;
 
@@ -46,6 +46,8 @@ public class getNetMusicLrc {
                         String JSONString = AllObject.getString("lrc");
                         JSONObject jsonObject = new JSONObject(JSONString);
                         String lyric = jsonObject.getString("lyric");
+                        lyricView.getLyric(lyric);
+                        hint.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -54,15 +56,15 @@ public class getNetMusicLrc {
         };
     }
 
-    public void getJson(Song song, MediaPlayer mediaPlayer) {
-        this.song = song;
-        this.mediaPlayer = mediaPlayer;
+    public void getJson(LyricView lyricView, TextView hint) {
+        this.lyricView = lyricView;
+        this.hint = hint;
         obtainMainHandler();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constant.URL_BASE)
                 .build();
         RequestServices_MusicLrc requestServices = retrofit.create(RequestServices_MusicLrc.class);
-        retrofit2.Call<ResponseBody> call = requestServices.getString(song.getSongId());
+        retrofit2.Call<ResponseBody> call = requestServices.getString(MusicUtil.getNowSong().getSongId());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {

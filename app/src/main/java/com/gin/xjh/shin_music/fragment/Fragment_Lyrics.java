@@ -14,12 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
+import com.gin.xjh.shin_music.Net_Request.getNetMusicLrc;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.album_details_Activity;
 import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.view.LyricView;
 
 /**
  * Created by Gin on 2018/4/23.
@@ -31,6 +34,10 @@ public class Fragment_Lyrics extends Fragment implements View.OnClickListener {
     private ImageView albumdetails;
     private AudioManager mAudioManager;
     private MyVolumeReceiver myVolumeReceiver;
+    private LyricView lyricView;
+    private TextView hint;
+
+    public static final String LYRIC_ACTION_CHANGE = "Lyric.To.Change";
 
     @Nullable
     @Override
@@ -38,9 +45,10 @@ public class Fragment_Lyrics extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_lyrics, null);
         mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
         myVolumeReceiver = new MyVolumeReceiver();
-        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getContext());
         IntentFilter intentFilter = new IntentFilter();
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getContext());
         intentFilter.addAction("android.media.VOLUME_CHANGED_ACTION");
+        intentFilter.addAction(LYRIC_ACTION_CHANGE);
         broadcastManager.registerReceiver(myVolumeReceiver, intentFilter);
         initView(view);
         initEvent();
@@ -50,12 +58,15 @@ public class Fragment_Lyrics extends Fragment implements View.OnClickListener {
     private void initView(View view) {
         volumeSeekBar = view.findViewById(R.id.volumeSeekBar);
         albumdetails = view.findViewById(R.id.albumdetails);
+        lyricView = view.findViewById(R.id.lyricView);
+        hint = view.findViewById(R.id.lyric_hint);
 
         albumdetails.setOnClickListener(this);
         volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
+                if (fromUser)
+                    mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
             }
 
             @Override
@@ -76,8 +87,7 @@ public class Fragment_Lyrics extends Fragment implements View.OnClickListener {
     }
 
     private void initEvent() {
-
-
+        new getNetMusicLrc().getJson(lyricView, hint);
     }
 
     @Override
@@ -105,13 +115,21 @@ public class Fragment_Lyrics extends Fragment implements View.OnClickListener {
      *
      * @author long
      */
-    private class MyVolumeReceiver extends BroadcastReceiver {
+    public class MyVolumeReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //如果音量发生变化则更改seekbar的位置
-            if (intent.getAction().equals("android.media.VOLUME_CHANGED_ACTION")) {
-                int currVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);// 当前的媒体音量
-                volumeSeekBar.setProgress(currVolume);
+            switch (intent.getAction()) {
+                case "android.media.VOLUME_CHANGED_ACTION":
+                    //如果音量发生变化则更改seekbar的位置
+                    if (intent.getAction().equals("android.media.VOLUME_CHANGED_ACTION")) {
+                        int currVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);// 当前的媒体音量
+                        volumeSeekBar.setProgress(currVolume);
+                    }
+                    break;
+                case LYRIC_ACTION_CHANGE:
+                    hint.setVisibility(View.VISIBLE);
+                    new getNetMusicLrc().getJson(lyricView, hint);
+                    break;
             }
         }
     }
@@ -130,5 +148,4 @@ public class Fragment_Lyrics extends Fragment implements View.OnClickListener {
         }
         super.setUserVisibleHint(isVisibleToUser);
     }
-
 }

@@ -183,10 +183,10 @@ public class MusicUtil {
 
     public static List<Song> getLocalMusic(Context context){
         List <Song> mSongList = new ArrayList<>();
-        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
+        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Audio.AudioColumns.IS_MUSIC);
         if (cursor != null) {
             cursor.moveToFirst();
-            while (cursor.moveToNext()) {
+            do {
                 String SongName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
                 String SingerName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
                 String AlbumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
@@ -194,12 +194,12 @@ public class MusicUtil {
                 Song song = new Song(SongName, SingerName, AlbumName, Url);
                 song.setAlbumId(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
                 song.setSongTime(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-                if (song.getSongTime() >= 60000) {
+                if (cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)) >= 800000) {
                     mSongList.add(song);
                 }
-            }
+            }while (cursor.moveToNext());
+            cursor.close();
         }
-        cursor.close();
         return mSongList;
     }
 

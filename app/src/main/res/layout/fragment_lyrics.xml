@@ -34,4 +34,18 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/lyric_hint"
+        android:gravity="center"
+        android:text="正在加载歌词数据，请稍后..."
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.gin.xjh.shin_music.view.LyricView
+        android:id="@+id/lyricView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>
