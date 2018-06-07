@@ -60,7 +60,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
     private void showbottomDialog(final int position) {
         final Dialog bottomDialog = new Dialog(context, R.style.BottomDialog);
         final Song song = list.get(position);
-        View contentView=null;
+        View contentView = null;
         if(song.isOnline()){
             contentView = LayoutInflater.from(context).inflate(R.layout.dialog_content_circle, null);
             TextView ic_comment = contentView.findViewById(R.id.ic_comment);
@@ -89,10 +89,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
             ic_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String where = MediaStore.Video.Media.DATA;
-                    where += "='" + song.getUrl() + "'";
-                    ContentResolver mResolver = context.getContentResolver();
-                    mResolver.delete(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, where, null);
+                    context.getContentResolver().delete(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, MediaStore.Video.Media.DATA+"='" + song.getUrl() + "'", null);
                     File mf = new File(song.getUrl());
                     if (mf.exists()) {
                         mf.delete();

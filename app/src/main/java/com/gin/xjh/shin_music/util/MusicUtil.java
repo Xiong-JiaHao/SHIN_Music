@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 
 import com.gin.xjh.shin_music.bean.Song;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -194,7 +195,7 @@ public class MusicUtil {
                 Song song = new Song(SongName, SingerName, AlbumName, Url);
                 song.setAlbumId(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
                 song.setSongTime(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-                if (cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)) >= 800000) {
+                if (cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)) >= 800000 && new File(song.getUrl()).exists()) {
                     mSongList.add(song);
                 }
             }while (cursor.moveToNext());
