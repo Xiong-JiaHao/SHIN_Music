@@ -93,7 +93,7 @@ public class All_comment extends BaseActivity implements View.OnClickListener {
             case R.id.write_comment:
                 //判读是否有资格写评论，如果没有提示需要登入
                 if (!User_state.getState()) {
-                    Toast.makeText(this, "需要登入后才具有评论功能", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "需要登录后才具有评论功能", Toast.LENGTH_SHORT).show();
                     break;
                 } else if (MusicUtil.getListSize() == 0) {
                     Toast.makeText(this, "当前没有歌曲", Toast.LENGTH_SHORT).show();

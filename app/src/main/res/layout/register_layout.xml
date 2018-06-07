@@ -225,7 +225,7 @@
         <EditText
             android:id="@+id/Personal_profile"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="100dp"
             android:background="@drawable/et1"
             android:gravity="start"
             android:padding="10dp" />

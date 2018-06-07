@@ -167,7 +167,14 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                MusicUtil.setSeekTo(seekBar.getProgress());
+                if(!MusicUtil.isPlayMusic()){
+                    MusicUtil.playorpause();
+                    MusicUtil.setSeekTo(seekBar.getProgress());
+                    MusicUtil.playorpause();
+                }
+                else{
+                    MusicUtil.setSeekTo(seekBar.getProgress());
+                }
                 isChange = false;
                 //恢复UI刷新
                 UIHandler.sendEmptyMessage(UPDATEUI);
