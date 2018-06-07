@@ -50,10 +50,9 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
 
         @Override
         public void handleMessage(Message msg) {
-            currentLine = -1;
             if (currentLine != lyricList.size() - 1) {
                 if (MusicUtil.getPlayTime() > lyricList.get(currentLine + 1).timePoint) {
-                    while (MusicUtil.getPlayTime() > lyricList.get(currentLine + 1).timePoint) {
+                    while (currentLine < lyricList.size() - 1 && MusicUtil.getPlayTime() > lyricList.get(currentLine + 1).timePoint) {
                         currentLine++;
                     }
                     invalidate(); // 刷新,会再次调用onDraw方法
@@ -138,6 +137,7 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case LYRIC_ACTION_PLAY:
+                    currentLine = -1;
                     handler.sendEmptyMessage(LYRIC);
                     break;
                 case LYRIC_ACTION_PAUSE:

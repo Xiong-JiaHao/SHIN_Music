@@ -53,11 +53,13 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     private SeekBar time_seekbar;
     private ViewPager fragment_VP;
 
+
     private List<Fragment> fragments = new ArrayList<>();
     private FragmentAdapter adapter;
     private int Index = 0;
 
     private SongBroadCast mSongBroadCast;
+    private LocalBroadcastManager broadcastManager;
 
     private musiclistRecyclerViewAdapter musiclistRecyclerViewAdapter;
 
@@ -93,7 +95,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.music_play);
         mSongBroadCast = new SongBroadCast();
-        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
+        broadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(MUSIC_ACTION_CHANGE);
         broadcastManager.registerReceiver(mSongBroadCast, intentFilter);
@@ -151,8 +153,11 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         time_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser)
+                if (fromUser) {
                     MusicUtil.setSeekTo(progress);
+                    Intent intent = new Intent(LyricView.LYRIC_ACTION_PLAY);
+                    broadcastManager.sendBroadcast(intent);
+                }
             }
 
             @Override
@@ -234,17 +239,17 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 } else if (!MusicUtil.isPlayMusic()) {
                     music_play.setImageResource(R.drawable.music_stop);
                     Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
+                    broadcastManager.sendBroadcast(playintent);
                     playintent = new Intent(LyricView.LYRIC_ACTION_PLAY);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
+                    broadcastManager.sendBroadcast(playintent);
                     //恢复UI刷新
                     UIHandler.sendEmptyMessage(UPDATEUI);
                 } else {
                     music_play.setImageResource(R.drawable.music_play);
                     Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PAUSE);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
+                    broadcastManager.sendBroadcast(playintent);
                     playintent = new Intent(LyricView.LYRIC_ACTION_PAUSE);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
+                    broadcastManager.sendBroadcast(playintent);
                     //停止UI刷新
                     UIHandler.removeMessages(UPDATEUI);
                 }
@@ -310,7 +315,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     MusicUtil.setIndex(num - 1);
                     MusicUtil.autonext();
                     Intent Musicintent = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(music_play_Activity.this).sendBroadcast(Musicintent);
+                    broadcastManager.sendBroadcast(Musicintent);
                     bottomDialog.dismiss();
                 }
             }
@@ -411,10 +416,10 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             time_seekbar.setProgress(MusicUtil.getPlayTime());
             time_seekbar.setMax(MusicUtil.getSumTime());
             Intent playintent = new Intent(Fragment_Lyrics.LYRIC_ACTION_CHANGE);
-            android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(playintent);
+            broadcastManager.sendBroadcast(playintent);
             if(MusicUtil.isPlayMusic()){
                 Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_CHANGE);
-                android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(intent1);
+                broadcastManager.sendBroadcast(intent1);
             }
         }
     }
@@ -440,7 +445,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
 
     @Override
     protected void onDestroy() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mSongBroadCast);
+        broadcastManager.unregisterReceiver(mSongBroadCast);
         super.onDestroy();
         //停止UI刷新
         UIHandler.removeMessages(UPDATEUI);

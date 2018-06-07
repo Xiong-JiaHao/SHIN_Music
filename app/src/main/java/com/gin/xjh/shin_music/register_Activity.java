@@ -64,94 +64,106 @@ public class register_Activity extends BaseActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.submit:
-                if (check()) {
-                    final User user = new User(user_Id, user_Name, password, user_QQ, usersex, personal_profile);
-                    user.save(new SaveListener<String>() {
-                        @Override
-                        public void done(String s, BmobException e) {
-                            if (e == null) {
-                                User_state.Login(user);
-                                Intent intent = new Intent();
-                                intent.putExtra("User", "yes");
-                                Toast.makeText(register_Activity.this, "注册成功，正在登录...", Toast.LENGTH_SHORT).show();
-                                setResult(RESULT_OK, intent);
-                                finish();
-                            } else {
-                                Toast.makeText(register_Activity.this, "注册失败，请重新注册，如果还失败请联系我们，联系方式详见关于", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }
+                submit();
                 break;
         }
     }
 
-    private boolean check() {
+    private void submit() {
         user_Id = User_Id.getText().toString();
         password = Password.getText().toString();
         againpassword = AgainPassWord.getText().toString();
         if(user_Id.compareTo("")==0||user_Id.length()==0){
             Toast.makeText(this, "请输入用户名后进行注册", Toast.LENGTH_SHORT).show();
-            return false;
+            return;
         }
         else if(password.compareTo("")==0||password.length()==0){
             Toast.makeText(this, "请输入密码后进行注册", Toast.LENGTH_SHORT).show();
-            return false;
+            return;
         }
         else if(againpassword.compareTo("")==0||againpassword.length()==0){
             Toast.makeText(this, "请输入确认密码后进行注册", Toast.LENGTH_SHORT).show();
-            return false;
+            return;
         }
         final String[] str = {""};
         checkagainpassword.setVisibility(View.VISIBLE);
         checkpassword.setVisibility(View.VISIBLE);
         checkid.setVisibility(View.VISIBLE);
-        BmobQuery<User> query = new BmobQuery<>();
-        query.addWhereEqualTo("UserId", user_Id);
-        query.findObjects(new FindListener<User>() {
-            @Override
-            public void done(List<User> list, BmobException e) {
-                if (e == null) {
-                    str[0] += "用户名已有，请重新选择";
-                    User_Id.setText("");
-                    checkid.setImageResource(R.drawable.fork);
-                }
-            }
-        });
         if (password.compareTo(againpassword) != 0) {
             str[0] += "\n两次密码不正确";
             Password.setText("");
             AgainPassWord.setText("");
             checkagainpassword.setImageResource(R.drawable.fork);
         }
-        if (str[0].compareTo("") == 0) {
-            user_QQ = User_QQ.getText().toString();
-            personal_profile = Personal_profile.getText().toString();
-            user_Name = User_Name.getText().toString();
-            switch (UserSex.getCheckedRadioButtonId()) {
-                case R.id.man:
-                    usersex = 0;
-                    break;
-                case R.id.woman:
-                    usersex = 1;
-                    break;
-                case R.id.alien:
-                    usersex = 2;
-                    break;
-                default:
-                    usersex = 0;
+        BmobQuery<User> query = new BmobQuery<>();
+        query.addWhereEqualTo("UserId", user_Id);
+        query.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() > 0) {
+                        str[0] += "用户名已有，请重新选择";
+                        User_Id.setText("");
+                        checkid.setImageResource(R.drawable.fork);
+                    }
+                    if (str[0] == "" && str[0].length() == 0) {
+                        user_QQ = User_QQ.getText().toString();
+                        personal_profile = Personal_profile.getText().toString();
+                        user_Name = User_Name.getText().toString();
+                        switch (UserSex.getCheckedRadioButtonId()) {
+                            case R.id.man:
+                                usersex = 0;
+                                break;
+                            case R.id.woman:
+                                usersex = 1;
+                                break;
+                            case R.id.alien:
+                                usersex = 2;
+                                break;
+                            default:
+                                usersex = 0;
+                        }
+                        if (user_QQ == "" || user_QQ.length() == 0) {
+                            user_QQ = "未知哦";
+                        }
+                        if (user_Name.length() == 0 || user_Name == "") {
+                            user_Name = user_Id;
+                        }
+                        if (personal_profile.length() == 0 || personal_profile == "") {
+                            personal_profile = "Ta很神秘，什么都没有写";
+                        }
+                        password = "";
+                        int lena = againpassword.length();
+                        int lenb = user_Id.length();
+                        for (int i = 0; i < lena; i++) {
+                            password += againpassword.charAt(i) % user_Id.charAt(i % lenb);
+                        }
+                        register();
+                    } else {
+                        Toast.makeText(register_Activity.this, str[0], Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
-            if (user_QQ.compareTo("") == 0) {
-                user_QQ = "未知哦";
-            } else if (user_Name.compareTo("") == 0) {
-                user_Name = user_Id;
-            } else if (personal_profile.compareTo("") == 0) {
-                personal_profile = "Ta很神秘，什么都没有写";
+        });
+    }
+
+    private void register() {
+        final User user = new User(user_Id, user_Name, password, user_QQ, usersex, personal_profile);
+        user.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    User_state.Login(user);
+                    Intent intent = new Intent();
+                    intent.putExtra("User", "yes");
+                    Toast.makeText(register_Activity.this, "注册成功，正在登录...", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    Toast.makeText(register_Activity.this, "注册失败，请重新注册，如果还失败请联系我们，联系方式详见关于", Toast.LENGTH_SHORT).show();
+                }
             }
-            return true;
-        } else {
-            Toast.makeText(this, str[0], Toast.LENGTH_SHORT).show();
-            return false;
-        }
+        });
+
     }
 }

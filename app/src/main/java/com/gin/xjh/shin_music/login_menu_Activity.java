@@ -102,7 +102,7 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
                     builder1.setPositiveButton("登录", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String id = UserId.getText().toString();
+                            final String id = UserId.getText().toString();
                             final String password = UserPassword.getText().toString();
                             BmobQuery<User> query = new BmobQuery<>();
                             query.addWhereEqualTo("UserId", id);
@@ -110,17 +110,25 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
                                 @Override
                                 public void done(List<User> list, BmobException e) {
                                     if (e == null) {
-                                        for (User user : list) {
-                                            if (password.compareTo(user.getPassWord()) == 0) {
-                                                //修改全局变量，保存对象，并且刷新界面
-                                                User_state.Login(user);
-                                                updataLogin();
-                                            } else {
-                                                Toast.makeText(login_menu_Activity.this, "密码错误，请确认后重新输入", Toast.LENGTH_SHORT).show();
+                                        if (list.size() > 0) {
+                                            for (User user : list) {
+                                                String deciphering = "";
+                                                int lena = password.length();
+                                                int lenb = id.length();
+                                                for (int i = 0; i < lena; i++) {
+                                                    deciphering += password.charAt(i) % id.charAt(i % lenb);
+                                                }
+                                                if (deciphering.compareTo(user.getPassWord()) == 0) {
+                                                    //修改全局变量，保存对象，并且刷新界面
+                                                    User_state.Login(user);
+                                                    updataLogin();
+                                                } else {
+                                                    Toast.makeText(login_menu_Activity.this, "密码错误，请确认后重新输入", Toast.LENGTH_SHORT).show();
+                                                }
                                             }
+                                        } else {
+                                            Toast.makeText(login_menu_Activity.this, "未找到该用户名，请核对后重新输入", Toast.LENGTH_SHORT).show();
                                         }
-                                    } else {
-                                        Toast.makeText(login_menu_Activity.this, "未找到该用户名，请核对后重新输入", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
