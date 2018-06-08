@@ -1,10 +1,13 @@
 package com.gin.xjh.shin_music;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +22,7 @@ import com.gin.xjh.shin_music.adapter.FragmentAdapter;
 import com.gin.xjh.shin_music.fragment.Fragment_Local;
 import com.gin.xjh.shin_music.fragment.Fragment_Online;
 import com.gin.xjh.shin_music.fragment.Fragment_Shin;
+import com.gin.xjh.shin_music.service.MusicService;
 import com.zhy.m.permission.MPermissions;
 import com.zhy.m.permission.PermissionDenied;
 import com.zhy.m.permission.PermissionGrant;
@@ -47,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final int REQUECT_CODE_SDCARD = 2;
 
+
+    private MusicService musicService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initView();
         initEvent();
+        Intent startIntent = new Intent(this, MusicService.class);
+        bindService(startIntent, connection, BIND_AUTO_CREATE);
     }
 
     private void initView() {
@@ -242,8 +251,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
     @PermissionDenied(REQUECT_CODE_SDCARD)
     public void requestSdcardFailed() {
         Toast.makeText(this, "未允许读取SD卡的权限，无法获取本地歌曲", Toast.LENGTH_SHORT).show();
+    }
+
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service1) {
+            musicService = ((MusicService.MusicBinder) service1).getService();
+            musicService.changNotifi();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        unbindService(connection);
+        super.onDestroy();
     }
 }

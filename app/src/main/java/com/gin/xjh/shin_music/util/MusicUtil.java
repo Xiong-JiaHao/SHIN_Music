@@ -186,19 +186,20 @@ public class MusicUtil {
         List <Song> mSongList = new ArrayList<>();
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Audio.AudioColumns.IS_MUSIC);
         if (cursor != null) {
-            cursor.moveToFirst();
-            do {
-                String SongName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                String SingerName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                String AlbumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                String Url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                Song song = new Song(SongName, SingerName, AlbumName, Url);
-                song.setAlbumId(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
-                song.setSongTime(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-                if (cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)) >= 800000 && new File(song.getUrl()).exists()) {
-                    mSongList.add(song);
-                }
-            }while (cursor.moveToNext());
+            if (cursor.moveToFirst()) {
+                do {
+                    String SongName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                    String SingerName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                    String AlbumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                    String Url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                    Song song = new Song(SongName, SingerName, AlbumName, Url);
+                    song.setAlbumId(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
+                    song.setSongTime(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+                    if (cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)) >= 800000 && new File(song.getUrl()).exists()) {
+                        mSongList.add(song);
+                    }
+                } while (cursor.moveToNext());
+            }
             cursor.close();
         }
         return mSongList;

@@ -2,7 +2,6 @@ package com.gin.xjh.shin_music.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +19,7 @@ import com.gin.xjh.shin_music.All_comment;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_play_Activity;
+import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.DensityUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 
@@ -172,8 +172,11 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                     }
                     MusicUtil.changeSongList(mList);
                     MusicUtil.setIndex(position);
-                    MusicUtil.play();
-                    context.startActivity(intent);
+                    Intent startIntent1 = new Intent(context, MusicService.class);
+                    startIntent1.putExtra("action", MusicService.PLAY);
+                    context.startService(startIntent1);
+                    Intent intent1 = new Intent(context, music_play_Activity.class);
+                    context.startActivity(intent1);
                 }
             });
 

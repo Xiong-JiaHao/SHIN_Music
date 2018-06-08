@@ -5,10 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +18,7 @@ import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.album_details_Activity;
 import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.util.BitmapUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.view.cd_ImageView;
 import com.squareup.picasso.Picasso;
@@ -138,7 +135,7 @@ public class Fragment_Music extends Fragment {
                     .error(R.drawable.album)
                     .into(mAlbum);
         } else {
-            mAlbum.setImageBitmap(getAlbumArt(song.getAlbumId()));
+            mAlbum.setImageBitmap(BitmapUtil.getAlbumArt(getContext(),song.getAlbumId()));
         }
     }
 
@@ -149,30 +146,5 @@ public class Fragment_Music extends Fragment {
         // 控件被移除时，取消动画
         objAnim.cancel();
         mAlbum.clearAnimation();// 清除此ImageView身上的动画
-    }
-
-    /**
-     * 根据专辑ID获取专辑封面图
-     *
-     * @param AlbumId 专辑ID
-     * @return
-     */
-    private Bitmap getAlbumArt(String AlbumId) {
-        String mUriAlbums = "content://media/external/audio/albums";
-        String[] projection = new String[]{"album_art"};
-        Cursor cur = getContext().getContentResolver().query(Uri.parse(mUriAlbums + "/" + AlbumId), projection, null, null, null);
-        String album_art = null;
-        if (cur.getCount() > 0 && cur.getColumnCount() > 0) {
-            cur.moveToNext();
-            album_art = cur.getString(0);
-        }
-        cur.close();
-        Bitmap bm = null;
-        if (album_art != null) {
-            bm = BitmapFactory.decodeFile(album_art);
-        } else {
-            bm = null;
-        }
-        return bm;
     }
 }

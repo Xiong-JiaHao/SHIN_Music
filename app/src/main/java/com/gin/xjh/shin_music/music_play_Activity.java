@@ -65,10 +65,10 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
 
     private boolean isChange = false;
 
-
     public static final String MUSIC_ACTION_CHANGE = "MusicNotificaion.To.Change";
 
     private static final int UPDATEUI = 200;
+
 
     //实时刷新UI
     private Handler UIHandler = new Handler() {
@@ -192,6 +192,8 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.go_back:
+                Intent intent = new Intent(LyricView.LYRIC_ACTION_PAUSE);
+                broadcastManager.sendBroadcast(intent);
                 finish();
                 break;
             case R.id.change_style:
@@ -232,45 +234,13 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 }
                 break;
             case R.id.leftto:
-                if (!MusicUtil.isPlayMusic()) {
-                    music_play.setImageResource(R.drawable.music_stop);
-                }
-                Intent startIntent2 = new Intent(this, MusicService.class);
-                startIntent2.putExtra("action", MusicService.PREVIOUSMUSIC);
-                startService(startIntent2);
+                preSong();
                 break;
             case R.id.music_play:
-                if (MusicUtil.getListSize() == 0) {
-                    Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
-                    break;
-                } else if (!MusicUtil.isPlayMusic()) {
-                    music_play.setImageResource(R.drawable.music_stop);
-                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
-                    broadcastManager.sendBroadcast(playintent);
-                    playintent = new Intent(LyricView.LYRIC_ACTION_PLAY);
-                    broadcastManager.sendBroadcast(playintent);
-                    //恢复UI刷新
-                    UIHandler.sendEmptyMessage(UPDATEUI);
-                } else {
-                    music_play.setImageResource(R.drawable.music_play);
-                    Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PAUSE);
-                    broadcastManager.sendBroadcast(playintent);
-                    playintent = new Intent(LyricView.LYRIC_ACTION_PAUSE);
-                    broadcastManager.sendBroadcast(playintent);
-                    //停止UI刷新
-                    UIHandler.removeMessages(UPDATEUI);
-                }
-                Intent startIntent1 = new Intent(this, MusicService.class);
-                startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
-                startService(startIntent1);
+                playOrpause();
                 break;
             case R.id.rightto:
-                if (!MusicUtil.isPlayMusic()) {
-                    music_play.setImageResource(R.drawable.music_stop);
-                }
-                Intent startIntent3 = new Intent(this, MusicService.class);
-                startIntent3.putExtra("action", MusicService.NEXTMUSIC);
-                startService(startIntent3);
+                nextSong();
                 break;
             case R.id.song_sheet:
                 if (MusicUtil.getListSize() > 0) {
@@ -278,6 +248,50 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 }
                 break;
         }
+    }
+
+    private void preSong() {
+        if (!MusicUtil.isPlayMusic()) {
+            music_play.setImageResource(R.drawable.music_stop);
+        }
+        Intent startIntent2 = new Intent(this, MusicService.class);
+        startIntent2.putExtra("action", MusicService.PREVIOUSMUSIC);
+        startService(startIntent2);
+    }
+
+    private void playOrpause() {
+        if (MusicUtil.getListSize() == 0) {
+            Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!MusicUtil.isPlayMusic()) {
+            music_play.setImageResource(R.drawable.music_stop);
+            Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
+            broadcastManager.sendBroadcast(playintent);
+            playintent = new Intent(LyricView.LYRIC_ACTION_PLAY);
+            broadcastManager.sendBroadcast(playintent);
+            //恢复UI刷新
+            UIHandler.sendEmptyMessage(UPDATEUI);
+        } else {
+            music_play.setImageResource(R.drawable.music_play);
+            Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PAUSE);
+            broadcastManager.sendBroadcast(playintent);
+            playintent = new Intent(LyricView.LYRIC_ACTION_PAUSE);
+            broadcastManager.sendBroadcast(playintent);
+            //停止UI刷新
+            UIHandler.removeMessages(UPDATEUI);
+        }
+        Intent startIntent1 = new Intent(this, MusicService.class);
+        startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
+        startService(startIntent1);
+    }
+
+    private void nextSong() {
+        if (!MusicUtil.isPlayMusic()) {
+            music_play.setImageResource(R.drawable.music_stop);
+        }
+        Intent startIntent3 = new Intent(this, MusicService.class);
+        startIntent3.putExtra("action", MusicService.NEXTMUSIC);
+        startService(startIntent3);
     }
 
     @SuppressLint("ResourceAsColor")
@@ -360,12 +374,15 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         if (MusicUtil.getPlay_state() == MusicUtil.SINGLE_CYCLE) {
             play_style_img.setImageResource(R.drawable.single_cycle);
             play_style_name.setText("单曲循环");
+            Toast.makeText(this, "单曲循环", Toast.LENGTH_SHORT).show();
         } else if (MusicUtil.getPlay_state() == MusicUtil.ORDER_CYCLE) {
             play_style_img.setImageResource(R.drawable.order_cycle);
             play_style_name.setText("顺序播放");
+            Toast.makeText(this, "顺序播放", Toast.LENGTH_SHORT).show();
         } else {
             play_style_img.setImageResource(R.drawable.disorderly_cycle);
             play_style_name.setText("随机播放");
+            Toast.makeText(this, "随机播放", Toast.LENGTH_SHORT).show();
         }
         play_style_num.setText("" + MusicUtil.getListSize());
         play_style_name.setOnClickListener(new View.OnClickListener() {
@@ -376,14 +393,17 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     cycle_style.setImageResource(R.drawable.single_cycle);
                     play_style_img.setImageResource(R.drawable.single_cycle);
                     play_style_name.setText("单曲循环");
+                    Toast.makeText(music_play_Activity.this, "单曲循环", Toast.LENGTH_SHORT).show();
                 } else if (MusicUtil.getPlay_state() == MusicUtil.ORDER_CYCLE) {
                     cycle_style.setImageResource(R.drawable.order_cycle);
                     play_style_img.setImageResource(R.drawable.order_cycle);
                     play_style_name.setText("顺序播放");
+                    Toast.makeText(music_play_Activity.this, "顺序播放", Toast.LENGTH_SHORT).show();
                 } else {
                     cycle_style.setImageResource(R.drawable.disorderly_cycle);
                     play_style_img.setImageResource(R.drawable.disorderly_cycle);
                     play_style_name.setText("随机播放");
+                    Toast.makeText(music_play_Activity.this, "随机播放", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -425,8 +445,11 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             Intent playintent = new Intent(Fragment_Lyrics.LYRIC_ACTION_CHANGE);
             broadcastManager.sendBroadcast(playintent);
             if(MusicUtil.isPlayMusic()){
+                music_play.setImageResource(R.drawable.music_stop);
                 Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_CHANGE);
                 broadcastManager.sendBroadcast(intent1);
+            } else {
+                music_play.setImageResource(R.drawable.music_play);
             }
         }
     }
@@ -453,9 +476,9 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onDestroy() {
         broadcastManager.unregisterReceiver(mSongBroadCast);
-        super.onDestroy();
         //停止UI刷新
         UIHandler.removeMessages(UPDATEUI);
+        super.onDestroy();
     }
 
     @Override
