@@ -60,7 +60,7 @@ public class add_question extends BaseActivity implements View.OnClickListener {
         String question_user = Question_User.getText().toString();
         String category = "";
 
-        if (question == "" || question.length() == 0) {
+        if (question != "" && question.length() > 0) {
             switch (Question_Classify.getCheckedRadioButtonId()) {
                 case R.id.suggest_rb:
                     category = "产品建议";
@@ -74,7 +74,10 @@ public class add_question extends BaseActivity implements View.OnClickListener {
                 @Override
                 public void done(String s, BmobException e) {
                     if (e == null) {
+                        Question_Content.setText("");
+                        Question_User.setText("");
                         Toast.makeText(add_question.this, "提交成功，稍后会进行解决", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 }
             });

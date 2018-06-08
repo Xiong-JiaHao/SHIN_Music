@@ -21,6 +21,9 @@ import java.util.List;
 
 
 public class LyricView extends android.support.v7.widget.AppCompatTextView {
+    public static final String LYRIC_ACTION_PLAY = "Lyric.To.Play";
+    public static final String LYRIC_ACTION_PAUSE = "Lyric.To.Pause";
+    private static final int LYRIC = 200;
     private List<Lyric> lyricList;
     // 标记当前行
     private int currentLine = -1;
@@ -28,10 +31,8 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
     private Paint otherPaint;
     private int currentColor = Color.rgb(179, 11, 11);
     private int currentTextSize = 60;
-
     private int otherColor = Color.BLACK;
     private int otherTextSize = 40;
-
     //歌词总行数一半
     private int MAX_LYRIC = 7;
     // 行间距
@@ -40,12 +41,6 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
     private Typeface currentTypeface = Typeface.DEFAULT_BOLD;
     //其他歌词字体
     private Typeface otherTypeface = Typeface.SERIF;
-
-    public static final String LYRIC_ACTION_PLAY = "Lyric.To.Play";
-    public static final String LYRIC_ACTION_PAUSE = "Lyric.To.Pause";
-
-    private static final int LYRIC = 200;
-
     private Handler handler = new Handler() {
 
         @Override
@@ -102,7 +97,7 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (lyricList != null) {
+        if (lyricList != null && lyricList.size() > 0) {
             Lyric lyric = null;
             //绘制播放过的歌词
 
