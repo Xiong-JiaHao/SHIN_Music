@@ -27,7 +27,7 @@ public class getNetMusicDetail {
 
     private Context mContext;
 
-    private static final int REQUEST_SUCCESS = 200;
+    private static final int REQUEST_SUCCESS = 202;
 
     private Handler mMainHandler;
 

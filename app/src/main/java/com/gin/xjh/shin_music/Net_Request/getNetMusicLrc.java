@@ -28,7 +28,7 @@ public class getNetMusicLrc {
     private TextView hint;
     private LyricView lyricView;
 
-    private static final int REQUEST_SUCCESS = 200;
+    private static final int REQUEST_SUCCESS = 204;
 
     private Handler mMainHandler;
 

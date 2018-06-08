@@ -23,7 +23,7 @@ import java.util.List;
 public class LyricView extends android.support.v7.widget.AppCompatTextView {
     public static final String LYRIC_ACTION_PLAY = "Lyric.To.Play";
     public static final String LYRIC_ACTION_PAUSE = "Lyric.To.Pause";
-    private static final int LYRIC = 200;
+    private static final int LYRIC = 206;
     private List<Lyric> lyricList;
     // 标记当前行
     private int currentLine = -1;

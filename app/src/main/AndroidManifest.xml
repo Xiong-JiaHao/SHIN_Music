@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.gin.xjh.shin_music">
 
     <!--允许联网 -->
@@ -24,6 +25,10 @@
 
     <!--电源锁-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!--本地音乐播放-->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"

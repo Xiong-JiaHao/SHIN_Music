@@ -39,7 +39,7 @@ public class getNetNewMusic {
     private List<Song> mSongList;
     private recommendmusicRecyclerViewAdapter mRecommendmusicRecyclerViewAdapter;
 
-    private static final int REQUEST_SUCCESS = 200;
+    private static final int REQUEST_SUCCESS = 205;
 
     private Handler mMainHandler;
 

@@ -39,7 +39,7 @@ public class getNetAlbumList {
     private List<Song> mSongList;
     private musicRecyclerViewAdapter mMusicRecyclerViewAdapter;
 
-    private static final int REQUEST_SUCCESS = 200;
+    private static final int REQUEST_SUCCESS = 201;
 
     private Handler mMainHandler;
 
