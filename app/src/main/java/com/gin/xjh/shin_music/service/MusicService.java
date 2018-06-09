@@ -128,6 +128,12 @@ public class MusicService extends Service {
     }
 
     @Override
+    public boolean onUnbind(Intent intent) {
+        musicNotifi.onCancelMusicNotifi();
+        return super.onUnbind(intent);
+    }
+
+    @Override
     public void onDestroy() {
         releseWakeLock();
         MusicUtil.clean();

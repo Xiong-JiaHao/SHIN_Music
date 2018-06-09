@@ -23,7 +23,7 @@ public class MusicNotification extends Notification {
 
     private static MusicNotification notifyInstance = null;
     private Notification musicNotifi = null;
-    private final int NOTIFICATION_ID =0;
+    private final int NOTIFICATION_ID = 100;
 
     private Context context;
     private final int REQUEST_CODE = 207;
@@ -107,7 +107,7 @@ public class MusicNotification extends Notification {
             musicNotifi = builder.build();
         }
         musicNotifi.flags = Notification.FLAG_ONGOING_EVENT;
-        manager.notify(0, musicNotifi);
+        manager.notify(NOTIFICATION_ID, musicNotifi);
     }
 
     public void onUpdataMusicNotifi() {
@@ -161,7 +161,7 @@ public class MusicNotification extends Notification {
      * 取消通知栏
      */
     public void onCancelMusicNotifi(){
-        manager.cancel(0);
+        manager.cancel(NOTIFICATION_ID);
     }
 
 
