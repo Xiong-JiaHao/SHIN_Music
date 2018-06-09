@@ -1,6 +1,7 @@
 package com.gin.xjh.shin_music.notification;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -99,9 +100,18 @@ public class MusicNotification extends Notification {
                     .setSmallIcon(R.drawable.albumdetails);//设置下拉图标
         }
 
-        // 兼容性实现
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelID = "ginshin";
+            String channelName = "xjh";
+            NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
+            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            manager.createNotificationChannel(channel);
+
+            builder.setChannelId(channelID);
+            musicNotifi = builder.build();
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             musicNotifi = builder.getNotification();
         } else {
             musicNotifi = builder.build();
