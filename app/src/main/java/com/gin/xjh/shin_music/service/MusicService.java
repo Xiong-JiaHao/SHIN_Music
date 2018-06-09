@@ -38,6 +38,7 @@ public class MusicService extends Service {
     public static final String MUSIC_NOTIFICATION_ACTION_PLAY = "musicnotificaion.To.PLAY";
     public static final String MUSIC_NOTIFICATION_ACTION_NEXT = "musicnotificaion.To.NEXT";
     public static final String MUSIC_NOTIFICATION_ACTION_PRE = "musicnotificaion.To.PRE";
+    public static final String MUSIC_NOTIFICATION_ACTION_CHANGE = "musicnotificaion.To.CHANGE";
 
     private PowerManager.WakeLock wakeLock = null;//电源锁
 
@@ -80,6 +81,7 @@ public class MusicService extends Service {
         filter.addAction(MUSIC_NOTIFICATION_ACTION_PLAY);
         filter.addAction(MUSIC_NOTIFICATION_ACTION_NEXT);
         filter.addAction(MUSIC_NOTIFICATION_ACTION_PRE);
+        filter.addAction(MUSIC_NOTIFICATION_ACTION_CHANGE);
         registerReceiver(musicBroadCast, filter);
         super.onCreate();
     }
@@ -154,9 +156,6 @@ public class MusicService extends Service {
     }
 
     public class MusicBroadCast extends BroadcastReceiver {
-        private final String MUSIC_NOTIFICATION_ACTION_PLAY = "musicnotificaion.To.PLAY";
-        private final String MUSIC_NOTIFICATION_ACTION_NEXT = "musicnotificaion.To.NEXT";
-        private final String MUSIC_NOTIFICATION_ACTION_PRE = "musicnotificaion.To.PRE";
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -178,6 +177,9 @@ public class MusicService extends Service {
                     startIntent3.putExtra("action", MusicService.PREVIOUSMUSIC);
                     startService(startIntent3);
                     sendBroadcast(changeIntent);
+                    break;
+                case MUSIC_NOTIFICATION_ACTION_CHANGE:
+                    changNotifi();
                     break;
             }
 

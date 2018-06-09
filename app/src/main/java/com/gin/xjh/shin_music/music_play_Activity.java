@@ -444,6 +444,8 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             time_seekbar.setMax(MusicUtil.getSumTime());
             Intent playintent = new Intent(Fragment_Lyrics.LYRIC_ACTION_CHANGE);
             broadcastManager.sendBroadcast(playintent);
+            playintent = new Intent(MusicService.MUSIC_NOTIFICATION_ACTION_CHANGE);
+            broadcastManager.sendBroadcast(playintent);
             if(MusicUtil.isPlayMusic()){
                 music_play.setImageResource(R.drawable.music_stop);
                 Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_CHANGE);

@@ -137,6 +137,7 @@ public class Fragment_Music extends Fragment {
         } else {
             mAlbum.setImageBitmap(BitmapUtil.getAlbumArt(getContext(),song.getAlbumId()));
         }
+
     }
 
     @Override
