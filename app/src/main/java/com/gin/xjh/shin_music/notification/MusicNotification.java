@@ -91,12 +91,14 @@ public class MusicNotification extends Notification {
             builder.setCustomBigContentView(remoteViews).setWhen(System.currentTimeMillis())
                     .setContentIntent(pendingIntent)
                     .setOngoing(true)
+                    .setAutoCancel(true)
                     .setSmallIcon(R.drawable.albumdetails);//设置下拉图标
         }
         else {
             builder.setContent(remoteViews).setWhen(System.currentTimeMillis())
                     .setContentIntent(pendingIntent)
                     .setOngoing(true)
+                    .setAutoCancel(true)
                     .setSmallIcon(R.drawable.albumdetails);//设置下拉图标
         }
 
@@ -153,7 +155,7 @@ public class MusicNotification extends Notification {
                         });
             }
             else {
-                remoteViews.setImageViewBitmap(R.id.notigication_album, BitmapUtil.getAlbumArt(context,song.getAlbumUrl()));
+                remoteViews.setImageViewBitmap(R.id.notigication_album, BitmapUtil.getAlbumArt(context, song.getAlbumId()));
             }
             if (MusicUtil.isPlayMusic()) {
                 remoteViews.setImageViewResource(R.id.notigication_playorpaues,R.drawable.notigication_pause);

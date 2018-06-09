@@ -87,7 +87,9 @@ public class Fragment_Lyrics extends Fragment implements View.OnClickListener {
     }
 
     private void initEvent() {
-        new getNetMusicLrc().getJson(lyricView, hint);
+        if (MusicUtil.getNowSong() != null) {
+            new getNetMusicLrc().getJson(lyricView, hint);
+        }
     }
 
     @Override
