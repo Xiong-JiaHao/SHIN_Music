@@ -82,23 +82,25 @@ public class MusicNotification extends Notification {
         //4.设置点击事件（调转到播放界面）
         Intent intent = new Intent(context, music_play_Activity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,0);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            builder.setCustomBigContentView(remoteViews).setWhen(System.currentTimeMillis())
+            builder.setCustomBigContentView(remoteViews)
+                    .setWhen(System.currentTimeMillis())
                     .setContentIntent(pendingIntent)
                     .setOngoing(true)//必须手动代码清除
-                    .setAutoCancel(true)
-                    .setDefaults(Notification.FLAG_ONLY_ALERT_ONCE)
                     .setSmallIcon(R.drawable.albumdetails);//设置下拉图标
         }
         else {
-            builder.setContent(remoteViews).setWhen(System.currentTimeMillis())
+            builder.setContent(remoteViews)
+                    .setWhen(System.currentTimeMillis())
                     .setContentIntent(pendingIntent)
                     .setOngoing(true)//必须手动代码清除
-                    .setAutoCancel(true)
-                    .setDefaults(Notification.FLAG_ONLY_ALERT_ONCE)
                     .setSmallIcon(R.drawable.albumdetails);//设置下拉图标
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setVisibility(Notification.VISIBILITY_PUBLIC);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelID = "ginshin";
@@ -142,13 +144,22 @@ public class MusicNotification extends Notification {
                 remoteViews.setImageViewBitmap(R.id.notigication_album, BitmapUtil.getAlbumArt(context, song.getAlbumId()));
             }
             if (MusicUtil.isPlayMusic()) {
-                remoteViews.setImageViewResource(R.id.notigication_playorpaues,R.drawable.notigication_pause);
+                remoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_pause);
             } else {
-                remoteViews.setImageViewResource(R.id.notigication_playorpaues,
-                        R.drawable.notigication_play);
+                remoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_play);
             }
         }
 
+        onCreateMusicNotifi(); //每一次改变都要重新创建，所以直接写这里
+    }
+
+    public void onUpdataPlayNotifi() {
+        Song song = MusicUtil.getNowSong();
+        if (MusicUtil.isPlayMusic()) {
+            remoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_pause);
+        } else {
+            remoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_play);
+        }
         onCreateMusicNotifi(); //每一次改变都要重新创建，所以直接写这里
     }
 

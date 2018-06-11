@@ -104,7 +104,7 @@ public class MusicService extends Service {
                     break;
                 case PLAYORPAUSE:
                     MusicUtil.playorpause();
-                    musicNotifi.onUpdataMusicNotifi();
+                    musicNotifi.onUpdataPlayNotifi();
                     break;
                 case PREVIOUSMUSIC:
                     MusicUtil.pre();
