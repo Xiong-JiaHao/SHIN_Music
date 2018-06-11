@@ -165,7 +165,6 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, music_play_Activity.class);
                     List<Song> mList = new ArrayList<>();
                     for (int i = 0; i < list.size(); i++) {
                         mList.add(list.get(i));
@@ -174,9 +173,9 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                     MusicUtil.setIndex(position);
                     Intent startIntent1 = new Intent(context, MusicService.class);
                     startIntent1.putExtra("action", MusicService.PLAY);
+                    Intent intent = new Intent(context, music_play_Activity.class);
                     context.startService(startIntent1);
-                    Intent intent1 = new Intent(context, music_play_Activity.class);
-                    context.startActivity(intent1);
+                    context.startActivity(intent);
                 }
             });
 

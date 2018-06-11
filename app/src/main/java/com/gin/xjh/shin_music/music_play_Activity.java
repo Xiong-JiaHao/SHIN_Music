@@ -227,10 +227,13 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 MusicUtil.changeType();
                 if (MusicUtil.getPlay_state() == MusicUtil.SINGLE_CYCLE) {
                     cycle_style.setImageResource(R.drawable.single_cycle);
+                    Toast.makeText(this, "单曲循环", Toast.LENGTH_SHORT).show();
                 } else if (MusicUtil.getPlay_state() == MusicUtil.ORDER_CYCLE) {
                     cycle_style.setImageResource(R.drawable.order_cycle);
+                    Toast.makeText(this, "顺序播放", Toast.LENGTH_SHORT).show();
                 } else {
                     cycle_style.setImageResource(R.drawable.disorderly_cycle);
+                    Toast.makeText(this, "随机播放", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.leftto:
@@ -374,15 +377,12 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         if (MusicUtil.getPlay_state() == MusicUtil.SINGLE_CYCLE) {
             play_style_img.setImageResource(R.drawable.single_cycle);
             play_style_name.setText("单曲循环");
-            Toast.makeText(this, "单曲循环", Toast.LENGTH_SHORT).show();
         } else if (MusicUtil.getPlay_state() == MusicUtil.ORDER_CYCLE) {
             play_style_img.setImageResource(R.drawable.order_cycle);
             play_style_name.setText("顺序播放");
-            Toast.makeText(this, "顺序播放", Toast.LENGTH_SHORT).show();
         } else {
             play_style_img.setImageResource(R.drawable.disorderly_cycle);
             play_style_name.setText("随机播放");
-            Toast.makeText(this, "随机播放", Toast.LENGTH_SHORT).show();
         }
         play_style_num.setText("" + MusicUtil.getListSize());
         play_style_name.setOnClickListener(new View.OnClickListener() {
@@ -418,7 +418,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         bottomDialog.show();
 
         WindowManager.LayoutParams layoutParams = bottomDialog.getWindow().getAttributes();
-        params.height = 1000;
+        params.height = 1000;//使得List的高为1000
         bottomDialog.getWindow().setAttributes(layoutParams);
     }
 
@@ -444,14 +444,14 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             time_seekbar.setMax(MusicUtil.getSumTime());
             Intent playintent = new Intent(Fragment_Lyrics.LYRIC_ACTION_CHANGE);
             broadcastManager.sendBroadcast(playintent);
-            playintent = new Intent(MusicService.MUSIC_NOTIFICATION_ACTION_CHANGE);
-            broadcastManager.sendBroadcast(playintent);
             if(MusicUtil.isPlayMusic()){
                 music_play.setImageResource(R.drawable.music_stop);
                 Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_CHANGE);
                 broadcastManager.sendBroadcast(intent1);
             } else {
                 music_play.setImageResource(R.drawable.music_play);
+                Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_PAUSE);
+                broadcastManager.sendBroadcast(intent1);
             }
         }
     }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_play_Activity;
+import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.squareup.picasso.Picasso;
 
@@ -68,14 +69,16 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, music_play_Activity.class);
-                    MusicUtil.setIndex(position);
                     List<Song> mList = new ArrayList<>();
                     for (int i = 0; i < list.size(); i++) {
                         mList.add(list.get(i));
                     }
                     MusicUtil.changeSongList(mList);
-                    MusicUtil.play();
+                    MusicUtil.setIndex(position);
+                    Intent startIntent1 = new Intent(context, MusicService.class);
+                    startIntent1.putExtra("action", MusicService.PLAY);
+                    Intent intent = new Intent(context, music_play_Activity.class);
+                    context.startService(startIntent1);
                     context.startActivity(intent);
                 }
             });

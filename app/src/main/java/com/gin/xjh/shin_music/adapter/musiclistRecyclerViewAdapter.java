@@ -3,7 +3,6 @@ package com.gin.xjh.shin_music.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import com.gin.xjh.shin_music.MainActivity;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_play_Activity;
+import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.MusicUtil;
 
 import java.util.List;
@@ -66,9 +66,12 @@ public class musiclistRecyclerViewAdapter extends RecyclerView.Adapter<musiclist
                 @Override
                 public void onClick(View v) {
                     MusicUtil.setIndex(position);
-                    MusicUtil.play();
-                    Intent playintent = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(context).sendBroadcast(playintent);
+                    Intent startIntent = new Intent(context, MusicService.class);
+                    startIntent.putExtra("action", MusicService.PLAY);
+                    context.startService(startIntent);
+                    Intent Musicintent = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(context).sendBroadcast(Musicintent);
+
                 }
             });
             removeSong.setOnClickListener(new View.OnClickListener() {
@@ -93,12 +96,11 @@ public class musiclistRecyclerViewAdapter extends RecyclerView.Adapter<musiclist
             if (position == num) {
                 MusicUtil.removeSong(num);
                 MusicUtil.setIndex((num - 1 + size) % size);
-                Log.d("xjhxx", "" + MusicUtil.getListSize());
-                MusicUtil.autonext();
+                Intent startIntent1 = new Intent(context, MusicService.class);
+                startIntent1.putExtra("action", MusicService.AUTONEXTMUSIC);
+                context.startService(startIntent1);
                 list = MusicUtil.getSongList();
                 notifyItemRemoved(position);
-                Intent Musicintent = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
-                android.support.v4.content.LocalBroadcastManager.getInstance(context).sendBroadcast(Musicintent);
             } else {
                 MusicUtil.removeSong(position);
             }

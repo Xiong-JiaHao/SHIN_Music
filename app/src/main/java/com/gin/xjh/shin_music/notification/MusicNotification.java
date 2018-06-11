@@ -6,8 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.widget.RemoteViews;
 
@@ -18,7 +16,6 @@ import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.BitmapUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 public class MusicNotification extends Notification {
 
@@ -33,7 +30,7 @@ public class MusicNotification extends Notification {
     private Builder builder = null;
 
     private RemoteViews remoteViews;
-    private Intent play=null,next=null,pre = null;
+    private Intent play = null, next = null, pre = null;
 
 
     public void setContext(Context context){
@@ -69,20 +66,18 @@ public class MusicNotification extends Notification {
 
         // 1.注册控制点击事件
 
-        PendingIntent pplay = PendingIntent.getBroadcast(context, REQUEST_CODE,
-                play,0);
-        remoteViews.setOnClickPendingIntent(R.id.notigication_playorpaues,pplay);
+        PendingIntent pplay = PendingIntent.getBroadcast(context, REQUEST_CODE, play, 0);
+        remoteViews.setOnClickPendingIntent(R.id.notigication_playorpaues, pplay);
 
         // 2.注册下一首点击事件
 
-        PendingIntent pnext = PendingIntent.getBroadcast(context, REQUEST_CODE,
-                next, 0);
-        remoteViews.setOnClickPendingIntent(R.id.notigication_next,pnext);
+        PendingIntent pnext = PendingIntent.getBroadcast(context, REQUEST_CODE, next, 0);
+        remoteViews.setOnClickPendingIntent(R.id.notigication_next, pnext);
 
         // 3.注册上一首点击事件
 
-        PendingIntent ppre = PendingIntent.getBroadcast(context, REQUEST_CODE,pre, 0);
-        remoteViews.setOnClickPendingIntent(R.id.notigication_pre,ppre);
+        PendingIntent ppre = PendingIntent.getBroadcast(context, REQUEST_CODE, pre, 0);
+        remoteViews.setOnClickPendingIntent(R.id.notigication_pre, ppre);
 
         //4.设置点击事件（调转到播放界面）
         Intent intent = new Intent(context, music_play_Activity.class);
@@ -90,22 +85,24 @@ public class MusicNotification extends Notification {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             builder.setCustomBigContentView(remoteViews).setWhen(System.currentTimeMillis())
                     .setContentIntent(pendingIntent)
-                    .setOngoing(true)
+                    .setOngoing(true)//必须手动代码清除
                     .setAutoCancel(true)
+                    .setDefaults(Notification.FLAG_ONLY_ALERT_ONCE)
                     .setSmallIcon(R.drawable.albumdetails);//设置下拉图标
         }
         else {
             builder.setContent(remoteViews).setWhen(System.currentTimeMillis())
                     .setContentIntent(pendingIntent)
-                    .setOngoing(true)
+                    .setOngoing(true)//必须手动代码清除
                     .setAutoCancel(true)
+                    .setDefaults(Notification.FLAG_ONLY_ALERT_ONCE)
                     .setSmallIcon(R.drawable.albumdetails);//设置下拉图标
         }
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelID = "ginshin";
-            String channelName = "xjh";
+            String channelName = "SHIN_Music";
             NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -135,24 +132,11 @@ public class MusicNotification extends Notification {
             remoteViews.setTextViewText(R.id.notigication_singer,song.getSingerName());
 
             if(song.isOnline()){
+                remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.album);
                 Picasso.with(context)
                         .load(song.getAlbumUrl())
-                        .into(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                remoteViews.setImageViewBitmap(R.id.notigication_album,bitmap);
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Drawable errorDrawable) {
-
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                            }
-                        });
+                        .error(R.drawable.album)
+                        .into(remoteViews, R.id.notigication_album, NOTIFICATION_ID, musicNotifi);
             }
             else {
                 remoteViews.setImageViewBitmap(R.id.notigication_album, BitmapUtil.getAlbumArt(context, song.getAlbumId()));
