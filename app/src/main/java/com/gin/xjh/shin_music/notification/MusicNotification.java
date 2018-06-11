@@ -84,28 +84,27 @@ public class MusicNotification extends Notification {
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            builder.setCustomBigContentView(remoteViews)
-                    .setWhen(System.currentTimeMillis())
-                    .setContentIntent(pendingIntent)
-                    .setOngoing(true)//必须手动代码清除
-                    .setSmallIcon(R.drawable.albumdetails);//设置下拉图标
+            builder.setCustomBigContentView(remoteViews);
         }
         else {
-            builder.setContent(remoteViews)
-                    .setWhen(System.currentTimeMillis())
-                    .setContentIntent(pendingIntent)
-                    .setOngoing(true)//必须手动代码清除
-                    .setSmallIcon(R.drawable.albumdetails);//设置下拉图标
+            builder.setContent(remoteViews);
         }
 
+        builder.setWhen(System.currentTimeMillis())
+                .setContentIntent(pendingIntent)
+                .setOngoing(true)//必须手动代码清除
+                .setSmallIcon(R.drawable.albumdetails);//设置下拉图标
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.setVisibility(Notification.VISIBILITY_PUBLIC);
+            builder.setCategory(Notification.CATEGORY_PROGRESS)
+                    .setVisibility(Notification.VISIBILITY_PUBLIC);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelID = "ginshin";
             String channelName = "SHIN_Music";
-            NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setSound(null, null);
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             manager.createNotificationChannel(channel);
@@ -130,8 +129,8 @@ public class MusicNotification extends Notification {
             remoteViews.setImageViewResource(R.id.notigication_album,R.drawable.album);
         }
         else {
-            remoteViews.setTextViewText(R.id.notigication_songName,song.getSongName());
-            remoteViews.setTextViewText(R.id.notigication_singer,song.getSingerName());
+            remoteViews.setTextViewText(R.id.notigication_songName, song.getSongName());
+            remoteViews.setTextViewText(R.id.notigication_singer, song.getSingerName());
 
             if(song.isOnline()){
                 remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.album);
@@ -154,7 +153,6 @@ public class MusicNotification extends Notification {
     }
 
     public void onUpdataPlayNotifi() {
-        Song song = MusicUtil.getNowSong();
         if (MusicUtil.isPlayMusic()) {
             remoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_pause);
         } else {
