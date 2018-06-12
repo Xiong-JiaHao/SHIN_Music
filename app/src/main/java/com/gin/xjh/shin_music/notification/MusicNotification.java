@@ -83,14 +83,8 @@ public class MusicNotification extends Notification {
         Intent intent = new Intent(context, music_play_Activity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,0);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            builder.setCustomBigContentView(remoteViews);
-        }
-        else {
-            builder.setContent(remoteViews);
-        }
-
-        builder.setWhen(System.currentTimeMillis())
+        builder.setContent(remoteViews)
+                .setWhen(System.currentTimeMillis())
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)//必须手动代码清除
                 .setSmallIcon(R.drawable.albumdetails);//设置下拉图标
