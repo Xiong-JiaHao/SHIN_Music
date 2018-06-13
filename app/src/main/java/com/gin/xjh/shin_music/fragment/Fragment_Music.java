@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,7 +21,7 @@ import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.util.BitmapUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
-import com.gin.xjh.shin_music.view.cd_ImageView;
+import com.gin.xjh.shin_music.view.CD_ImageView;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -29,7 +30,7 @@ import com.squareup.picasso.Picasso;
 
 public class Fragment_Music extends Fragment {
 
-    private cd_ImageView mAlbum;
+    private CD_ImageView mAlbum;
 
     public static final String MUSIC_ACTION_PLAY = "MusicNotificaion.To.PLAY";
     public static final String MUSIC_ACTION_PAUSE = "MusicNotificaion.To.PAUSE";
@@ -130,12 +131,21 @@ public class Fragment_Music extends Fragment {
     private void changeAlbum() {
         Song song = MusicUtil.getNowSong();
         if (song.isOnline()) {
-            Picasso.with(getContext()).load(song.getAlbumUrl())
-                    .placeholder(R.drawable.album)
-                    .error(R.drawable.album)
-                    .into(mAlbum);
+            if (song.getAlbumUrl() != null) {
+                Picasso.with(getContext())
+                        .load(song.getAlbumUrl())
+                        .error(R.drawable.album)
+                        .into(mAlbum);
+            } else {
+                mAlbum.setImageResource(R.drawable.album);
+            }
         } else {
-            mAlbum.setImageBitmap(BitmapUtil.getAlbumArt(getContext(),song.getAlbumId()));
+            Bitmap bitmap = BitmapUtil.getAlbumArt(getContext(), song.getSongId());
+            if (bitmap == null) {
+                mAlbum.setImageResource(R.drawable.album);
+            } else {
+                mAlbum.setImageBitmap(bitmap);
+            }
         }
 
     }

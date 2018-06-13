@@ -143,7 +143,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         MediaPlayer mMediaPlayer = MusicUtil.getMediaPlayer();
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
-            public void onCompletion(MediaPlayer mp) {
+            public void onCompletion(MediaPlayer mp) {//自动播放完后
                 Intent startIntent = new Intent(music_play_Activity.this, MusicService.class);
                 startIntent.putExtra("action", MusicService.AUTONEXTMUSIC);
                 startService(startIntent);

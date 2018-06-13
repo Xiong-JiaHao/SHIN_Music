@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.gin.xjh.shin_music.Interface.RequestServices_MusicDetail;
 import com.gin.xjh.shin_music.music_play_Activity;
+import com.gin.xjh.shin_music.notification.MusicNotification;
 import com.gin.xjh.shin_music.util.Constant;
 import com.gin.xjh.shin_music.util.MusicUtil;
 
@@ -53,7 +54,7 @@ public class getNetMusicDetail {
                         MusicUtil.getSongList().get(MusicUtil.getIndex()).setAlbumUrl(url);
                         Intent intent = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
                         android.support.v4.content.LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-
+                        MusicNotification.getMusicNotification(mContext).onUpdataMusicNotifi();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

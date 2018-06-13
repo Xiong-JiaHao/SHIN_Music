@@ -87,8 +87,13 @@ public class Fragment_Lyrics extends Fragment implements View.OnClickListener {
     }
 
     private void initEvent() {
-        if (MusicUtil.getNowSong() != null) {
-            new getNetMusicLrc().getJson(lyricView, hint);
+        Song song = MusicUtil.getNowSong();
+        if (song != null) {
+            if (song.isOnline())
+                new getNetMusicLrc().getJson(lyricView, hint);
+            else {
+                hint.setText("本地歌曲没有歌词");
+            }
         }
     }
 

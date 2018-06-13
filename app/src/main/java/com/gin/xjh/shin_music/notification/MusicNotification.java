@@ -127,14 +127,16 @@ public class MusicNotification extends Notification {
             remoteViews.setTextViewText(R.id.notigication_singer, song.getSingerName());
 
             if(song.isOnline()){
-                remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.album);
-                Picasso.with(context)
-                        .load(song.getAlbumUrl())
-                        .error(R.drawable.album)
-                        .into(remoteViews, R.id.notigication_album, NOTIFICATION_ID, musicNotifi);
-            }
-            else {
-                remoteViews.setImageViewBitmap(R.id.notigication_album, BitmapUtil.getAlbumArt(context, song.getAlbumId()));
+                if (song.getAlbumUrl() != null) {
+                    Picasso.with(context)
+                            .load(song.getAlbumUrl())
+                            .error(R.drawable.album)
+                            .into(remoteViews, R.id.notigication_album, NOTIFICATION_ID, musicNotifi);
+                } else {
+                    remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.album);
+                }
+            } else {
+                remoteViews.setImageViewBitmap(R.id.notigication_album, BitmapUtil.getAlbumArt(context, song.getSongId()));
             }
             if (MusicUtil.isPlayMusic()) {
                 remoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_pause);

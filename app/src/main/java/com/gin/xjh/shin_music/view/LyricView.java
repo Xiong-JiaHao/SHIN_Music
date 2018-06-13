@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.gin.xjh.shin_music.bean.Lyric;
 import com.gin.xjh.shin_music.util.LrcUtils;
@@ -89,7 +90,7 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
     }
 
     public void getLyric(String lyrics) {
-        //Log.d("xjhlyric", lyrics);
+        Log.d("xjhlyric", lyrics);
         lyricList = LrcUtils.readLRC(lyrics);
         currentLine = -1;
         handler.sendEmptyMessage(LYRIC);

@@ -13,7 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
-public class cd_ImageView extends android.support.v7.widget.AppCompatImageView {
+public class CD_ImageView extends android.support.v7.widget.AppCompatImageView {
 
     private Paint mPaint; //画笔
 
@@ -38,15 +38,15 @@ public class cd_ImageView extends android.support.v7.widget.AppCompatImageView {
 //        }
 //    };
 
-    public cd_ImageView(Context context) {
+    public CD_ImageView(Context context) {
         super(context);
     }
 
-    public cd_ImageView(Context context, @Nullable AttributeSet attrs) {
+    public CD_ImageView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public cd_ImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CD_ImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -64,6 +64,10 @@ public class cd_ImageView extends android.support.v7.widget.AppCompatImageView {
 
         mPaint = new Paint();
         Bitmap bitmap = drawableToBitmap(getDrawable());
+
+        if (bitmap == null) {
+            return;
+        }
 
         //初始化BitmapShader，传入bitmap对象
         BitmapShader bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
@@ -89,6 +93,9 @@ public class cd_ImageView extends android.support.v7.widget.AppCompatImageView {
 
     //写一个drawble转BitMap的方法
     private Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable == null) {
+            return null;
+        }
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bd = (BitmapDrawable) drawable;
             return bd.getBitmap();

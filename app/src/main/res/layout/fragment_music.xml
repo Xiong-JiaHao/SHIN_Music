@@ -7,7 +7,7 @@
     android:padding="30dp"
     android:orientation="vertical">
 
-    <com.gin.xjh.shin_music.view.cd_ImageView
+    <com.gin.xjh.shin_music.view.CD_ImageView
         android:id="@+id/album"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

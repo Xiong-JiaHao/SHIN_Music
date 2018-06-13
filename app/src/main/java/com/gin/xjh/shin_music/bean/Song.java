@@ -46,7 +46,7 @@ public class Song extends BmobObject implements Serializable {
     }
 
     public boolean isOnline() {
-        if (SongId.compareTo(-1L) == 0) {
+        if (AlbumId == null) {
             return false;
         }
         return true;
@@ -94,6 +94,10 @@ public class Song extends BmobObject implements Serializable {
 
     public void setAlbumId(String albumId) {
         AlbumId = albumId;
+    }
+
+    public void setSongId(Long songId) {
+        SongId = songId;
     }
 
     public void setUrl(String url) {
