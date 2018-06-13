@@ -14,9 +14,9 @@ public class Album extends BmobObject implements Serializable {
     private String AlbumUrl;//专辑图片路径
     private String Singer;//歌手名称
     private Long Times;//发行时间
-    private String AlbumId;//专辑id
+    private Long AlbumId;//专辑id
 
-    public Album(String AlbumName, String AlbumUrl, Long Times, String AlbumId, String Singer) {
+    public Album(String AlbumName, String AlbumUrl, Long Times, Long AlbumId, String Singer) {
         this.AlbumName = AlbumName;
         this.AlbumUrl = AlbumUrl;
         this.Times=Times;
@@ -40,7 +40,7 @@ public class Album extends BmobObject implements Serializable {
         return Times;
     }
 
-    public String getAlbumId() {
+    public Long getAlbumId() {
         return AlbumId;
     }
 

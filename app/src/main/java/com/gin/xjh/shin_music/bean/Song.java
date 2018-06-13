@@ -19,7 +19,7 @@ public class Song extends BmobObject implements Serializable {
     private String AlbumUrl;//专辑图片路径
     private int SongTime = 0;//歌曲时间
     private Long AlbumTime = null;
-    private String AlbumId = null;
+    private Long AlbumId = null;
 
     public Song() {
 
@@ -46,10 +46,10 @@ public class Song extends BmobObject implements Serializable {
     }
 
     public boolean isOnline() {
-        if (AlbumId == null) {
-            return false;
+        if (Url == null) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     public String getSongName() {
@@ -88,11 +88,11 @@ public class Song extends BmobObject implements Serializable {
         return AlbumTime;
     }
 
-    public String getAlbumId() {
+    public Long getAlbumId() {
         return AlbumId;
     }
 
-    public void setAlbumId(String albumId) {
+    public void setAlbumId(Long albumId) {
         AlbumId = albumId;
     }
 

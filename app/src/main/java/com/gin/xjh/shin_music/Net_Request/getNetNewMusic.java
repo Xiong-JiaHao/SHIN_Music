@@ -74,7 +74,7 @@ public class getNetNewMusic {
                             JSONObject alObject = new JSONObject(al);
                             String AlbumName = alObject.getString("name");
                             String AlbumUri = alObject.getString("picUrl");
-                            String AlbumId = String.valueOf(alObject.getLong("id"));
+                            Long AlbumId = alObject.getLong("id");
                             Song song = new Song(jsonObject.getString("name"), jsonObject.getLong("id"), Singer, SingerId, AlbumName, AlbumUri, jsonObject.getInt("dt"));
                             song.setAlbumId(AlbumId);
                             song.setAlbumTime(jsonObject.getLong("publishTime"));

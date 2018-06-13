@@ -61,7 +61,7 @@ public class getNetAlbumList {
                         Long time = AlbumObject.getLong("publishTime");
                         String AlbumName = AlbumObject.getString("name");
                         String AlbumUri = AlbumObject.getString("blurPicUrl");
-                        String AlbumId = String.valueOf(AlbumObject.getLong("id"));
+                        Long AlbumId = AlbumObject.getLong("id");
                         int len = Math.min(50, jsonArray.length());
                         for (int i = 0; i < len; i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -95,7 +95,7 @@ public class getNetAlbumList {
         };
     }
 
-    public void getJson(String id, View music_list_rv, View music_list_hint, Context mContext) {
+    public void getJson(Long id, View music_list_rv, View music_list_hint, Context mContext) {
         this.music_list_rv = (RecyclerView) music_list_rv;
         this.music_list_hint = (TextView) music_list_hint;
         this.mContext = mContext;

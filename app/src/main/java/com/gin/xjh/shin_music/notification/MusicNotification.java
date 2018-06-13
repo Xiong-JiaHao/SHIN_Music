@@ -136,7 +136,7 @@ public class MusicNotification extends Notification {
                     remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.album);
                 }
             } else {
-                remoteViews.setImageViewBitmap(R.id.notigication_album, BitmapUtil.getAlbumArt(context, song.getSongId()));
+                remoteViews.setImageViewBitmap(R.id.notigication_album, BitmapUtil.getAlbumArt(context, song));
             }
             if (MusicUtil.isPlayMusic()) {
                 remoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_pause);

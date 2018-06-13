@@ -9,6 +9,6 @@ public interface RequestServices_AlbumList {
 
     @GET("album")
         //定义返回的方法，返回的响应体使用了ResponseBody
-    Call<ResponseBody> getString(@Query("id") String Id);
+    Call<ResponseBody> getString(@Query("id") Long Id);
 
 }

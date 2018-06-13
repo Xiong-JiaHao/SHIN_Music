@@ -140,7 +140,7 @@ public class Fragment_Music extends Fragment {
                 mAlbum.setImageResource(R.drawable.album);
             }
         } else {
-            Bitmap bitmap = BitmapUtil.getAlbumArt(getContext(), song.getSongId());
+            Bitmap bitmap = BitmapUtil.getAlbumArt(getContext(), song);
             if (bitmap == null) {
                 mAlbum.setImageResource(R.drawable.album);
             } else {
