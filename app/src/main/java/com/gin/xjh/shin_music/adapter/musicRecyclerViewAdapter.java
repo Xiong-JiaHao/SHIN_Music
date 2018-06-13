@@ -113,9 +113,9 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                     List<Song> mSong = new ArrayList<>();
                     mSong.add(song);
                     MusicUtil.changeSongList(mSong);
-                    Intent startIntent1 = new Intent(context, MusicService.class);
-                    startIntent1.putExtra("action", MusicService.PLAY);
-                    context.startService(startIntent1);
+                    Intent startIntent = new Intent(context, MusicService.class);
+                    startIntent.putExtra("action", MusicService.PLAY);
+                    context.startService(startIntent);
                 } else {
                     List<Song> mlist = MusicUtil.getSongList();
                     boolean isFlag = true;
@@ -173,9 +173,9 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                     }
                     MusicUtil.changeSongList(mList);
                     MusicUtil.setIndex(position);
-                    Intent startIntent1 = new Intent(context, MusicService.class);
-                    startIntent1.putExtra("action", MusicService.PLAY);
-                    context.startService(startIntent1);
+                    Intent startIntent = new Intent(context, MusicService.class);
+                    startIntent.putExtra("action", MusicService.PLAY);
+                    context.startService(startIntent);
                     Intent intent = new Intent(context, music_play_Activity.class);
                     context.startActivity(intent);
                 }
