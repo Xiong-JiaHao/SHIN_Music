@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.gin.xjh.shin_music.MainActivity;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
-import com.gin.xjh.shin_music.music_play_Activity;
 import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.MusicUtil;
 
@@ -69,8 +68,6 @@ public class musiclistRecyclerViewAdapter extends RecyclerView.Adapter<musiclist
                     Intent startIntent = new Intent(context, MusicService.class);
                     startIntent.putExtra("action", MusicService.PLAY);
                     context.startService(startIntent);
-                    Intent Musicintent = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(context).sendBroadcast(Musicintent);
 
                 }
             });

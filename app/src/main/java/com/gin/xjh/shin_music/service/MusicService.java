@@ -121,6 +121,8 @@ public class MusicService extends Service {
                 case PLAY:
                     MusicUtil.play();
                     musicNotifi.onUpdataMusicNotifi();
+                    Intent Musicintent4 = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(Musicintent4);
                     break;
             }
         }
