@@ -76,7 +76,7 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
         addAll.setOnClickListener(this);
         mContext = this;
         if (isAlbum) {
-            Picasso.with(this).load(album.getAlbumUrl())
+            Picasso.get().load(album.getAlbumUrl())
                     .placeholder(R.drawable.album)
                     .error(R.drawable.album)
                     .into(album_img);
@@ -89,7 +89,7 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
             }
             updateBmobEvent();
         } else {
-            Picasso.with(this).load(url)
+            Picasso.get().load(url)
                 .placeholder(R.drawable.album)
                 .error(R.drawable.album)
                 .into(album_img);

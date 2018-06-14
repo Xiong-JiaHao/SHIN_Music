@@ -65,7 +65,7 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
         public void load(Song song, final Context context, final int position) {
             SongName.setText(song.getSongName());
             SingerName.setText(song.toString());
-            Picasso.with(mContext).load(song.getAlbumUrl())
+            Picasso.get().load(song.getAlbumUrl())
                     .placeholder(R.drawable.album)
                     .error(R.drawable.album)
                     .into(cover);

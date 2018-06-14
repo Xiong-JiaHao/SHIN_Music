@@ -128,7 +128,7 @@ public class MusicNotification extends Notification {
 
             if(song.isOnline()){
                 if (song.getAlbumUrl() != null) {
-                    Picasso.with(context)
+                    Picasso.get()
                             .load(song.getAlbumUrl())
                             .error(R.drawable.album)
                             .into(remoteViews, R.id.notigication_album, NOTIFICATION_ID, musicNotifi);

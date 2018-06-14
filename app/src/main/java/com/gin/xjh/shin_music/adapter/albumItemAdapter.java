@@ -62,7 +62,7 @@ public class albumItemAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Picasso.with(mContext).load(mList.get(position).getAlbumUrl())
+        Picasso.get().load(mList.get(position).getAlbumUrl())
                 .placeholder(R.drawable.album)
                 .error(R.drawable.album)
                 .into(holder.shin_Img);

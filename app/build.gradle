@@ -37,7 +37,7 @@ dependencies {
     implementation 'com.zhy:mpermission-api:1.0.0'
 
     //图片加载Picasso库
-    implementation ('com.squareup.picasso:picasso:2.5.2')
+    implementation ('com.squareup.picasso:picasso:2.71828')
             {
                 exclude group: 'com.squareup.okio'
             }

@@ -132,7 +132,7 @@ public class Fragment_Music extends Fragment {
         Song song = MusicUtil.getNowSong();
         if (song.isOnline()) {
             if (song.getAlbumUrl() != null) {
-                Picasso.with(getContext())
+                Picasso.get()
                         .load(song.getAlbumUrl())
                         .error(R.drawable.album)
                         .into(mAlbum);
