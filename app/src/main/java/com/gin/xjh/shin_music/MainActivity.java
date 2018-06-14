@@ -36,7 +36,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobInstallation;
+import cn.bmob.v3.BmobInstallationManager;
+import cn.bmob.v3.InstallationListener;
+import cn.bmob.v3.exception.BmobException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -63,13 +68,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bmob.initialize(this, "df98b1644c7d3aa94239034059791d40");
         setContentView(R.layout.activity_main);
+        initBmob();
         initalize();
         initView();
         initEvent();
         Intent startIntent = new Intent(this, MusicService.class);
         bindService(startIntent, connection, BIND_AUTO_CREATE);
+    }
+
+    private void initBmob() {
+
+        Bmob.initialize(this, "df98b1644c7d3aa94239034059791d40");
+
+        BmobInstallationManager.getInstance().initialize(new InstallationListener<BmobInstallation>() {
+            @Override
+            public void done(BmobInstallation bmobInstallation, BmobException e) {
+                if (e != null) {
+                    Toast.makeText(MainActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        // 启动推送服务
+        BmobPush.startWork(this);
+
     }
 
     private void initalize() {
