@@ -2,9 +2,11 @@ package com.gin.xjh.shin_music;
 
 import android.Manifest;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -18,16 +20,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gin.xjh.shin_music.User.User_state;
 import com.gin.xjh.shin_music.adapter.FragmentAdapter;
+import com.gin.xjh.shin_music.bean.User;
 import com.gin.xjh.shin_music.fragment.Fragment_Local;
 import com.gin.xjh.shin_music.fragment.Fragment_Online;
 import com.gin.xjh.shin_music.fragment.Fragment_Shin;
 import com.gin.xjh.shin_music.service.MusicService;
+import com.gin.xjh.shin_music.util.TimesUtil;
 import com.zhy.m.permission.MPermissions;
 import com.zhy.m.permission.PermissionDenied;
 import com.zhy.m.permission.PermissionGrant;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
@@ -59,10 +65,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         Bmob.initialize(this, "df98b1644c7d3aa94239034059791d40");
         setContentView(R.layout.activity_main);
+        initalize();
         initView();
         initEvent();
         Intent startIntent = new Intent(this, MusicService.class);
         bindService(startIntent, connection, BIND_AUTO_CREATE);
+    }
+
+    private void initalize() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        String user_id = sharedPreferences.getString("user_id", null);
+        String user_name = sharedPreferences.getString("user_name", null);
+        String password = sharedPreferences.getString("password", null);
+        String user_qq = sharedPreferences.getString("user_qq", null);
+        int user_sex = sharedPreferences.getInt("user_sex", 0);
+        String personal_profile = sharedPreferences.getString("personal_profile", null);
+        Long time = sharedPreferences.getLong("time", -1L);
+        if (user_id != null && TimesUtil.dateToLong(new Date(System.currentTimeMillis())) - time < 432440640) {
+            User user = new User(user_id, user_name, password, user_qq, user_sex, personal_profile);
+            User_state.Login(user);
+        }
+        User_state.setUse_4G(sharedPreferences.getBoolean("use4G", false));
     }
 
     private void initView() {
@@ -254,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @PermissionDenied(REQUECT_CODE_SDCARD)
     public void requestSdcardFailed() {
-        Toast.makeText(this, "未允许读取SD卡的权限，无法获取本地歌曲", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "+未允许读取SD卡的权限，无法获取本地歌曲", Toast.LENGTH_SHORT).show();
     }
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -275,4 +298,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         unbindService(connection);
         super.onDestroy();
     }
+
 }

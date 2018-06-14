@@ -17,11 +17,13 @@ import android.widget.Toast;
 
 import com.gin.xjh.shin_music.All_comment;
 import com.gin.xjh.shin_music.R;
+import com.gin.xjh.shin_music.User.User_state;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_play_Activity;
 import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.DensityUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.util.NetStateUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -109,6 +111,15 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
         ic_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (song.isOnline()) {
+                    if (NetStateUtil.getNetWorkState(context) == NetStateUtil.NO_STATE) {
+                        Toast.makeText(context, "当前网络无法播放", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else if (NetStateUtil.getNetWorkState(context) == NetStateUtil.DATA_STATE && User_state.isUse_4G() == false) {
+                        Toast.makeText(context, "请打开4G开关后再进行播放", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
                 if (MusicUtil.getListSize() == 0) {
                     List<Song> mSong = new ArrayList<>();
                     mSong.add(song);
@@ -161,12 +172,21 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
             sz = itemView.findViewById(R.id.music_sz);
         }
 
-        public void load(Song song, final Context context, final int position) {
+        public void load(final Song song, final Context context, final int position) {
             SongName.setText(song.getSongName());
             SingerName.setText(song.toString());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (song.isOnline()) {
+                        if (NetStateUtil.getNetWorkState(context) == NetStateUtil.NO_STATE) {
+                            Toast.makeText(context, "当前网络无法播放", Toast.LENGTH_SHORT).show();
+                            return;
+                        } else if (NetStateUtil.getNetWorkState(context) == NetStateUtil.DATA_STATE && User_state.isUse_4G() == false) {
+                            Toast.makeText(context, "请打开4G开关后再进行播放", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
                     List<Song> mList = new ArrayList<>();
                     for (int i = 0; i < list.size(); i++) {
                         mList.add(list.get(i));

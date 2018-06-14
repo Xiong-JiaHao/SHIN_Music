@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.album_details_Activity;
 import com.gin.xjh.shin_music.bean.Album;
+import com.gin.xjh.shin_music.util.NetStateUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -68,6 +70,10 @@ public class albumItemAdapter extends BaseAdapter {
         holder.shin_Img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (NetStateUtil.getNetWorkState(mContext) == NetStateUtil.NO_STATE) {
+                    Toast.makeText(mContext, "当前无网络...", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent intent = new Intent(mContext, album_details_Activity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("album",mList.get(position));

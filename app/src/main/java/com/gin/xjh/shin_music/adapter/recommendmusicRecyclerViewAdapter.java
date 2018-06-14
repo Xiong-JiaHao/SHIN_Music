@@ -8,12 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
+import com.gin.xjh.shin_music.User.User_state;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_play_Activity;
 import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.util.NetStateUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -69,6 +72,13 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (NetStateUtil.getNetWorkState(context) == NetStateUtil.NO_STATE) {
+                        Toast.makeText(context, "当前网络无法播放", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else if (NetStateUtil.getNetWorkState(context) == NetStateUtil.DATA_STATE && User_state.isUse_4G() == false) {
+                        Toast.makeText(context, "请打开4G开关后再进行播放", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     List<Song> mList = new ArrayList<>();
                     for (int i = 0; i < list.size(); i++) {
                         mList.add(list.get(i));

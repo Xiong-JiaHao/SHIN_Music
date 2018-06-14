@@ -12,12 +12,14 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.Net_Request.getNetNewMusic;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.album_details_Activity;
 import com.gin.xjh.shin_music.music_details_Activity;
+import com.gin.xjh.shin_music.util.NetStateUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,6 +87,10 @@ public class Fragment_Online extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                if (NetStateUtil.getNetWorkState(getContext()) == NetStateUtil.NO_STATE) {
+                    Toast.makeText(getContext(), "当前无网络...", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 Intent intent = new Intent(getContext(), album_details_Activity.class);
                 intent.putExtra("isAlbum", false);
@@ -95,15 +101,22 @@ public class Fragment_Online extends Fragment {
             }
         });
 
-        //RecyclerView
-        new getNetNewMusic().getJson(0,view.findViewById(R.id.fragment_recommend_music_list),view.findViewById(R.id.new_Song_hint),getContext());
-
         mCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 find();
             }
         });
+
+        //RecyclerView
+        if (NetStateUtil.getNetWorkState(getContext()) == NetStateUtil.NO_STATE) {
+            Toast.makeText(getContext(), "当前无网络...", Toast.LENGTH_SHORT).show();
+            TextView hint = view.findViewById(R.id.new_Song_hint);
+            hint.setText("当前无网络,请联网后重开APP");
+            return;
+        }
+        new getNetNewMusic().getJson(0, view.findViewById(R.id.fragment_recommend_music_list), view.findViewById(R.id.new_Song_hint), getContext());
+
     }
 
     /**

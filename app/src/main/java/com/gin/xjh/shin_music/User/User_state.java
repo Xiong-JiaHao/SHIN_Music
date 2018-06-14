@@ -4,8 +4,14 @@ import com.gin.xjh.shin_music.bean.User;
 
 public class User_state {
 
+    private static volatile boolean Use_4G = false;
     private static volatile boolean Login_flag = false;
     private static volatile User user = null;
+
+
+    public static void setUse_4G(boolean use_4G) {
+        Use_4G = use_4G;
+    }
 
     public static void Login(User Loginuser) {
         synchronized (User_state.class) {
@@ -23,6 +29,10 @@ public class User_state {
                 }
             }
         }
+    }
+
+    public static boolean isUse_4G() {
+        return Use_4G;
     }
 
     public static User getLoginUser() {

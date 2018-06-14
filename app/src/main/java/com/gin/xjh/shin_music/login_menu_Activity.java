@@ -1,7 +1,9 @@
 package com.gin.xjh.shin_music;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -17,8 +19,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.User.User_state;
+import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.util.NetStateUtil;
+import com.gin.xjh.shin_music.util.TimesUtil;
 
+import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -61,6 +68,8 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
     }
 
     private void initEvent() {
+        fourg.setChecked(User_state.isUse_4G());
+
         go_back.setOnClickListener(this);
         User_Name.setOnClickListener(this);
         edit_user.setOnClickListener(this);
@@ -71,18 +80,42 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         fourg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked) {
+                    List<Song> mSongList = MusicUtil.getSongList();
+                    if (mSongList != null) {
+                        boolean flag = false;
+                        for (Song song : mSongList) {
+                            if (song != null && song.isOnline() && NetStateUtil.getNetWorkState(login_menu_Activity.this) == NetStateUtil.DATA_STATE) {
+                                Toast.makeText(login_menu_Activity.this, "当前歌单中存在在线歌曲，关闭失败", Toast.LENGTH_SHORT).show();
+                                fourg.setChecked(true);
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (flag) {
+                            return;
+                        }
+                    }
+                }
+                User_state.setUse_4G(isChecked);
+                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("use4G", isChecked);
+                editor.commit();
                 if (isChecked) {
-                    Toast.makeText(login_menu_Activity.this, "Check", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(login_menu_Activity.this, "允许4G播放", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(login_menu_Activity.this, "UnCheck", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(login_menu_Activity.this, "不允许4G播放", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
         if (User_state.getState()) {
             updataLogin();
         } else {
             updataLogout();
         }
+
     }
 
     @Override
@@ -177,9 +210,6 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
                     Toast.makeText(this, "请登录后再进行该项操作", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.fourg:
-                Toast.makeText(this, "4g", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.about:
                 AlertDialog.Builder builder3 = new AlertDialog.Builder(login_menu_Activity.this);
                 LayoutInflater inflater3 = LayoutInflater.from(login_menu_Activity.this);
@@ -227,6 +257,17 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
                 User_Sex.setImageResource(R.drawable.alien);
                 break;
         }
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("user_id", user.getUserId());
+        editor.putString("user_name", user.getUserName());
+        editor.putString("password", user.getPassWord());
+        editor.putString("user_qq", user.getUserQQ());
+        editor.putInt("user_sex", user.getUserSex());
+        editor.putString("personal_profile", user.getPersonal_profile());
+        editor.putLong("time", TimesUtil.dateToLong(new Date(System.currentTimeMillis())));
+        editor.commit();
     }
 
     private void updataLogout() {
@@ -234,5 +275,17 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         User_QQ.setText("");
         User_Sign.setText("");
         User_Sex.setVisibility(View.GONE);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("user_id", null);
+        editor.putString("user_name", null);
+        editor.putString("password", null);
+        editor.putString("user_qq", null);
+        editor.putInt("user_sex", 0);
+        editor.putString("personal_profile", null);
+        editor.putLong("time", -1L);
+        editor.commit();
     }
+
 }

@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.adapter.albumItemAdapter;
 import com.gin.xjh.shin_music.bean.Album;
+import com.gin.xjh.shin_music.util.NetStateUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,7 +37,6 @@ public class Fragment_Shin extends Fragment {
         View view = inflater.inflate(R.layout.fragment_shin, null);
         initView(view);
         initData();
-        //initEvent();
         return view;
     }
 
@@ -45,6 +46,10 @@ public class Fragment_Shin extends Fragment {
 
 
     private void initData() {
+        if (NetStateUtil.getNetWorkState(getContext()) == NetStateUtil.NO_STATE) {
+            Toast.makeText(getContext(), "当前无网络...", Toast.LENGTH_SHORT).show();
+            return;
+        }
         BmobQuery<Album> query = new BmobQuery<>();
         query.findObjects(new FindListener<Album>() {
             @Override
