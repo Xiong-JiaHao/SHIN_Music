@@ -77,7 +77,9 @@ public class LrcUtils {
                         tl = new Lyric();
                         tl.timePoint = time[j].intValue();
                         tl.lricString = strLineRemaining;
-                        lyricList.add(tl);
+                        if (tl.lricString != "" && tl.lricString.length() > 0) {
+                            lyricList.add(tl);
+                        }
                     }
                 }
                 return strLineRemaining;

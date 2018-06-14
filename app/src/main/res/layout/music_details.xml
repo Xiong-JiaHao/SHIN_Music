@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="通过搜索 "
-                android:textSize="17sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/find_name"
@@ -36,13 +36,13 @@
                 android:layout_height="wrap_content"
                 android:text="信"
                 android:textColor="@color/RED"
-                android:textSize="20sp" />
+                android:textSize="17sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=" 得到如下歌曲"
-                android:textSize="17sp" />
+                android:textSize="15sp" />
 
 
         </LinearLayout>

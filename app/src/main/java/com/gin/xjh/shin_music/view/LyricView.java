@@ -12,9 +12,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.gin.xjh.shin_music.bean.Lyric;
+import com.gin.xjh.shin_music.util.DisplayUtils;
 import com.gin.xjh.shin_music.util.LrcUtils;
 import com.gin.xjh.shin_music.util.MusicUtil;
 
@@ -30,14 +30,14 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
     private int currentLine = -1;
     private Paint currentPaint;
     private Paint otherPaint;
-    private int currentColor = Color.rgb(179, 11, 11);
-    private int currentTextSize = 60;
+    private int currentColor = Color.rgb(80, 4, 4);
+    private float currentTextSize = 19;
     private int otherColor = Color.BLACK;
-    private int otherTextSize = 40;
+    private float otherTextSize = 16;
     //歌词总行数一半
-    private int MAX_LYRIC = 7;
+    private int MAX_LYRIC = 10;
     // 行间距
-    private int lineSpace = 70;
+    private float lineSpace = 30;
     //当前歌词字体
     private Typeface currentTypeface = Typeface.DEFAULT_BOLD;
     //其他歌词字体
@@ -71,13 +71,15 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
         otherPaint = new Paint();
         lyricList = null;
 
+        lineSpace = DisplayUtils.sp2px(context, lineSpace);
+
         currentPaint.setColor(currentColor);
-        currentPaint.setTextSize(currentTextSize);
+        currentPaint.setTextSize(DisplayUtils.sp2px(context, currentTextSize));
         currentPaint.setTextAlign(Paint.Align.CENTER); // 画在中间
         currentPaint.setTypeface(currentTypeface);
 
         otherPaint.setColor(otherColor);
-        otherPaint.setTextSize(otherTextSize);
+        otherPaint.setTextSize(DisplayUtils.sp2px(context, otherTextSize));
         otherPaint.setTextAlign(Paint.Align.CENTER);
         otherPaint.setTypeface(otherTypeface);
 
@@ -90,7 +92,7 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
     }
 
     public void getLyric(String lyrics) {
-        Log.d("xjhlyric", lyrics);
+        //Log.d("xjhlyric", lyrics);
         lyricList = LrcUtils.readLRC(lyrics);
         currentLine = -1;
         handler.sendEmptyMessage(LYRIC);
