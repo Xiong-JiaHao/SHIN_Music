@@ -87,7 +87,7 @@ public class MusicNotification extends Notification {
                 .setWhen(System.currentTimeMillis())
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)//必须手动代码清除
-                .setSmallIcon(R.drawable.albumdetails);//设置下拉图标
+                .setSmallIcon(R.drawable.notification_icon);//设置下拉图标
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setCategory(Notification.CATEGORY_PROGRESS)
