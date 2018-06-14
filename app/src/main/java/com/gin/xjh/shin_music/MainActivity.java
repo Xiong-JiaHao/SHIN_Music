@@ -84,9 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         BmobInstallationManager.getInstance().initialize(new InstallationListener<BmobInstallation>() {
             @Override
             public void done(BmobInstallation bmobInstallation, BmobException e) {
-                if (e != null) {
-                    Toast.makeText(MainActivity.this, "Failure", Toast.LENGTH_SHORT).show();
-                }
+
             }
         });
         // 启动推送服务
