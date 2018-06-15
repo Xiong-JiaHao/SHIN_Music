@@ -47,18 +47,26 @@ public class updata_password_Activity extends BaseActivity implements View.OnCli
                 finish();
                 break;
             case R.id.submit:
-                final String password = UserPassword.getText().toString();
+                String password = UserPassword.getText().toString();
                 String againpassword = AgainPassword.getText().toString();
                 if (password.compareTo(againpassword) == 0) {
                     User user = new User();
+                    String userid = user.getUserId();
+                    password = "";
+                    int lena = againpassword.length();
+                    int lenb = userid.length();
+                    for (int i = 0; i < lena; i++) {
+                        password += againpassword.charAt(i) % userid.charAt(i % lenb);
+                    }
                     user.setPassWord(password);
+                    final String finalPassword = password;
                     user.update(User_state.getLoginUser().getObjectId(), new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
                             if (e == null) {
                                 Toast.makeText(updata_password_Activity.this, "更新成功", Toast.LENGTH_SHORT).show();
                                 User users = User_state.getLoginUser();
-                                users.setPassWord(password);
+                                users.setPassWord(finalPassword);
                                 User_state.Login(users);
                                 finish();
                             } else {

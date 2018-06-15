@@ -96,6 +96,20 @@ public class updata_Activity extends BaseActivity implements View.OnClickListene
                     user.setPersonal_profile(userSign);
                     upuser.setPersonal_profile(userSign);
                 }
+                int sex = 0;
+                switch (UserSex.getCheckedRadioButtonId()) {
+                    case R.id.woman:
+                        sex = 1;
+                        break;
+                    case R.id.alien:
+                        sex = 2;
+                        break;
+                }
+                if (sex != upuser.getUserSex()) {
+                    flag = true;
+                    user.setUserSex(sex);
+                    upuser.setUserSex(sex);
+                }
                 if (flag) {
                     user.update(upuser.getObjectId(), new UpdateListener() {
                         @Override

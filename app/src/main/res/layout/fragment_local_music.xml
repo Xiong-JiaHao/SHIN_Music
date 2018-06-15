@@ -23,7 +23,7 @@
             android:cursorVisible="false"
             android:singleLine="true"
             android:gravity="center"
-            android:hint="搜索本地歌曲，下拉自动搜索"
+            android:hint="搜索本地歌曲"
             android:imeOptions="actionSearch"
             android:maxLines="1"
             android:textSize="13sp" />

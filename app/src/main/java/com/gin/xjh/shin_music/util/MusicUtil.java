@@ -134,9 +134,11 @@ public class MusicUtil {
     }
 
     public static void clean() {
-        mediaPlayer.stop();
-        mediaPlayer.reset();
-        mediaPlayer.release();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            mediaPlayer.release();
+        }
     }
 
     public static void pre(){

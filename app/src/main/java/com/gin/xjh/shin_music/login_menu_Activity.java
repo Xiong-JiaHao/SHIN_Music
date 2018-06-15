@@ -191,12 +191,20 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(login_menu_Activity.this);
                     LayoutInflater inflater2 = LayoutInflater.from(login_menu_Activity.this);
                     View viewDialog2 = inflater2.inflate(R.layout.password_validate, null);
-                    final EditText password = viewDialog2.findViewById(R.id.UserPassword);
+                    EditText Password = viewDialog2.findViewById(R.id.UserPassword);
+                    final String password = Password.getText().toString();
                     builder2.setView(viewDialog2);
                     builder2.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (User_state.getLoginUser().getPassWord().compareTo(password.getText().toString()) == 0) {
+                            String str = "";
+                            String userid = User_state.getLoginUser().getUserId();
+                            int lena = password.length();
+                            int lenb = userid.length();
+                            for (int i = 0; i < lena; i++) {
+                                str += password.charAt(i) % userid.charAt(i % lenb);
+                            }
+                            if (User_state.getLoginUser().getPassWord().compareTo(str) == 0) {
                                 Intent intent = new Intent(login_menu_Activity.this, updata_password_Activity.class);
                                 startActivity(intent);
                             } else {
@@ -223,9 +231,11 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
                 startActivity(questionintent);
                 break;
             case R.id.logout:
-                updataLogout();
-                User_state.Logout();
-                Toast.makeText(this, "退出成功", Toast.LENGTH_SHORT).show();
+                if (User_state.getState()) {
+                    updataLogout();
+                    User_state.Logout();
+                    Toast.makeText(this, "退出成功", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

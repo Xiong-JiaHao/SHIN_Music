@@ -20,7 +20,6 @@ import com.gin.xjh.shin_music.adapter.commentRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Comment;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.bean.User;
-import com.gin.xjh.shin_music.util.MusicUtil;
 
 import java.util.Collections;
 import java.util.Date;
@@ -94,9 +93,6 @@ public class All_comment extends BaseActivity implements View.OnClickListener {
                 //判读是否有资格写评论，如果没有提示需要登入
                 if (!User_state.getState()) {
                     Toast.makeText(this, "需要登录后才具有评论功能", Toast.LENGTH_SHORT).show();
-                    break;
-                } else if (MusicUtil.getListSize() == 0) {
-                    Toast.makeText(this, "当前没有歌曲", Toast.LENGTH_SHORT).show();
                     break;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(All_comment.this);
