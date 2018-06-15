@@ -159,27 +159,30 @@ public class MusicService extends Service {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case MUSIC_NOTIFICATION_ACTION_PLAY:
-                    Intent startIntent1 = new Intent(getApplicationContext(), MusicService.class);
-                    startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
-                    startService(startIntent1);
-                    sendBroadcast(changeIntent);
-                    break;
-                case MUSIC_NOTIFICATION_ACTION_NEXT:
-                    Intent startIntent2 = new Intent(getApplicationContext(), MusicService.class);
-                    startIntent2.putExtra("action", MusicService.NEXTMUSIC);
-                    startService(startIntent2);
-                    sendBroadcast(changeIntent);
-                    break;
-                case MUSIC_NOTIFICATION_ACTION_PRE:
-                    Intent startIntent3 = new Intent(getApplicationContext(), MusicService.class);
-                    startIntent3.putExtra("action", MusicService.PREVIOUSMUSIC);
-                    startService(startIntent3);
-                    sendBroadcast(changeIntent);
-                    break;
+            if (MusicUtil.getSongList() != null) {
+                switch (intent.getAction()) {
+                    case MUSIC_NOTIFICATION_ACTION_PLAY:
+                        Intent startIntent1 = new Intent(getApplicationContext(), MusicService.class);
+                        startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
+                        startService(startIntent1);
+                        sendBroadcast(changeIntent);
+                        break;
+                    case MUSIC_NOTIFICATION_ACTION_NEXT:
+                        Intent startIntent2 = new Intent(getApplicationContext(), MusicService.class);
+                        startIntent2.putExtra("action", MusicService.NEXTMUSIC);
+                        startService(startIntent2);
+                        sendBroadcast(changeIntent);
+                        break;
+                    case MUSIC_NOTIFICATION_ACTION_PRE:
+                        Intent startIntent3 = new Intent(getApplicationContext(), MusicService.class);
+                        startIntent3.putExtra("action", MusicService.PREVIOUSMUSIC);
+                        startService(startIntent3);
+                        sendBroadcast(changeIntent);
+                        break;
+                }
+            } else {
+                Toast.makeText(context, "当前歌单无歌曲，请添加后重试", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
