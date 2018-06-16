@@ -80,7 +80,7 @@ public class Fragment_Music extends Fragment {
             public void onClick(View v) {
                 //调转到专辑
                 Song song = MusicUtil.getNowSong();
-                if (song.isOnline()) {
+                if (song != null && song.isOnline()) {
                     Intent intent = new Intent(getContext(), album_details_Activity.class);
                     Bundle bundle = new Bundle();
                     Album album = new Album(song.getAlbumName(), song.getAlbumUrl(), song.getAlbumTime(), song.getAlbumId(), song.getSingerName());
