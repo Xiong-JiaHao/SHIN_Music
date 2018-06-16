@@ -69,6 +69,18 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
 
     private static final int UPDATEUI = 200;
 
+    private final long INTERVAL = 500L; //防止连续点击的时间间隔
+    private long lastClickTime = 0L; //上一次点击的时间
+
+    private boolean filter() {
+        long time = System.currentTimeMillis();
+        if ((time - lastClickTime) > INTERVAL) {
+            lastClickTime = time;
+            return false;
+        }
+        lastClickTime = time;
+        return true;
+    }
 
     //实时刷新UI
     private Handler UIHandler = new Handler() {
@@ -237,12 +249,21 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 }
                 break;
             case R.id.leftto:
+                if (filter()) {
+                    return;
+                }
                 preSong();
                 break;
             case R.id.music_play:
+                if (filter()) {
+                    return;
+                }
                 playOrpause();
                 break;
             case R.id.rightto:
+                if (filter()) {
+                    return;
+                }
                 nextSong();
                 break;
             case R.id.song_sheet:
