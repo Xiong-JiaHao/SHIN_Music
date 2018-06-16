@@ -191,13 +191,13 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(login_menu_Activity.this);
                     LayoutInflater inflater2 = LayoutInflater.from(login_menu_Activity.this);
                     View viewDialog2 = inflater2.inflate(R.layout.password_validate, null);
-                    EditText Password = viewDialog2.findViewById(R.id.UserPassword);
-                    final String password = Password.getText().toString();
+                    final EditText Password = viewDialog2.findViewById(R.id.UserPassword);
                     builder2.setView(viewDialog2);
                     builder2.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String str = "";
+                            final String password = Password.getText().toString();
                             String userid = User_state.getLoginUser().getUserId();
                             int lena = password.length();
                             int lenb = userid.length();
@@ -276,6 +276,7 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         editor.putString("user_qq", user.getUserQQ());
         editor.putInt("user_sex", user.getUserSex());
         editor.putString("personal_profile", user.getPersonal_profile());
+        editor.putString("objId", user.getObjectId());
         editor.putLong("time", TimesUtil.dateToLong(new Date(System.currentTimeMillis())));
         editor.commit();
     }
@@ -294,6 +295,7 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         editor.putString("user_qq", null);
         editor.putInt("user_sex", 0);
         editor.putString("personal_profile", null);
+        editor.putString("objId", null);
         editor.putLong("time", -1L);
         editor.commit();
     }

@@ -100,10 +100,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String user_qq = sharedPreferences.getString("user_qq", null);
         int user_sex = sharedPreferences.getInt("user_sex", 0);
         String personal_profile = sharedPreferences.getString("personal_profile", null);
+        String objId = sharedPreferences.getString("objId", null);
         Long time = sharedPreferences.getLong("time", -1L);
-        if (user_id != null && TimesUtil.dateToLong(new Date(System.currentTimeMillis())) - time < 432000000) {
+        Long nowtime = TimesUtil.dateToLong(new Date(System.currentTimeMillis()));
+        if (user_id != null && nowtime - time < 432000000) {
             User user = new User(user_id, user_name, password, user_qq, user_sex, personal_profile);
+            user.setObjectId(objId);
             User_state.Login(user);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putLong("time", nowtime);
+            editor.commit();
         }
         User_state.setUse_4G(sharedPreferences.getBoolean("use4G", false));
     }

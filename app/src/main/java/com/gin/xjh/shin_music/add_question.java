@@ -81,6 +81,8 @@ public class add_question extends BaseActivity implements View.OnClickListener {
                     }
                 }
             });
+        } else {
+            Toast.makeText(this, "您未填写意见，请勿点击按钮", Toast.LENGTH_SHORT).show();
         }
     }
 }

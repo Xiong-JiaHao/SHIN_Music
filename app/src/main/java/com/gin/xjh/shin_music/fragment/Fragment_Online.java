@@ -41,7 +41,7 @@ public class Fragment_Online extends Fragment {
 
     private int[] bitmapids = new int[]{R.drawable.top, R.drawable.hitfmtop, R.drawable.billboard, R.drawable.classical, R.drawable.hiphop, R.drawable.electricsong};
     private String[] bitmapname = new String[]{"中国Top榜", "HitFMTop榜", "Billboard榜", "金曲榜", "嘻哈榜", "电音榜"};
-    private int[] ids = new int[]{14, 9, 6, 17, 18, 4};
+    private int[] ids = new int[]{15, 9, 6, 17, 18, 4};
     private String[] bitmapUrl = new String[]{"http://p1.music.126.net/d8faOLHxwWPta02fskrdDQ==/2057186255569164.jpg",
                                                 "http://p1.music.126.net/ZRvvfxWy6l12Kzth56Jzaw==/2034096511385987.jpg",
                                                 "http://p1.music.126.net/BmeUMF4Cr0f343lCwj1_7Q==/2105564767199852.jpg",

@@ -4,12 +4,12 @@ import cn.bmob.v3.BmobObject;
 
 public class User extends BmobObject {
 
-    private String UserId;
-    private String UserName;
-    private String PassWord;
-    private String UserQQ;
-    private int UserSex;
-    private String Personal_profile;
+    private String UserId = null;
+    private String UserName = null;
+    private String PassWord = null;
+    private String UserQQ = null;
+    private int UserSex = -1;
+    private String Personal_profile = null;
 
     public User() {
 

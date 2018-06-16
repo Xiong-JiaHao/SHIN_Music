@@ -51,7 +51,7 @@ public class updata_password_Activity extends BaseActivity implements View.OnCli
                 String againpassword = AgainPassword.getText().toString();
                 if (password.compareTo(againpassword) == 0) {
                     User user = new User();
-                    String userid = user.getUserId();
+                    String userid = User_state.getLoginUser().getUserId();
                     password = "";
                     int lena = againpassword.length();
                     int lenb = userid.length();
@@ -67,7 +67,6 @@ public class updata_password_Activity extends BaseActivity implements View.OnCli
                                 Toast.makeText(updata_password_Activity.this, "更新成功", Toast.LENGTH_SHORT).show();
                                 User users = User_state.getLoginUser();
                                 users.setPassWord(finalPassword);
-                                User_state.Login(users);
                                 finish();
                             } else {
                                 Toast.makeText(updata_password_Activity.this, "更新失败", Toast.LENGTH_SHORT).show();

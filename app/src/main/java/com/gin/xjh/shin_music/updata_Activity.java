@@ -76,25 +76,21 @@ public class updata_Activity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.submit:
                 boolean flag = false;
-                User user = new User();
-                final User upuser = User_state.getLoginUser();
-                String userName = UserName.getText().toString();
+                final User user = new User();
+                final String userName = UserName.getText().toString();
                 String userQQ = UserQQ.getText().toString();
                 String userSign = UserSign.getText().toString();
                 if (userName.compareTo("") != 0) {
                     flag = true;
                     user.setUserName(userName);
-                    upuser.setUserName(userName);
                 }
                 if (userQQ.compareTo("") != 0) {
                     flag = true;
                     user.setUserQQ(userQQ);
-                    upuser.setUserQQ(userQQ);
                 }
                 if (userSign.compareTo("") != 0) {
                     flag = true;
                     user.setPersonal_profile(userSign);
-                    upuser.setPersonal_profile(userSign);
                 }
                 int sex = 0;
                 switch (UserSex.getCheckedRadioButtonId()) {
@@ -105,17 +101,28 @@ public class updata_Activity extends BaseActivity implements View.OnClickListene
                         sex = 2;
                         break;
                 }
-                if (sex != upuser.getUserSex()) {
+                if (sex != User_state.getLoginUser().getUserSex()) {
                     flag = true;
                     user.setUserSex(sex);
-                    upuser.setUserSex(sex);
                 }
                 if (flag) {
-                    user.update(upuser.getObjectId(), new UpdateListener() {
+                    user.update(User_state.getLoginUser().getObjectId(), new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
                             if (e == null) {
-                                User_state.Login(upuser);
+                                User upuser = User_state.getLoginUser();
+                                if (user.getUserSex() != -1) {
+                                    upuser.setUserSex(user.getUserSex());
+                                }
+                                if (user.getUserName() != null) {
+                                    upuser.setUserName(user.getUserName());
+                                }
+                                if (user.getUserQQ() != null) {
+                                    upuser.setUserQQ(user.getUserQQ());
+                                }
+                                if (user.getPersonal_profile() != null) {
+                                    upuser.setPersonal_profile(user.getPersonal_profile());
+                                }
                                 Intent intent = new Intent();
                                 intent.putExtra("User", "yes");
                                 setResult(RESULT_OK, intent);
@@ -126,6 +133,8 @@ public class updata_Activity extends BaseActivity implements View.OnClickListene
                             }
                         }
                     });
+                } else {
+                    Toast.makeText(this, "没有修改，请勿点击", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

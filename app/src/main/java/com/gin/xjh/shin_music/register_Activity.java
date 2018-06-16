@@ -153,6 +153,7 @@ public class register_Activity extends BaseActivity implements View.OnClickListe
             @Override
             public void done(String s, BmobException e) {
                 if (e == null) {
+                    user.setObjectId(s);
                     User_state.Login(user);
                     Intent intent = new Intent();
                     intent.putExtra("User", "yes");

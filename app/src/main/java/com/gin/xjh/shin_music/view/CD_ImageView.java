@@ -2,6 +2,7 @@ package com.gin.xjh.shin_music.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,6 +13,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+
+import com.gin.xjh.shin_music.R;
 
 public class CD_ImageView extends android.support.v7.widget.AppCompatImageView {
 
@@ -66,7 +69,7 @@ public class CD_ImageView extends android.support.v7.widget.AppCompatImageView {
         Bitmap bitmap = drawableToBitmap(getDrawable());
 
         if (bitmap == null) {
-            return;
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.album);
         }
 
         //初始化BitmapShader，传入bitmap对象

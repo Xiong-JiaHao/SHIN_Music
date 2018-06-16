@@ -12,7 +12,6 @@ import com.gin.xjh.shin_music.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import cn.bmob.push.PushConstants;
 
@@ -28,12 +27,12 @@ public class PushReceiver extends BroadcastReceiver {
         try {
             if (intent.getAction().equals(PushConstants.ACTION_MESSAGE)) {
                 String msg = intent.getStringExtra("msg");
-                JSONTokener jsonTokener = new JSONTokener(msg);
-                JSONObject object = (JSONObject) jsonTokener.nextValue();
-                String message = object.getString("alert");
+                JSONObject jsonObject = new JSONObject(msg);
+                String title = jsonObject.getString("title");
+                String content = jsonObject.getString("content");
                 builder = new Notification.Builder(context);
-                builder.setContentTitle("更新通知")
-                        .setContentText(message)
+                builder.setContentTitle(title)
+                        .setContentText(content)
                         .setWhen(System.currentTimeMillis())
                         .setSmallIcon(R.drawable.notification_icon);//设置下拉图标
 
