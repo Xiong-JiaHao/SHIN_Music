@@ -116,7 +116,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                         Toast.makeText(context, "当前网络无法播放", Toast.LENGTH_SHORT).show();
                         return;
                     } else if (NetStateUtil.getNetWorkState(context) == NetStateUtil.DATA_STATE && User_state.isUse_4G() == false) {
-                        Toast.makeText(context, "请打开4G开关后再进行播放", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "请允许4G播放后尝试", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
@@ -183,7 +183,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                             Toast.makeText(context, "当前网络无法播放", Toast.LENGTH_SHORT).show();
                             return;
                         } else if (NetStateUtil.getNetWorkState(context) == NetStateUtil.DATA_STATE && User_state.isUse_4G() == false) {
-                            Toast.makeText(context, "请打开4G开关后再进行播放", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "请允许4G播放后尝试", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
