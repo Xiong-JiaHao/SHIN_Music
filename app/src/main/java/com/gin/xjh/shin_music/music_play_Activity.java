@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -198,6 +199,19 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             //恢复UI刷新
             UIHandler.sendEmptyMessage(UPDATEUI);
         }
+        switch (MusicUtil.getPlay_state()) {
+            case MusicUtil.SINGLE_CYCLE:
+                cycle_style.setImageResource(R.drawable.single_cycle);
+                break;
+
+            case MusicUtil.ORDER_CYCLE:
+                cycle_style.setImageResource(R.drawable.order_cycle);
+                break;
+
+            case MusicUtil.DISORDERLY_CYCLE:
+                cycle_style.setImageResource(R.drawable.disorderly_cycle);
+                break;
+        }
     }
 
     @Override
@@ -247,6 +261,10 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     cycle_style.setImageResource(R.drawable.disorderly_cycle);
                     Toast.makeText(this, "随机播放", Toast.LENGTH_SHORT).show();
                 }
+                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("play_state",MusicUtil.getPlay_state());
+                editor.commit();
                 break;
             case R.id.leftto:
                 if (filter()) {
@@ -275,7 +293,10 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     }
 
     private void preSong() {
-        if (!MusicUtil.isPlayMusic()) {
+        if (MusicUtil.getListSize() == 0) {
+            Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!MusicUtil.isPlayMusic()) {
             music_play.setImageResource(R.drawable.music_stop);
         }
         Intent startIntent2 = new Intent(this, MusicService.class);
@@ -310,7 +331,10 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     }
 
     private void nextSong() {
-        if (!MusicUtil.isPlayMusic()) {
+        if (MusicUtil.getListSize() == 0) {
+            Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!MusicUtil.isPlayMusic()) {
             music_play.setImageResource(R.drawable.music_stop);
         }
         Intent startIntent3 = new Intent(this, MusicService.class);
@@ -426,6 +450,11 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     play_style_name.setText("随机播放");
                     Toast.makeText(music_play_Activity.this, "随机播放", Toast.LENGTH_SHORT).show();
                 }
+
+                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("play_state",MusicUtil.getPlay_state());
+                editor.commit();
             }
         });
 

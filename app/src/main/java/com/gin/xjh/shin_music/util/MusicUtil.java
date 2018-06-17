@@ -229,6 +229,9 @@ public class MusicUtil {
         mediaPlayer.start();
     }
 
+    public static void setPlay_state(int state) {
+        play_state = state;
+    }
 
     private static void stopMusic() {
         playTime = mediaPlayer.getCurrentPosition();

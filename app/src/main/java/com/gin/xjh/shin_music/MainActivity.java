@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -27,6 +26,7 @@ import com.gin.xjh.shin_music.fragment.Fragment_Local;
 import com.gin.xjh.shin_music.fragment.Fragment_Online;
 import com.gin.xjh.shin_music.fragment.Fragment_Shin;
 import com.gin.xjh.shin_music.service.MusicService;
+import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.util.TimesUtil;
 import com.zhy.m.permission.MPermissions;
 import com.zhy.m.permission.PermissionDenied;
@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editor.commit();
         }
         User_state.setUse_4G(sharedPreferences.getBoolean("use4G", false));
+        MusicUtil.setPlay_state(sharedPreferences.getInt("play_state", 0));
     }
 
     private void initView() {
@@ -187,7 +188,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (Index == 1) {
                             Online_music_img.setImageResource(R.drawable.online_music_white);
                             Online_music_text.setTextColor(Color.WHITE);
-                            IntentFilter filter = new IntentFilter();
                         } else if (Index == 2) {
                             Local_music_img.setImageResource(R.drawable.local_music_white);
                             Local_music_text.setTextColor(Color.WHITE);
