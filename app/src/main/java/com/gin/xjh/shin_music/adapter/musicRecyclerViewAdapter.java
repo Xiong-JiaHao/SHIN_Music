@@ -142,8 +142,8 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                     } else {
                         Toast.makeText(context, "该歌曲已经存在，请勿重复添加", Toast.LENGTH_SHORT).show();
                     }
-                    bottomDialog.dismiss();
                 }
+                bottomDialog.dismiss();
             }
         });
         TextView ic_singer = contentView.findViewById(R.id.ic_singer);

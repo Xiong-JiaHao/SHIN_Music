@@ -8,7 +8,7 @@ public class User extends BmobObject {
     private String UserName = null;
     private String PassWord = null;
     private String UserQQ = null;
-    private int UserSex = -1;
+    private int UserSex = 0;
     private String Personal_profile = null;
 
     public User() {

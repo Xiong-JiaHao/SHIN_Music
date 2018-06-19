@@ -10,6 +10,7 @@
         android:layout_height="300dp"
         android:background="@drawable/et2"
         android:gravity="start"
+        android:maxLength="200"
         android:padding="10dp" />
 
 </LinearLayout>

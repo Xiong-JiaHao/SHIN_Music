@@ -22,7 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -97,11 +96,11 @@ public class getNetMusicList {
         };
     }
 
-    public void getJson(int id, View music_list_rv, View music_list_hint, Context mContext) {
+    public void getJson(int id, View music_list_rv, View music_list_hint, Context mContext, List<Song> mSongList) {
         this.music_list_rv = (RecyclerView) music_list_rv;
         this.music_list_hint = (TextView) music_list_hint;
         this.mContext = mContext;
-        mSongList = new ArrayList<>();
+        this.mSongList = mSongList;
         obtainMainHandler();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constant.URL_BASE)

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gin.xjh.shin_music.Net_Request.getNetAlbumList;
 import com.gin.xjh.shin_music.Net_Request.getNetMusicList;
@@ -128,7 +129,8 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
     }
 
     private void updateOnlineEvent() {
-        new getNetMusicList().getJson(id, findViewById(R.id.album_rv), findViewById(R.id.album_hint), mContext);
+        mSongList = new ArrayList<>();
+        new getNetMusicList().getJson(id, findViewById(R.id.album_rv), findViewById(R.id.album_hint), mContext, mSongList);
     }
 
     @Override
@@ -143,6 +145,10 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
     }
 
     private void addAllSong() {
+        if (mSongList == null || mSongList.size() == 0) {
+            return;
+        }
+        boolean flag = false;
         if (MusicUtil.getListSize() == 0) {
             List<Song> mList = new ArrayList<>();
             for (int i = 0; i < mSongList.size(); i++) {
@@ -162,10 +168,13 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
                     }
                 }
                 if (isFlag) {
+                    flag = true;
                     MusicUtil.addSong(song);
                 }
             }
         }
-
+        if (flag) {
+            Toast.makeText(mContext, "添加完成", Toast.LENGTH_SHORT).show();
+        }
     }
 }
