@@ -169,7 +169,7 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
                 }
                 if (isFlag) {
                     flag = true;
-                    MusicUtil.addSong(song);
+                    MusicUtil.addSong(song, false);
                 }
             }
         }

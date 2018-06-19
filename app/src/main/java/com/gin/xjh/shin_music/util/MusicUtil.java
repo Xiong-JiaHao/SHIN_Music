@@ -77,16 +77,20 @@ public class MusicUtil {
         listSize = list.size();
     }
 
-    public static void addSong(Song song){
+    public static void addSong(Song song, boolean flag) {
         if (SongList == null) {
             SongList = new ArrayList<>();
         }
-        SongList.add(index + 1, song);
+        if (flag) {
+            SongList.add(index + 1, song);
+        } else {
+            SongList.add(song);
+        }
         listSize++;
     }
 
     public static void removeSong(int num) {
-        if(listSize==1){
+        if (listSize == 1) {
             listSize = 0;
             SongList = null;
             return;

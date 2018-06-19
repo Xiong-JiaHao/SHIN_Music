@@ -72,6 +72,8 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
 
     private final long INTERVAL = 500L; //防止连续点击的时间间隔
     private long lastClickTime = 0L; //上一次点击的时间
+    private volatile String lastSongName = null;
+    private volatile Long lastSongId = null;
 
     private boolean filter() {
         long time = System.currentTimeMillis();
@@ -157,9 +159,18 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {//自动播放完后
-                Intent startIntent = new Intent(music_play_Activity.this, MusicService.class);
-                startIntent.putExtra("action", MusicService.AUTONEXTMUSIC);
-                startService(startIntent);
+                if (lastSongName == null) {
+                    Song song = MusicUtil.getNowSong();
+                    if (song.getSongName().equals(lastSongName) && song.getSongId().equals(lastSongId)) {
+                        return;
+                    }
+                    lastSongName = song.getSongName();
+                    lastSongId = song.getSongId();
+                    Intent startIntent = new Intent(music_play_Activity.this, MusicService.class);
+                    startIntent.putExtra("action", MusicService.AUTONEXTMUSIC);
+                    startService(startIntent);
+                }
+
             }
         });
 
@@ -474,6 +485,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
 
     private void changSong() {
         Song song = MusicUtil.getNowSong();
+        nowtime.setText("00:00");
         if (song == null) {
             Song_Name.setText("未知");
             Singer_Name.setText("未知");

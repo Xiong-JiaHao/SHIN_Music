@@ -1,12 +1,16 @@
 package com.gin.xjh.shin_music.util;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 
 import com.gin.xjh.shin_music.bean.Song;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class BitmapUtil {
     /**
@@ -16,53 +20,20 @@ public class BitmapUtil {
      * @return
      */
     public static Bitmap getAlbumArt(Context context, Song song) {
-        Uri selectedAudio = Uri.parse(song.getUrl());
-        MediaMetadataRetriever myRetriever = new MediaMetadataRetriever();
-        myRetriever.setDataSource(context, selectedAudio); // the URI of audio file
-        byte[] artwork;
-
-        artwork = myRetriever.getEmbeddedPicture();
-
-        if (artwork != null) {
-            Bitmap bMap = BitmapFactory.decodeByteArray(artwork, 0, artwork.length);
-
-            return bMap;
-        } else {
+        Uri artworkUri = Uri.parse("content://media/external/audio/albumart");
+        ContentResolver resolver = context.getContentResolver();
+        Uri uri = ContentUris.withAppendedId(artworkUri, song.getAlbumId());
+        InputStream is;
+        try {
+            is = resolver.openInputStream(uri);
+        } catch (FileNotFoundException ignored) {
             return null;
         }
-//        Uri albumArtUri = Uri.parse("content://media/external/audio/albumart");
-//        Bitmap bitmap = null;
-//        Long albumid = song.getAlbumId();
-//        Long songid = song.getSongId();
-//        ContentResolver resolver = context.getContentResolver();
-//        if (albumid < 0 && songid < 0) {
-//            throw new IllegalArgumentException("Must specify an album or song");
-//        }
-//
-//        try {
-//            BitmapFactory.Options options = new BitmapFactory.Options();
-//            FileDescriptor fileDescriptor = null;
-//            if (albumid < 0) {
-//                Uri uri = Uri.parse("content://media/external/audio/media/" + songid + "/albumart");
-//                ParcelFileDescriptor parcelFileDescriptor = resolver.openFileDescriptor(uri, "r");
-//                if (parcelFileDescriptor != null) {
-//                    fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-//                    bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
-//                }
-//            } else {
-//                Uri uri = ContentUris.withAppendedId(albumArtUri, albumid);
-//                ParcelFileDescriptor pfd = resolver.openFileDescriptor(uri, "r");
-//                if (pfd != null) {
-//                    fileDescriptor = pfd.getFileDescriptor();
-//                    bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
-//                }
-//            }
-//
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return bitmap;
+        if (is == null) {
+            return null;
+        }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        return BitmapFactory.decodeStream(is, null, options);
     }
 }
