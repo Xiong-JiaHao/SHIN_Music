@@ -16,10 +16,12 @@ import android.widget.Toast;
 
 import com.gin.xjh.shin_music.Net_Request.getNetAlbumList;
 import com.gin.xjh.shin_music.Net_Request.getNetMusicList;
+import com.gin.xjh.shin_music.User.User_state;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.util.NetStateUtil;
 import com.gin.xjh.shin_music.util.TimesUtil;
 import com.squareup.picasso.Picasso;
 
@@ -146,6 +148,13 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
 
     private void addAllSong() {
         if (mSongList == null || mSongList.size() == 0) {
+            return;
+        }
+        if (NetStateUtil.getNetWorkState(this) == NetStateUtil.NO_STATE) {
+            Toast.makeText(this, "当前网络无法播放", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (NetStateUtil.getNetWorkState(this) == NetStateUtil.DATA_STATE && User_state.isUse_4G() == false) {
+            Toast.makeText(this, "请允许4G播放后尝试", Toast.LENGTH_SHORT).show();
             return;
         }
         boolean flag = false;
