@@ -92,7 +92,6 @@ public class musiclistRecyclerViewAdapter extends RecyclerView.Adapter<musiclist
             int num = MusicUtil.getIndex();
             if (position == num) {
                 MusicUtil.removeSong(num);
-                MusicUtil.setIndex((num - 1 + size) % size);
                 Intent startIntent1 = new Intent(context, MusicService.class);
                 startIntent1.putExtra("action", MusicService.AUTONEXTMUSIC);
                 context.startService(startIntent1);

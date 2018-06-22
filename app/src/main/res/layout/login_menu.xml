@@ -267,5 +267,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="20dp"
+        android:visibility="gone"
         android:text="退出登录" />
 </RelativeLayout>

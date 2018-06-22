@@ -279,6 +279,8 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         editor.putString("objId", user.getObjectId());
         editor.putLong("time", TimesUtil.dateToLong(new Date(System.currentTimeMillis())));
         editor.commit();
+
+        logout.setVisibility(View.VISIBLE);
     }
 
     private void updataLogout() {
@@ -298,6 +300,8 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         editor.putString("objId", null);
         editor.putLong("time", -1L);
         editor.commit();
+
+        logout.setVisibility(View.GONE);
     }
 
 }

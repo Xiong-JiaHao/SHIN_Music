@@ -155,8 +155,8 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
                 mList.add(mSongList.get(i));
             }
             MusicUtil.changeSongList(mList);
-            MusicUtil.changeSongList(mList);
             MusicUtil.play();
+            flag = true;
         } else {
             List<Song> nowSongList = MusicUtil.getSongList();
             for (Song song : mSongList) {

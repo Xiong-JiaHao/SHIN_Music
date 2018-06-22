@@ -96,6 +96,9 @@ public class MusicUtil {
             return;
         }
         SongList.remove(num);
+        if (index >= num) {
+            index--;
+        }
         listSize--;
     }
 

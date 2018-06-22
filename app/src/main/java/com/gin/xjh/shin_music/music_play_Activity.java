@@ -392,7 +392,6 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 } else {
                     int num = MusicUtil.getIndex();
                     MusicUtil.removeSong(num);
-                    MusicUtil.setIndex(num - 1);
                     MusicUtil.autonext();
                     Intent Musicintent = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
                     broadcastManager.sendBroadcast(Musicintent);
