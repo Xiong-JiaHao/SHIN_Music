@@ -20,6 +20,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,6 +75,8 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     private long lastClickTime = 0L; //上一次点击的时间
     private volatile String lastSongName = null;
     private volatile Long lastSongId = null;
+    private int lasttime = -1;
+    private volatile boolean isNext = true;
 
     private boolean filter() {
         long time = System.currentTimeMillis();
@@ -93,12 +96,22 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             if (msg.what == UPDATEUI && !isChange) {
                 String timeStr = null;
                 int time = MusicUtil.getPlayTime();
+                if (lasttime == time) {
+                    Toast.makeText(music_play_Activity.this, "\"" + MusicUtil.getNowSong().getSongName() + "\"无版权无法播放", Toast.LENGTH_SHORT).show();
+                    if (isNext) {
+                        nextSong();
+                    } else {
+                        preSong();
+                    }
+                    isNext = true;
+                }
                 try {
                     timeStr = TimesUtil.longToString(time, "mm:ss");
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 time_seekbar.setProgress(time);
+                lasttime = time;
                 nowtime.setText(timeStr);
                 UIHandler.sendEmptyMessageDelayed(UPDATEUI, 1000);//自己给自己刷新
             }
@@ -159,18 +172,20 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {//自动播放完后
-                if (lastSongName == null) {
-                    Song song = MusicUtil.getNowSong();
-                    if (song.getSongName().equals(lastSongName) && song.getSongId().equals(lastSongId)) {
-                        return;
+                Song song = MusicUtil.getNowSong();
+                if (!(song.getSongName().equals(lastSongName) && song.getSongId().equals(lastSongId))) {
+                    Intent startIntent = null;
+                    if (isNext) {
+                        startIntent = new Intent(music_play_Activity.this, MusicService.class);
+                        startIntent.putExtra("action", MusicService.AUTONEXTMUSIC);
+                    } else {
+                        startIntent = new Intent(music_play_Activity.this, MusicService.class);
+                        startIntent.putExtra("action", MusicService.PREVIOUSMUSIC);
                     }
+                    startService(startIntent);
                     lastSongName = song.getSongName();
                     lastSongId = song.getSongId();
-                    Intent startIntent = new Intent(music_play_Activity.this, MusicService.class);
-                    startIntent.putExtra("action", MusicService.AUTONEXTMUSIC);
-                    startService(startIntent);
                 }
-
             }
         });
 
@@ -179,6 +194,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
                     MusicUtil.setSeekTo(progress);
+                    lasttime = progress - 1;
                     Intent intent = new Intent(LyricView.LYRIC_ACTION_PLAY);
                     broadcastManager.sendBroadcast(intent);
                 }
@@ -199,6 +215,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 else{
                     MusicUtil.setSeekTo(seekBar.getProgress());
                 }
+                lasttime = seekBar.getProgress() - 1;
                 isChange = false;
                 //恢复UI刷新
                 UIHandler.sendEmptyMessage(UPDATEUI);
@@ -281,6 +298,8 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 if (filter()) {
                     return;
                 }
+                isNext = false;
+                Log.d("xxxxx", isNext + "");
                 preSong();
                 break;
             case R.id.music_play:
@@ -293,6 +312,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 if (filter()) {
                     return;
                 }
+                isNext = true;
                 nextSong();
                 break;
             case R.id.song_sheet:
@@ -485,6 +505,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     private void changSong() {
         Song song = MusicUtil.getNowSong();
         nowtime.setText("00:00");
+        lasttime = -1;
         if (song == null) {
             Song_Name.setText("未知");
             Singer_Name.setText("未知");

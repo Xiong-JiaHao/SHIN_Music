@@ -220,16 +220,14 @@ public class MusicUtil {
             mediaPlayer = new MediaPlayer();
         }
         try {
+            mediaPlayer.reset();
             if (song.getUrl() == null) {
                 //获取网络歌曲
-                mediaPlayer.reset();
                 mediaPlayer.setDataSource(Constant.MUSIC_URL + song.getSongId() + Constant.SUFFIX_MP3);
-                mediaPlayer.prepare();
             } else {
-                mediaPlayer.reset();
                 mediaPlayer.setDataSource(song.getUrl());
-                mediaPlayer.prepare();
             }
+            mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
