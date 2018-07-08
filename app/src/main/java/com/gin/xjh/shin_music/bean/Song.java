@@ -120,11 +120,22 @@ public class Song extends BmobObject implements Serializable {
         AlbumTime = albumTime;
     }
 
+    public void setSongName(String songName) {
+        SongName = songName;
+    }
+
+    public void setSingerName(String singerName) {
+        SingerName = singerName;
+    }
+
+    public void setAlbumName(String albumName) {
+        AlbumName = albumName;
+    }
+
     @Override
     public String toString() {
         return SingerName + " - " + AlbumName;
     }
-
     @Override
     public boolean equals(Object obj) {
         Song song = (Song) obj;

@@ -75,6 +75,7 @@ public class MusicUtil {
     public static void changeSongList(List<Song> list){
         SongList = list;
         listSize = list.size();
+        ListDataSaveUtil.setDataList("songlist", SongList);
     }
 
     public static void addSong(Song song, boolean flag) {
@@ -87,6 +88,7 @@ public class MusicUtil {
             SongList.add(song);
         }
         listSize++;
+        ListDataSaveUtil.setDataList("songlist", SongList);
     }
 
     public static void removeSong(int num) {
@@ -100,6 +102,8 @@ public class MusicUtil {
             index--;
         }
         listSize--;
+        ListDataSaveUtil.setDataList("songlist", SongList);
+        ListDataSaveUtil.setIndex("index", index);
     }
 
     public static void setSeekTo(int i){
@@ -109,14 +113,11 @@ public class MusicUtil {
     public static void setIndex(int i) {
         index = i;
         playTime = 0;
+        ListDataSaveUtil.setIndex("index", index);
     }
 
     public static int getPlayTime() {
         return mediaPlayer.getCurrentPosition();
-    }
-
-    public static int getSumTime() {
-        return mediaPlayer.getDuration();
     }
 
     public static void play() {
@@ -161,6 +162,7 @@ public class MusicUtil {
         else {
             index = new Random().nextInt(listSize - 1);
         }
+        ListDataSaveUtil.setIndex("index", index);
         play();
     }
 
@@ -175,6 +177,7 @@ public class MusicUtil {
         else {
             index = new Random().nextInt(listSize-1);
         }
+        ListDataSaveUtil.setIndex("index", index);
         play();
     }
 
@@ -188,6 +191,7 @@ public class MusicUtil {
         } else if (play_state == DISORDERLY_CYCLE) {
             index = new Random().nextInt(listSize-1);
         }
+        ListDataSaveUtil.setIndex("index", index);
         play();
     }
 

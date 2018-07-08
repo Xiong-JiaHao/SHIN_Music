@@ -26,6 +26,7 @@ import com.gin.xjh.shin_music.fragment.Fragment_Local;
 import com.gin.xjh.shin_music.fragment.Fragment_Online;
 import com.gin.xjh.shin_music.fragment.Fragment_Shin;
 import com.gin.xjh.shin_music.service.MusicService;
+import com.gin.xjh.shin_music.util.ListDataSaveUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.util.TimesUtil;
 import com.zhy.m.permission.MPermissions;
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initalize() {
         SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        ListDataSaveUtil.setPreferences(sharedPreferences);
         String user_id = sharedPreferences.getString("user_id", null);
         String user_name = sharedPreferences.getString("user_name", null);
         String password = sharedPreferences.getString("password", null);
@@ -113,6 +115,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         User_state.setUse_4G(sharedPreferences.getBoolean("use4G", false));
         MusicUtil.setPlay_state(sharedPreferences.getInt("play_state", 0));
+        int index = sharedPreferences.getInt("index", -1);
+        if (index >= 0) {
+            MusicUtil.setIndex(index);
+            MusicUtil.changeSongList(ListDataSaveUtil.getDataList("songlist"));
+        }
     }
 
     private void initView() {

@@ -20,7 +20,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -173,6 +172,10 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             @Override
             public void onCompletion(MediaPlayer mp) {//自动播放完后
                 Song song = MusicUtil.getNowSong();
+                if(lastSongId==null){
+                    lastSongName = song.getSongName();
+                    lastSongId = song.getSongId();
+                }
                 if (!(song.getSongName().equals(lastSongName) && song.getSongId().equals(lastSongId))) {
                     Intent startIntent = null;
                     if (isNext) {
@@ -299,7 +302,6 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     return;
                 }
                 isNext = false;
-                Log.d("xxxxx", isNext + "");
                 preSong();
                 break;
             case R.id.music_play:
@@ -509,7 +511,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         if (song == null) {
             Song_Name.setText("未知");
             Singer_Name.setText("未知");
-
+            time_seekbar.setProgress(0);
         } else {
             Song_Name.setText(song.getSongName());
             Singer_Name.setText(song.getSingerName());
@@ -522,8 +524,13 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            time_seekbar.setProgress(MusicUtil.getPlayTime());
-            time_seekbar.setMax(MusicUtil.getSumTime());
+            if(MusicUtil.isPlayMusic()){
+                time_seekbar.setProgress(MusicUtil.getPlayTime());
+            }
+            else{
+                time_seekbar.setProgress(0);
+            }
+            time_seekbar.setMax(song.getSongTime());
             Intent playintent = new Intent(Fragment_Lyrics.LYRIC_ACTION_CHANGE);
             broadcastManager.sendBroadcast(playintent);
             if(MusicUtil.isPlayMusic()){

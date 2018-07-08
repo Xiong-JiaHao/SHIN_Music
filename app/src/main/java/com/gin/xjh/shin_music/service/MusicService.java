@@ -10,7 +10,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.music_play_Activity;
@@ -88,7 +87,7 @@ public class MusicService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        musicNotifi.onUpdataMusicNotifi();
+        musicNotifi.onCreateMusicNotifi();
         return new MusicBinder();
     }
 
@@ -99,7 +98,6 @@ public class MusicService extends Service {
             switch (intent.getStringExtra("action")) {
                 case AUTONEXTMUSIC:
                     MusicUtil.autonext();
-                    Log.d("xxxxx", "autonext");
                     musicNotifi.onUpdataMusicNotifi();
                     Intent Musicintent1 = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
                     android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(Musicintent1);
@@ -116,7 +114,6 @@ public class MusicService extends Service {
                     break;
                 case NEXTMUSIC:
                     MusicUtil.next();
-                    Log.d("xxxxx", "next");
                     musicNotifi.onUpdataMusicNotifi();
                     Intent Musicintent3 = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
                     android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(Musicintent3);
