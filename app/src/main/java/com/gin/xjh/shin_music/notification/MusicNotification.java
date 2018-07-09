@@ -27,10 +27,10 @@ public class MusicNotification extends Notification {
     private final int REQUEST_CODE = 207;
 
     private NotificationManager manager = null;
-    private Builder builder = null;
+    private Builder builder;
 
     private RemoteViews remoteViews;
-    private Intent play = null, next = null, pre = null;
+    private Intent play, next, pre;
 
 
     public void setContext(Context context){

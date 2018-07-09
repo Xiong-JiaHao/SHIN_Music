@@ -10,6 +10,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.music_play_Activity;
@@ -99,8 +100,7 @@ public class MusicService extends Service {
                 case AUTONEXTMUSIC:
                     MusicUtil.autonext();
                     musicNotifi.onUpdataMusicNotifi();
-                    Intent Musicintent1 = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(Musicintent1);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(changeIntent);
                     break;
                 case PLAYORPAUSE:
                     MusicUtil.playorpause();
@@ -109,20 +109,17 @@ public class MusicService extends Service {
                 case PREVIOUSMUSIC:
                     MusicUtil.pre();
                     musicNotifi.onUpdataMusicNotifi();
-                    Intent Musicintent2 = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(Musicintent2);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(changeIntent);
                     break;
                 case NEXTMUSIC:
                     MusicUtil.next();
                     musicNotifi.onUpdataMusicNotifi();
-                    Intent Musicintent3 = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(Musicintent3);
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(changeIntent);
                     break;
                 case PLAY:
                     MusicUtil.play();
-                    Intent Musicintent4 = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(Musicintent4);
                     musicNotifi.onUpdataMusicNotifi();
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(changeIntent);
                     break;
             }
         }
@@ -162,22 +159,19 @@ public class MusicService extends Service {
             if (MusicUtil.getSongList() != null) {
                 switch (intent.getAction()) {
                     case MUSIC_NOTIFICATION_ACTION_PLAY:
-                        Intent startIntent1 = new Intent(getApplicationContext(), MusicService.class);
-                        startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
-                        startService(startIntent1);
-                        sendBroadcast(changeIntent);
+                        MusicUtil.playorpause();
+                        musicNotifi.onUpdataMusicNotifi();
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(changeIntent);
                         break;
                     case MUSIC_NOTIFICATION_ACTION_NEXT:
-                        Intent startIntent2 = new Intent(getApplicationContext(), MusicService.class);
-                        startIntent2.putExtra("action", MusicService.NEXTMUSIC);
-                        startService(startIntent2);
-                        sendBroadcast(changeIntent);
+                        MusicUtil.next();
+                        musicNotifi.onUpdataMusicNotifi();
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(changeIntent);
                         break;
                     case MUSIC_NOTIFICATION_ACTION_PRE:
-                        Intent startIntent3 = new Intent(getApplicationContext(), MusicService.class);
-                        startIntent3.putExtra("action", MusicService.PREVIOUSMUSIC);
-                        startService(startIntent3);
-                        sendBroadcast(changeIntent);
+                        MusicUtil.pre();
+                        musicNotifi.onUpdataMusicNotifi();
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(changeIntent);
                         break;
                 }
             } else {

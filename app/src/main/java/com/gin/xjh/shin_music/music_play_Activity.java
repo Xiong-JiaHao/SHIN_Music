@@ -20,6 +20,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,7 +75,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     private long lastClickTime = 0L; //上一次点击的时间
     private volatile String lastSongName = null;
     private volatile Long lastSongId = null;
-    private int lasttime = -1;
+    private volatile int lasttime = 0;
     private volatile boolean isNext = true;
 
     private boolean filter() {
@@ -96,23 +97,27 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 String timeStr = null;
                 int time = MusicUtil.getPlayTime();
                 if (lasttime == time) {
+                    Log.d("jjjjj", lasttime + " + " + time);
+                    lasttime = 0;
+                    Log.d("jjjjj", lasttime + " + " + time);
                     Toast.makeText(music_play_Activity.this, "\"" + MusicUtil.getNowSong().getSongName() + "\"无版权无法播放", Toast.LENGTH_SHORT).show();
                     if (isNext) {
+                        isNext = true;
                         nextSong();
                     } else {
                         preSong();
                     }
-                    isNext = true;
+                } else {
+                    try {
+                        timeStr = TimesUtil.longToString(time, "mm:ss");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    time_seekbar.setProgress(time);
+                    lasttime = time;
+                    nowtime.setText(timeStr);
+                    UIHandler.sendEmptyMessageDelayed(UPDATEUI, 1000);//自己给自己刷新
                 }
-                try {
-                    timeStr = TimesUtil.longToString(time, "mm:ss");
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                time_seekbar.setProgress(time);
-                lasttime = time;
-                nowtime.setText(timeStr);
-                UIHandler.sendEmptyMessageDelayed(UPDATEUI, 1000);//自己给自己刷新
             }
         }
     };
@@ -177,7 +182,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     lastSongId = song.getSongId();
                 }
                 if (!(song.getSongName().equals(lastSongName) && song.getSongId().equals(lastSongId))) {
-                    Intent startIntent = null;
+                    Intent startIntent;
                     if (isNext) {
                         startIntent = new Intent(music_play_Activity.this, MusicService.class);
                         startIntent.putExtra("action", MusicService.AUTONEXTMUSIC);
@@ -197,7 +202,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
                     MusicUtil.setSeekTo(progress);
-                    lasttime = progress - 1;
+                    lasttime = progress;
                     Intent intent = new Intent(LyricView.LYRIC_ACTION_PLAY);
                     broadcastManager.sendBroadcast(intent);
                 }
@@ -218,9 +223,10 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 else{
                     MusicUtil.setSeekTo(seekBar.getProgress());
                 }
-                lasttime = seekBar.getProgress() - 1;
+                lasttime = seekBar.getProgress();
                 isChange = false;
                 //恢复UI刷新
+                lasttime = 0;
                 UIHandler.sendEmptyMessage(UPDATEUI);
             }
         });
@@ -228,6 +234,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         if (MusicUtil.isPlayMusic()) {
             music_play.setImageResource(R.drawable.music_stop);
             //恢复UI刷新
+            lasttime = 0;
             UIHandler.sendEmptyMessage(UPDATEUI);
         }
         switch (MusicUtil.getPlay_state()) {
@@ -348,6 +355,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             playintent = new Intent(LyricView.LYRIC_ACTION_PLAY);
             broadcastManager.sendBroadcast(playintent);
             //恢复UI刷新
+            lasttime = 0;
             UIHandler.sendEmptyMessage(UPDATEUI);
         } else {
             music_play.setImageResource(R.drawable.music_play);
@@ -370,6 +378,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         } else if (!MusicUtil.isPlayMusic()) {
             music_play.setImageResource(R.drawable.music_stop);
         }
+        lasttime = 0;
         Intent startIntent3 = new Intent(this, MusicService.class);
         startIntent3.putExtra("action", MusicService.NEXTMUSIC);
         startService(startIntent3);
@@ -506,9 +515,8 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
 
     private void changSong() {
         Song song = MusicUtil.getNowSong();
-        nowtime.setText("00:00");
-        lasttime = -1;
         if (song == null) {
+            nowtime.setText("00:00");
             Song_Name.setText("未知");
             Singer_Name.setText("未知");
             time_seekbar.setProgress(0);
@@ -521,24 +529,28 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 } else {
                     endtime.setText(TimesUtil.longToString(song.getSongTime(), "mm:ss"));
                 }
+                if (MusicUtil.isPlayMusic()) {
+                    time_seekbar.setProgress(MusicUtil.getPlayTime());
+                } else {
+                    time_seekbar.setProgress(0);
+                }
             } catch (ParseException e) {
                 e.printStackTrace();
-            }
-            if(MusicUtil.isPlayMusic()){
-                time_seekbar.setProgress(MusicUtil.getPlayTime());
-            }
-            else{
-                time_seekbar.setProgress(0);
             }
             time_seekbar.setMax(song.getSongTime());
             Intent playintent = new Intent(Fragment_Lyrics.LYRIC_ACTION_CHANGE);
             broadcastManager.sendBroadcast(playintent);
             if(MusicUtil.isPlayMusic()){
+                //恢复UI刷新
+                lasttime = 0;
+                UIHandler.sendEmptyMessage(UPDATEUI);
                 music_play.setImageResource(R.drawable.music_stop);
                 Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_CHANGE);
                 broadcastManager.sendBroadcast(intent1);
             } else {
                 music_play.setImageResource(R.drawable.music_play);
+                //暂停UI刷新
+                UIHandler.removeMessages(UPDATEUI);
                 Intent intent1 = new Intent(Fragment_Music.MUSIC_ACTION_PAUSE);
                 broadcastManager.sendBroadcast(intent1);
             }
