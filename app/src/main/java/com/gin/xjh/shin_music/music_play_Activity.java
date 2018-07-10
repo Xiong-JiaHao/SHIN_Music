@@ -20,7 +20,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,9 +96,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 String timeStr = null;
                 int time = MusicUtil.getPlayTime();
                 if (lasttime == time) {
-                    Log.d("jjjjj", lasttime + " + " + time);
                     lasttime = 0;
-                    Log.d("jjjjj", lasttime + " + " + time);
                     Toast.makeText(music_play_Activity.this, "\"" + MusicUtil.getNowSong().getSongName() + "\"无版权无法播放", Toast.LENGTH_SHORT).show();
                     if (isNext) {
                         isNext = true;

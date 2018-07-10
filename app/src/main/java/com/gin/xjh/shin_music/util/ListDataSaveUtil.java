@@ -14,7 +14,6 @@ public class ListDataSaveUtil {
 
     public static void setPreferences(SharedPreferences preferences) {
         ListDataSaveUtil.preferences = preferences;
-        editor = preferences.edit();
     }
 
     /**
@@ -29,8 +28,8 @@ public class ListDataSaveUtil {
 
         Gson gson = new Gson();
         //转换成json数据，再保存
+        editor = preferences.edit();
         String Json = gson.toJson(datalist);
-        editor.clear();
         editor.putString(listtag, Json);
         editor.commit();
     }
@@ -42,6 +41,7 @@ public class ListDataSaveUtil {
      * @param index
      */
     public static void setIndex(String indextag, int index) {
+        editor = preferences.edit();
         editor.putInt(indextag, index);
         editor.commit();
     }
@@ -58,6 +58,7 @@ public class ListDataSaveUtil {
         if (null == Json) {
             return null;
         }
+
         Gson gson = new Gson();
         datalist = gson.fromJson(Json, new TypeToken<List<Song>>() {
 

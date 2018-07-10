@@ -88,7 +88,6 @@ public class MusicUtil {
             SongList.add(song);
         }
         listSize++;
-        ListDataSaveUtil.setDataList("songlist", SongList);
     }
 
     public static void removeSong(int num) {
@@ -123,6 +122,7 @@ public class MusicUtil {
     public static void play() {
         isPlay = true;
         playMusic(SongList.get(index));
+        ListDataSaveUtil.setIndex("index", index);
         //还原暂停播放
         setSeekTo(playTime);
     }
@@ -162,7 +162,6 @@ public class MusicUtil {
         else {
             index = new Random().nextInt(listSize - 1);
         }
-        ListDataSaveUtil.setIndex("index", index);
         play();
     }
 
@@ -177,7 +176,6 @@ public class MusicUtil {
         else {
             index = new Random().nextInt(listSize-1);
         }
-        ListDataSaveUtil.setIndex("index", index);
         play();
     }
 
@@ -191,7 +189,6 @@ public class MusicUtil {
         } else if (play_state == DISORDERLY_CYCLE) {
             index = new Random().nextInt(listSize-1);
         }
-        ListDataSaveUtil.setIndex("index", index);
         play();
     }
 

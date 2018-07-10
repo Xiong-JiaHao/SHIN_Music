@@ -22,6 +22,7 @@ import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_play_Activity;
 import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.DensityUtil;
+import com.gin.xjh.shin_music.util.ListDataSaveUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.util.NetStateUtil;
 
@@ -139,6 +140,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                     }
                     if (isFlag) {
                         MusicUtil.addSong(song, true);
+                        ListDataSaveUtil.setDataList("songlist",MusicUtil.getSongList());
                     } else {
                         Toast.makeText(context, "该歌曲已经存在，请勿重复添加", Toast.LENGTH_SHORT).show();
                     }

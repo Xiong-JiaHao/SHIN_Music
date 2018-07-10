@@ -20,6 +20,7 @@ import com.gin.xjh.shin_music.User.User_state;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.util.ListDataSaveUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.util.NetStateUtil;
 import com.gin.xjh.shin_music.util.TimesUtil;
@@ -181,6 +182,7 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
                     MusicUtil.addSong(song, false);
                 }
             }
+            ListDataSaveUtil.setDataList("songlist", MusicUtil.getSongList());
         }
         if (flag) {
             Toast.makeText(mContext, "添加完成", Toast.LENGTH_SHORT).show();
