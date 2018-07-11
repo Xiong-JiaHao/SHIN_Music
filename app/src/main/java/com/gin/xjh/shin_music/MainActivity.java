@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             User user = new User(user_id, user_name, password, user_qq, user_sex, personal_profile);
             user.setObjectId(objId);
             User_state.Login(user);
+            User_state.setLikeSongList(ListDataSaveUtil.getDataList("likesong"));
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong("time", nowtime);
             editor.commit();

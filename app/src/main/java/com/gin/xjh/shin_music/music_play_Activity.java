@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.Net_Request.getNetMusicDetail;
+import com.gin.xjh.shin_music.User.User_state;
 import com.gin.xjh.shin_music.adapter.FragmentAdapter;
 import com.gin.xjh.shin_music.adapter.musiclistRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
@@ -49,7 +50,7 @@ import java.util.List;
 public class music_play_Activity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView go_back, change_style, ic_comment, setting;
-    private ImageView leftto, music_play, rightto, cycle_style, song_sheet;
+    private ImageView leftto, music_play, rightto, cycle_style, song_sheet, ilike;
     private TextView Song_Name, Singer_Name, change_flag, nowtime, endtime;
     private SeekBar time_seekbar;
     private ViewPager fragment_VP;
@@ -76,6 +77,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     private volatile Long lastSongId = null;
     private volatile int lasttime = 0;
     private volatile boolean isNext = true;
+    private volatile boolean islike;
 
     private boolean filter() {
         long time = System.currentTimeMillis();
@@ -150,6 +152,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         endtime = findViewById(R.id.endtime);
         time_seekbar = findViewById(R.id.time_seekbar);
         fragment_VP = findViewById(R.id.fragment_VP);
+        ilike = findViewById(R.id.ilike);
     }
 
     private void initEvent() {
@@ -168,6 +171,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         music_play.setOnClickListener(this);
         rightto.setOnClickListener(this);
         song_sheet.setOnClickListener(this);
+        ilike.setOnClickListener(this);
 
         MediaPlayer mMediaPlayer = MusicUtil.getMediaPlayer();
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -326,6 +330,24 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     showListbottomDialog();
                 }
                 break;
+            case R.id.ilike:
+                if (filter()) {
+                    return;
+                }
+                Song song = MusicUtil.getNowSong();
+                if (song == null || !song.isOnline()) {
+                    return;
+                }
+                if (!User_state.getState()) {
+                    Toast.makeText(this, "请登录后进行该项操作", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (islike) {
+                    User_state.removeLikeSongList(music_play_Activity.this, ilike, song);
+                } else {
+                    User_state.addLikeSongList(music_play_Activity.this, ilike, song);
+                }
+                break;
         }
     }
 
@@ -387,15 +409,31 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         bottomDialog.setCanceledOnTouchOutside(true);
         View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content_circle_inplay, null);
         TextView ic_comment2 = contentView.findViewById(R.id.ic_comment);
+        final TextView like = contentView.findViewById(R.id.like);
         final Song song = MusicUtil.getNowSong();
         if (song.isOnline()) {
             ic_comment2.setTextColor(R.color.Check);
+            like.setTextColor(R.color.Check);
         }
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (song != null && song.isOnline() && User_state.getState()) {
+                    if (islike) {
+                        User_state.removeLikeSongList(music_play_Activity.this, ilike, song);
+                        like.setText(R.string.unlike);
+                    } else {
+                        User_state.addLikeSongList(music_play_Activity.this, ilike, song);
+                        like.setText(R.string.like);
+                    }
+                }
+            }
+        });
         ic_comment2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //发消息告知弹出评论
-                if (song == null || song.isOnline()) {
+                if (song != null && song.isOnline()) {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("song", song);
                     Intent ic_comment_intent = new Intent(music_play_Activity.this, All_comment.class);
@@ -520,6 +558,15 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         } else {
             Song_Name.setText(song.getSongName());
             Singer_Name.setText(song.getSingerName());
+            islike = false;
+            if (User_state.getState()) {
+                islike = User_state.isLikeSong(song);
+            }
+            if (islike) {
+                ilike.setImageResource(R.drawable.likesong);
+            } else {
+                ilike.setImageResource(R.drawable.unlikesong);
+            }
             try {
                 if (song.getSongTime() == 0) {
                     new getNetMusicDetail().getJson(this);

@@ -3,4 +3,6 @@
     <string name="my_appId">62882</string>
     <string name="my_appSecret">33ff1ea139954d69a2d4aa884dc30a96</string>
     <string name="user4g">使用4G播放音乐</string>
+    <string name="unlike">听听吧，说不定就喜欢我了(~.~)</string>
+    <string name="like">我是你喜欢的音乐(^.^)</string>
 </resources>

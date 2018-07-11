@@ -116,6 +116,13 @@
                 android:src="@drawable/comment" />
 
             <ImageView
+                android:id="@+id/ilike"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/unlikesong" />
+
+            <ImageView
                 android:id="@+id/settings"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
+import com.gin.xjh.shin_music.User.User_state;
 import com.gin.xjh.shin_music.album_details_Activity;
 import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.util.NetStateUtil;
@@ -74,12 +75,16 @@ public class albumItemAdapter extends BaseAdapter {
                     Toast.makeText(mContext, "当前无网络...", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Intent intent = new Intent(mContext, album_details_Activity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("album",mList.get(position));
-                intent.putExtra("album",bundle);
-                intent.putExtra("isAlbum", true);
-                mContext.startActivity(intent);
+                if (User_state.getState()) {
+                    Intent intent = new Intent(mContext, album_details_Activity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("album", mList.get(position));
+                    intent.putExtra("album", bundle);
+                    intent.putExtra("isAlbum", true);
+                    mContext.startActivity(intent);
+                } else {
+                    Toast.makeText(mContext, "当前未登录，无法享受该功能", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         return convertView;

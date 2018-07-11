@@ -136,6 +136,7 @@ public class Song extends BmobObject implements Serializable {
     public String toString() {
         return SingerName + " - " + AlbumName;
     }
+
     @Override
     public boolean equals(Object obj) {
         Song song = (Song) obj;

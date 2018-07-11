@@ -19,6 +19,7 @@ import com.gin.xjh.shin_music.Net_Request.getNetMusicList;
 import com.gin.xjh.shin_music.User.User_state;
 import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Album;
+import com.gin.xjh.shin_music.bean.LikeSong;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.util.ListDataSaveUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
@@ -80,18 +81,27 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
         addAll.setOnClickListener(this);
         mContext = this;
         if (isAlbum) {
+            if (album.getAlbumId() == -1) {
+                album_singer.setText("创建者：" + User_state.getLoginUser().getUserName());
+                album_times.setText("");
+                mSongList = User_state.getLikeSongList();
+                if (mSongList == null) {
+                    updateBmobLikeEvent();
+                }
+            } else {
+                album_singer.setText("歌手：" + album.getSinger());
+                try {
+                    album_times.setText("发行时间：" + TimesUtil.longToString(album.getTimes(), "yyyy-MM-dd"));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                updateBmobEvent();
+            }
             Picasso.get().load(album.getAlbumUrl())
                     .placeholder(R.drawable.album)
                     .error(R.drawable.album)
                     .into(album_img);
-            album_singer.setText("歌手：" + album.getSinger());
             album_name.setText(album.getAlbumName());
-            try {
-                album_times.setText("发行时间：" + TimesUtil.longToString(album.getTimes(), "yyyy-MM-dd"));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            updateBmobEvent();
         } else {
             Picasso.get().load(url)
                 .placeholder(R.drawable.album)
@@ -103,6 +113,32 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
         }
     }
 
+    private void updateBmobLikeEvent() {
+        album_rv = findViewById(R.id.album_rv);
+        album_hint = findViewById(R.id.album_hint);
+        BmobQuery<LikeSong> query = new BmobQuery<>();
+        query.addWhereEqualTo("UserId", User_state.getLoginUser().getUserId());//按当前登录的ID进行查找
+        query.findObjects(new FindListener<LikeSong>() {
+            @Override
+            public void done(List<LikeSong> list, BmobException e) {
+                if (list != null && list.size() != 0) {
+                    for (int i = 0; i < list.size(); i++) {
+                        mSongList.add(list.get(i).getSong());
+                    }
+                    album_hint.setVisibility(View.GONE);
+                    mMusicRecyclerViewAdapter = new musicRecyclerViewAdapter(mContext, mSongList);
+                    album_rv.setLayoutManager(new LinearLayoutManager(mContext));
+                    album_rv.setItemAnimator(new DefaultItemAnimator());//默认动画
+                    album_rv.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
+                    album_rv.setAdapter(mMusicRecyclerViewAdapter);
+                } else {
+                    album_hint.setText("无喜欢歌曲，请添加后查看");
+                }
+            }
+        });
+
+    }
+
     private void updateBmobEvent() {
         album_rv = findViewById(R.id.album_rv);
         album_hint = findViewById(R.id.album_hint);
@@ -111,7 +147,7 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
         query.findObjects(new FindListener<Song>() {
             @Override
             public void done(List<Song> list, BmobException e) {
-                if (list.size() != 0) {
+                if (list != null && list.size() != 0) {
                     mSongList = list;
                     for (int i = 0; i < mSongList.size(); i++) {
                         mSongList.get(i).setAlbumId(album.getAlbumId());

@@ -1,12 +1,28 @@
 package com.gin.xjh.shin_music.User;
 
+import android.content.Context;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.gin.xjh.shin_music.R;
+import com.gin.xjh.shin_music.bean.LikeSong;
+import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.util.ListDataSaveUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class User_state {
 
     private static volatile boolean Use_4G = false;
     private static volatile boolean Login_flag = false;
     private static volatile User user = null;
+    private static volatile List<Song> likeSongList = null;//存到sp中（登陆的时候就进行查找,退出时删除）
 
 
     public static void setUse_4G(boolean use_4G) {
@@ -52,4 +68,84 @@ public class User_state {
         }
     }
 
+    public static List<Song> getLikeSongList() {
+        synchronized (User_state.class) {
+            return likeSongList;
+        }
+    }
+
+    public static void setLikeSongList(List<Song> likeSongList) {
+        synchronized (User_state.class) {
+            User_state.likeSongList = likeSongList;
+        }
+    }
+
+    public static void addLikeSongList(final Context context, final ImageView imageView, final Song song) {
+        synchronized (User_state.class) {
+            if (likeSongList == null) {
+                likeSongList = new ArrayList<>();
+            }
+            LikeSong likeSong = new LikeSong(User_state.getLoginUser().getUserId(), song);
+            likeSong.save(new SaveListener<String>() {
+                @Override
+                public void done(String s, BmobException e) {
+                    if (e == null) {
+                        imageView.setImageResource(R.drawable.likesong);
+                        likeSongList.add(song);
+                        ListDataSaveUtil.setDataList("likesong", likeSongList);
+                    } else {
+                        Toast.makeText(context, "添加失败，请重试", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    public static boolean isLikeSong(Song song) {
+        if (likeSongList == null) {
+            return false;
+        }
+        for (Song likesong : likeSongList) {
+            if (likesong.equals(song)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void removeLikeSongList(final Context context, final ImageView imageView, final Song song) {
+        synchronized (User_state.class) {
+            if (likeSongList == null) {
+                Toast.makeText(context, "喜欢的音乐中没有该歌曲", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            LikeSong likeSong = null;
+            int index = 0;
+            for (Song likesong : likeSongList) {
+                if (likesong.equals(song)) {
+                    likeSong = new LikeSong(User_state.getLoginUser().getUserId(), likesong);
+                    likeSong.setObjectId(likesong.getObjectId());
+                    break;
+                }
+                index++;
+            }
+            if (likeSong == null) {
+                Toast.makeText(context, "喜欢的音乐中没有该歌曲", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            final int finalIndex = index;
+            likeSong.delete(new UpdateListener() {
+                @Override
+                public void done(BmobException e) {
+                    if (e == null) {
+                        imageView.setImageResource(R.drawable.unlikesong);
+                        likeSongList.remove(finalIndex);
+                        ListDataSaveUtil.setDataList("likesong", likeSongList);
+                    } else {
+                        Toast.makeText(context, "删除失败，请重试", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
 }

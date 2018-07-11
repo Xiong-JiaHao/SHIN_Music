@@ -47,6 +47,20 @@
         android:textColor="@color/UnCheck"
         android:textSize="14sp" />
 
+    <TextView
+        android:id="@+id/like"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="false"
+        android:drawableLeft="@drawable/like"
+        android:drawablePadding="16dp"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:text="听听吧，说不定就喜欢我了(~.~)"
+        android:textColor="@color/UnCheck"
+        android:textSize="14sp" />
+
 
     <TextView
         android:id="@+id/ic_delete"

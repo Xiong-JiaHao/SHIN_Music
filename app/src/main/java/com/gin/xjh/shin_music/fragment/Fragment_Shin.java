@@ -75,6 +75,12 @@ public class Fragment_Shin extends Fragment {
         public int compare(Object o1, Object o2) {
             Album a = (Album) o1;
             Album b = (Album) o2;
+            if (a.getAlbumId() == -1) {
+                return -1;
+            }
+            if (b.getAlbumId() == -1) {
+                return 1;
+            }
             return -a.getTimes().compareTo(b.getTimes());
         }
     }
