@@ -75,7 +75,7 @@ public class albumItemAdapter extends BaseAdapter {
                     Toast.makeText(mContext, "当前无网络...", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (User_state.getState()) {
+                if (User_state.getState() || position != 0) {
                     Intent intent = new Intent(mContext, album_details_Activity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("album", mList.get(position));

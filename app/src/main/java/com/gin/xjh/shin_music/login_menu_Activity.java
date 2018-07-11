@@ -19,12 +19,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.User.User_state;
+import com.gin.xjh.shin_music.bean.LikeSong;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.util.ListDataSaveUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.util.NetStateUtil;
 import com.gin.xjh.shin_music.util.TimesUtil;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -279,7 +282,7 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         editor.putString("objId", user.getObjectId());
         editor.putLong("time", TimesUtil.dateToLong(new Date(System.currentTimeMillis())));
         editor.commit();
-
+        updateBmobLikeEvent();
         logout.setVisibility(View.VISIBLE);
     }
 
@@ -299,9 +302,34 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         editor.putString("personal_profile", null);
         editor.putString("objId", null);
         editor.putLong("time", -1L);
+        editor.putString("likesong", null);
         editor.commit();
+        User_state.setLikeSongList(null);
 
         logout.setVisibility(View.GONE);
+    }
+
+    private void updateBmobLikeEvent() {
+        BmobQuery<LikeSong> query = new BmobQuery<>();
+        query.addWhereEqualTo("UserId", User_state.getLoginUser().getUserId());//按当前登录的ID进行查找
+        query.findObjects(new FindListener<LikeSong>() {
+            @Override
+            public void done(List<LikeSong> list, BmobException e) {
+                if (list != null && list.size() != 0) {
+                    Song song;
+                    LikeSong likeSong;
+                    List<Song> mSong = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++) {
+                        likeSong = list.get(i);
+                        song = likeSong.getSong();
+                        song.setObjectId(likeSong.getObjectId());
+                        mSong.add(song);
+                    }
+                    ListDataSaveUtil.setDataList("likesong", mSong);
+                }
+            }
+        });
+
     }
 
 }

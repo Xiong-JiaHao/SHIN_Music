@@ -22,7 +22,7 @@ public class User_state {
     private static volatile boolean Use_4G = false;
     private static volatile boolean Login_flag = false;
     private static volatile User user = null;
-    private static volatile List<Song> likeSongList = null;//存到sp中（登陆的时候就进行查找,退出时删除）
+    private static volatile List<Song> likeSongList = null;
 
 
     public static void setUse_4G(boolean use_4G) {
@@ -69,9 +69,7 @@ public class User_state {
     }
 
     public static List<Song> getLikeSongList() {
-        synchronized (User_state.class) {
-            return likeSongList;
-        }
+        return likeSongList;
     }
 
     public static void setLikeSongList(List<Song> likeSongList) {
@@ -91,6 +89,7 @@ public class User_state {
                 public void done(String s, BmobException e) {
                     if (e == null) {
                         imageView.setImageResource(R.drawable.likesong);
+                        song.setObjectId(s);
                         likeSongList.add(song);
                         ListDataSaveUtil.setDataList("likesong", likeSongList);
                     } else {

@@ -23,8 +23,12 @@ public class ListDataSaveUtil {
      * @param datalist
      */
     public static void setDataList(String listtag, List<Song> datalist) {
-        if (null == datalist || datalist.size() <= 0)
+        if (null == datalist || datalist.size() <= 0) {
+            editor = preferences.edit();
+            editor.putString(listtag, null);
+            editor.commit();
             return;
+        }
 
         Gson gson = new Gson();
         //转换成json数据，再保存

@@ -343,8 +343,10 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     return;
                 }
                 if (islike) {
+                    islike = false;
                     User_state.removeLikeSongList(music_play_Activity.this, ilike, song);
                 } else {
+                    islike = true;
                     User_state.addLikeSongList(music_play_Activity.this, ilike, song);
                 }
                 break;
@@ -415,14 +417,21 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             ic_comment2.setTextColor(R.color.Check);
             like.setTextColor(R.color.Check);
         }
+        if (islike) {
+            like.setText(R.string.like);
+        } else {
+            like.setText(R.string.unlike);
+        }
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (song != null && song.isOnline() && User_state.getState()) {
                     if (islike) {
+                        islike = false;
                         User_state.removeLikeSongList(music_play_Activity.this, ilike, song);
                         like.setText(R.string.unlike);
                     } else {
+                        islike = true;
                         User_state.addLikeSongList(music_play_Activity.this, ilike, song);
                         like.setText(R.string.like);
                     }
