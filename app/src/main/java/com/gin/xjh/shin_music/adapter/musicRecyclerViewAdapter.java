@@ -68,7 +68,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
             contentView = LayoutInflater.from(context).inflate(R.layout.dialog_content_circle, null);
             TextView ic_comment = contentView.findViewById(R.id.ic_comment);
             if (song.isOnline()) {
-                ic_comment.setTextColor(R.color.Check);
+                ic_comment.setTextColor(context.getResources().getColor(R.color.Check));
             }
             ic_comment.setOnClickListener(new View.OnClickListener() {
                 @Override

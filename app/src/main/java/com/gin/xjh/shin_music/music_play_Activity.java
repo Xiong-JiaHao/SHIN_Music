@@ -40,6 +40,7 @@ import com.gin.xjh.shin_music.fragment.Fragment_Music;
 import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.DensityUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.util.NetStateUtil;
 import com.gin.xjh.shin_music.util.TimesUtil;
 import com.gin.xjh.shin_music.view.LyricView;
 
@@ -102,7 +103,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     Toast.makeText(music_play_Activity.this, "\"" + MusicUtil.getNowSong().getSongName() + "\"无版权无法播放", Toast.LENGTH_SHORT).show();
                     if (isNext) {
                         isNext = true;
-                        nextSong();
+                        nextSong(true);
                     } else {
                         preSong();
                     }
@@ -115,6 +116,10 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     time_seekbar.setProgress(time);
                     lasttime = time;
                     nowtime.setText(timeStr);
+                    if (time >= MusicUtil.getNowSong().getSongTime()) {
+                        nextSong(false);
+                        return;
+                    }
                     UIHandler.sendEmptyMessageDelayed(UPDATEUI, 1000);//自己给自己刷新
                 }
             }
@@ -182,7 +187,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     lastSongName = song.getSongName();
                     lastSongId = song.getSongId();
                 }
-                if (!(song.getSongName().equals(lastSongName) && song.getSongId().equals(lastSongId))) {
+                if (song.getSongName().equals(lastSongName) && song.getSongId().equals(lastSongId)) {
                     Intent startIntent;
                     if (isNext) {
                         startIntent = new Intent(music_play_Activity.this, MusicService.class);
@@ -323,7 +328,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                     return;
                 }
                 isNext = true;
-                nextSong();
+                nextSong(true);
                 break;
             case R.id.song_sheet:
                 if (MusicUtil.getListSize() > 0) {
@@ -334,8 +339,13 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 if (filter()) {
                     return;
                 }
+                if (NetStateUtil.getNetWorkState(music_play_Activity.this) == NetStateUtil.NO_STATE) {
+                    Toast.makeText(music_play_Activity.this, "当前无网络", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Song song = MusicUtil.getNowSong();
                 if (song == null || !song.isOnline()) {
+                    Toast.makeText(this, "当前歌曲无法进行该项操作", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!User_state.getState()) {
@@ -392,7 +402,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         startService(startIntent1);
     }
 
-    private void nextSong() {
+    private void nextSong(boolean flag) {
         if (MusicUtil.getListSize() == 0) {
             Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
             return;
@@ -401,7 +411,11 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         }
         lasttime = 0;
         Intent startIntent3 = new Intent(this, MusicService.class);
-        startIntent3.putExtra("action", MusicService.NEXTMUSIC);
+        if (flag) {
+            startIntent3.putExtra("action", MusicService.NEXTMUSIC);
+        } else {
+            startIntent3.putExtra("action", MusicService.AUTONEXTMUSIC);
+        }
         startService(startIntent3);
     }
 
@@ -413,10 +427,6 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         TextView ic_comment2 = contentView.findViewById(R.id.ic_comment);
         final TextView like = contentView.findViewById(R.id.like);
         final Song song = MusicUtil.getNowSong();
-        if (song.isOnline()) {
-            ic_comment2.setTextColor(R.color.Check);
-            like.setTextColor(R.color.Check);
-        }
         if (islike) {
             like.setText(R.string.like);
         } else {
@@ -425,6 +435,10 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (NetStateUtil.getNetWorkState(music_play_Activity.this) == NetStateUtil.NO_STATE) {
+                    Toast.makeText(music_play_Activity.this, "当前无网络", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (song != null && song.isOnline() && User_state.getState()) {
                     if (islike) {
                         islike = false;
@@ -435,6 +449,12 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                         User_state.addLikeSongList(music_play_Activity.this, ilike, song);
                         like.setText(R.string.like);
                     }
+                } else if (song == null || !song.isOnline()) {
+                    Toast.makeText(music_play_Activity.this, "当前歌曲未拥有此功能", Toast.LENGTH_SHORT).show();
+                    bottomDialog.dismiss();
+                } else {
+                    Toast.makeText(music_play_Activity.this, "未登录，无法喜欢歌曲", Toast.LENGTH_SHORT).show();
+                    bottomDialog.dismiss();
                 }
             }
         });
@@ -454,6 +474,17 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 bottomDialog.dismiss();
             }
         });
+        if (song != null && song.isOnline()) {
+            ic_comment2.setTextColor(getResources().getColor(R.color.Check));
+            like.setTextColor(getResources().getColor(R.color.Check));
+            ic_comment2.setClickable(true);
+            like.setClickable(true);
+        } else {
+            ic_comment2.setTextColor(getResources().getColor(R.color.UnCheck));
+            like.setTextColor(getResources().getColor(R.color.UnCheck));
+            ic_comment2.setClickable(false);
+            like.setClickable(false);
+        }
         TextView ic_delete = contentView.findViewById(R.id.ic_delete);
         ic_delete.setOnClickListener(new View.OnClickListener() {
             @Override
