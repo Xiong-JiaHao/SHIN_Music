@@ -1,16 +1,23 @@
 package com.gin.xjh.shin_music;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +28,7 @@ import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.LikeSong;
 import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.bean.User;
 import com.gin.xjh.shin_music.util.ListDataSaveUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.util.NetStateUtil;
@@ -34,6 +42,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class album_details_Activity extends BaseActivity implements View.OnClickListener {
 
@@ -48,6 +57,7 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
     private String name,url;
     private int id;
     private boolean isAlbum;
+    private volatile boolean isPublic = false;
 
     private Context mContext;
 
@@ -84,8 +94,20 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
         mContext = this;
         if (isAlbum) {
             if (album.getAlbumId() == -1) {
+                String str = User_state.getLoginUser().getLikeSongListName();
+                if (str != null) {
+                    album_name.setText(str);
+                } else {
+                    album_name.setText(album.getAlbumName());
+                }
                 album_singer.setText("创建者：" + User_state.getLoginUser().getUserName());
-                album_times.setText("");
+                album_times.setText("编辑歌单信息");
+                album_times.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editSongList();
+                    }
+                });
                 mSongList = User_state.getLikeSongList();
                 if (mSongList == null || mSongList.size() == 0) {
                     updateBmobLikeEvent();
@@ -99,13 +121,13 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                album_name.setText(album.getAlbumName());
                 updateBmobEvent();
             }
             Picasso.get().load(album.getAlbumUrl())
                     .placeholder(R.drawable.album)
                     .error(R.drawable.album)
                     .into(album_img);
-            album_name.setText(album.getAlbumName());
         } else {
             Picasso.get().load(url)
                 .placeholder(R.drawable.album)
@@ -115,6 +137,87 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
             album_name.setText(name);
             updateOnlineEvent();
         }
+    }
+
+    private void editSongList() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(album_details_Activity.this);
+        LayoutInflater inflater = LayoutInflater.from(album_details_Activity.this);
+        View viewDialog = inflater.inflate(R.layout.editlikesong_layout, null);
+        final EditText likeSongName = viewDialog.findViewById(R.id.likeSongName);
+        final Switch is_Public = viewDialog.findViewById(R.id.is_Public);
+        likeSongName.setHint(album_name.getText());
+        is_Public.setChecked(User_state.getLoginUser().isPublic_song());
+        is_Public.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                synchronized (album_details_Activity.class) {
+                    isPublic = isChecked;
+                }
+            }
+        });
+        builder.setView(viewDialog);
+        builder.setPositiveButton("保存", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String name = likeSongName.getText().toString();
+                if (name == null) {
+                    if (isPublic != User_state.getLoginUser().isPublic_song()) {
+                        User user = new User();
+                        if (isPublic) {
+                            user.changPublic_song();
+                        }
+                        final boolean ispublic = isPublic;
+                        user.update(User_state.getLoginUser().getObjectId(), new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e == null) {
+                                    SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    User_state.getLoginUser().changPublic_song();
+                                    editor.putBoolean("public_song", ispublic);
+                                    editor.commit();
+                                } else {
+                                    Toast.makeText(album_details_Activity.this, "保存失败，请重试", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    User user = new User();
+                    if (isPublic) {
+                        user.changPublic_song();
+                    }
+                    user.setLikeSongListName(name);
+                    final boolean ispublic = isPublic;
+                    user.update(User_state.getLoginUser().getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                if (ispublic != User_state.getLoginUser().isPublic_song()) {
+                                    User_state.getLoginUser().changPublic_song();
+                                    editor.putBoolean("public_song", ispublic);
+                                }
+                                User_state.getLoginUser().setLikeSongListName(name);
+                                editor.putString("likesonglistname", name);
+                                editor.commit();
+                                album_name.setText(name);
+                            } else {
+                                Toast.makeText(album_details_Activity.this, "保存失败，请重试", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.create();
+        builder.show();
     }
 
     private void updateBmobLikeEvent() {

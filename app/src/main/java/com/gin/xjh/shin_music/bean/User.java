@@ -10,6 +10,8 @@ public class User extends BmobObject {
     private String UserQQ = null;
     private int UserSex = 0;
     private String Personal_profile = null;
+    private boolean Public_song = false;
+    private String likeSongListName = null;
 
     public User() {
 
@@ -32,39 +34,55 @@ public class User extends BmobObject {
         return UserName;
     }
 
-    public String getPassWord() {
-        return PassWord;
-    }
-
-    public String getUserQQ() {
-        return UserQQ;
-    }
-
-    public int getUserSex() {
-        return UserSex;
-    }
-
-    public String getPersonal_profile() {
-        return Personal_profile;
-    }
-
     public void setUserName(String userName) {
         UserName = userName;
+    }
+
+    public String getPassWord() {
+        return PassWord;
     }
 
     public void setPassWord(String passWord) {
         PassWord = passWord;
     }
 
-    public void setUserSex(int userSex) {
-        UserSex = userSex;
+    public String getUserQQ() {
+        return UserQQ;
     }
 
     public void setUserQQ(String userQQ) {
         UserQQ = userQQ;
     }
 
+    public int getUserSex() {
+        return UserSex;
+    }
+
+    public void setUserSex(int userSex) {
+        UserSex = userSex;
+    }
+
+    public String getPersonal_profile() {
+        return Personal_profile;
+    }
+
     public void setPersonal_profile(String personal_profile) {
         Personal_profile = personal_profile;
+    }
+
+    public boolean isPublic_song() {
+        return Public_song;
+    }
+
+    public void changPublic_song() {
+        Public_song = !Public_song;
+    }
+
+    public String getLikeSongListName() {
+        return likeSongListName;
+    }
+
+    public void setLikeSongListName(String likeSongListName) {
+        this.likeSongListName = likeSongListName;
     }
 }

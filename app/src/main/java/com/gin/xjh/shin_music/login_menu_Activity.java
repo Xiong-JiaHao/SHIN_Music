@@ -281,6 +281,8 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         editor.putString("personal_profile", user.getPersonal_profile());
         editor.putString("objId", user.getObjectId());
         editor.putLong("time", TimesUtil.dateToLong(new Date(System.currentTimeMillis())));
+        editor.putString("likesonglistname", user.getLikeSongListName());
+        editor.putBoolean("public_song",user.isPublic_song());
         editor.commit();
         updateBmobLikeEvent();
         logout.setVisibility(View.VISIBLE);
@@ -303,6 +305,8 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         editor.putString("objId", null);
         editor.putLong("time", -1L);
         editor.putString("likesong", null);
+        editor.putString("likesonglistname",null);
+        editor.putBoolean("public_song",false);
         editor.commit();
         User_state.setLikeSongList(null);
 

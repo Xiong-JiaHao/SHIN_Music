@@ -108,6 +108,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (user_id != null && nowtime - time < 432000000) {
             User user = new User(user_id, user_name, password, user_qq, user_sex, personal_profile);
             user.setObjectId(objId);
+            user.setLikeSongListName(sharedPreferences.getString("likesonglistname", null));
+            boolean ispublic = sharedPreferences.getBoolean("public_song", false);
+            if(ispublic){
+                user.changPublic_song();
+            }
             User_state.Login(user);
             User_state.setLikeSongList(ListDataSaveUtil.getDataList("likesong"));
             SharedPreferences.Editor editor = sharedPreferences.edit();
