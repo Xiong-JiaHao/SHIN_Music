@@ -37,5 +37,12 @@
             android:textSize="17sp" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/music_sz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/sz" />
 
 </RelativeLayout>

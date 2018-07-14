@@ -1,14 +1,12 @@
 package com.gin.xjh.shin_music.bean;
 
-import cn.bmob.v3.BmobObject;
 
-public class LikeSong extends BmobObject {
+public class LikeSong extends Song {
     private String UserId;
-    private Song song;
 
     public LikeSong(String UserId, Song song) {
+        super(song);
         this.UserId = UserId;
-        this.song = song;
     }
 
     public String getUserId() {
@@ -20,7 +18,7 @@ public class LikeSong extends BmobObject {
     }
 
     public Song getSong() {
-        return song;
+        return super.getSong();
     }
 
 }

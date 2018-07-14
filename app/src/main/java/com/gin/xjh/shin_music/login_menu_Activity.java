@@ -329,7 +329,11 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
                         song.setObjectId(likeSong.getObjectId());
                         mSong.add(song);
                     }
+                    User_state.setLikeSongList(mSong);
                     ListDataSaveUtil.setDataList("likesong", mSong);
+                } else {
+                    User_state.setLikeSongList(null);
+                    ListDataSaveUtil.setDataList("likesong", null);
                 }
             }
         });

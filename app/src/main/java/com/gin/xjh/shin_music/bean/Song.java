@@ -45,6 +45,24 @@ public class Song extends BmobObject implements Serializable {
         Url = null;
     }
 
+    public Song(Song song) {
+        this.SongName = song.getSongName();
+        this.setObjectId(song.getObjectId());
+        this.SongId = song.getSongId();
+        this.SingerName = song.getSingerName();
+        this.SingerId = song.getSingerId();
+        this.AlbumName = song.getAlbumName();
+        this.AlbumUrl = song.getAlbumUrl();
+        this.SongTime = song.getSongTime();
+        Url = null;
+        this.AlbumTime = song.getAlbumTime();
+        this.AlbumId = song.getAlbumId();
+    }
+
+    public Song getSong() {
+        return this;
+    }
+
     public boolean isOnline() {
         if (Url == null) {
             return true;

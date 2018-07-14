@@ -14,8 +14,9 @@
 
         <ImageView
             android:id="@+id/album_img"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="150sp"
+            android:layout_height="150sp"
+            android:layout_gravity="center"
             android:src="@drawable/everyone" />
 
         <LinearLayout
@@ -61,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="个人简介："
-                android:textSize="15sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/User_sign"
@@ -70,6 +71,14 @@
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:text="这个人很懒什么都没写"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/likesong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="喜欢的歌单"
                 android:textSize="12sp" />
         </LinearLayout>
 

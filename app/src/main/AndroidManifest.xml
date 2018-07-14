@@ -59,8 +59,11 @@
         <activity android:name=".updata_Activity"/>
         <activity android:name=".updata_password_Activity"/>
         <activity android:name=".music_details_Activity"/>
-        <activity android:name=".All_comment"/>
+        <activity android:name=".All_comment"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
         <service android:name=".service.MusicService"/>
+        <activity android:name=".personal_menu_Activity"/>
         <!--TODO 集成：1.2、添加推送所需要的服务和广播-->
         <service
             android:name="cn.bmob.push.lib.service.PushService"

@@ -1,6 +1,8 @@
 package com.gin.xjh.shin_music.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Comment;
 import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.personal_menu_Activity;
 import com.gin.xjh.shin_music.util.TimesUtil;
 
 import java.text.ParseException;
@@ -62,12 +65,14 @@ public class commentRecyclerViewAdapter extends RecyclerView.Adapter<commentRecy
 
         public void load(final Comment comment, final Context context) {
             try {
+                final AlertDialog[] dia = new AlertDialog[1];
                 itemName.setText(comment.getUserName());
                 itemComment.setText(comment.getMyComment());
                 itemTimes.setText(TimesUtil.longToString(comment.getTimes(), "yyyy-MM-dd HH:mm:ss"));
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        final User[] user = new User[1];
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         LayoutInflater inflater = LayoutInflater.from(context);
                         View viewDialog = inflater.inflate(R.layout.comment_details, null);
@@ -77,6 +82,7 @@ public class commentRecyclerViewAdapter extends RecyclerView.Adapter<commentRecy
                         final TextView User_QQ = viewDialog.findViewById(R.id.User_QQ);
                         final TextView User_sign = viewDialog.findViewById(R.id.User_sign);
                         final TextView comment_content = viewDialog.findViewById(R.id.comment_content);
+                        TextView likesong = viewDialog.findViewById(R.id.likesong);
                         final String Userid = comment.getUserId();
                         User_name.setText(comment.getUserName());
                         comment_content.setText(comment.getMyComment());
@@ -86,8 +92,8 @@ public class commentRecyclerViewAdapter extends RecyclerView.Adapter<commentRecy
                             @Override
                             public void done(List<User> list, BmobException e) {
                                 if (e == null) {
-                                    User user = list.get(0);
-                                    switch (user.getUserSex()) {
+                                    user[0] = list.get(0);
+                                    switch (user[0].getUserSex()) {
                                         case 0:
                                             User_sex.setImageResource(R.drawable.man);
                                             break;
@@ -98,15 +104,26 @@ public class commentRecyclerViewAdapter extends RecyclerView.Adapter<commentRecy
                                             User_sex.setImageResource(R.drawable.alien);
                                             break;
                                     }
-                                    User_QQ.setText("QQ:" + user.getUserQQ());
-                                    User_sign.setText(user.getPersonal_profile());
+                                    User_QQ.setText("QQ:" + user[0].getUserQQ());
+                                    User_sign.setText(user[0].getPersonal_profile());
                                 }
+                            }
+                        });
+                        likesong.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(context, personal_menu_Activity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("user", user[0]);
+                                intent.putExtra("user", bundle);
+                                context.startActivity(intent);
+                                dia[0].dismiss();
                             }
                         });
 
                         builder.setView(viewDialog);
                         builder.create();
-                        builder.show();
+                        dia[0] = builder.show();
                     }
                 });
             } catch (ParseException e) {
