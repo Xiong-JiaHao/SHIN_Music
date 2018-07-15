@@ -20,6 +20,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,17 +96,34 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what == UPDATEUI && !isChange) {
+            if (msg.what == UPDATEUI && !isChange && MusicUtil.isPlayMusic()) {
                 String timeStr = null;
                 int time = MusicUtil.getPlayTime();
                 if (lasttime == time) {
-                    lasttime = 0;
-                    Toast.makeText(music_play_Activity.this, "\"" + MusicUtil.getNowSong().getSongName() + "\"无版权无法播放", Toast.LENGTH_SHORT).show();
-                    if (isNext) {
-                        isNext = true;
-                        nextSong(true);
+                    if (time == 0) {
+                        if (lasttime == -1) {
+                            Log.d("jjjjj", MusicUtil.getNowSong().toString());
+                            lasttime = 0;
+                            Toast.makeText(music_play_Activity.this, "\"" + MusicUtil.getNowSong().getSongName() + "\"无版权无法播放", Toast.LENGTH_SHORT).show();
+                            if (isNext) {
+                                isNext = true;
+                                nextSong(true);
+                            } else {
+                                preSong();
+                            }
+                            return;
+                        }
+                        lasttime = -1;
+                        UIHandler.sendEmptyMessageDelayed(UPDATEUI, 1000);//自己给自己刷新
                     } else {
-                        preSong();
+                        lasttime = 0;
+                        Toast.makeText(music_play_Activity.this, "\"" + MusicUtil.getNowSong().getSongName() + "\"无版权无法播放", Toast.LENGTH_SHORT).show();
+                        if (isNext) {
+                            isNext = true;
+                            nextSong(true);
+                        } else {
+                            preSong();
+                        }
                     }
                 } else {
                     try {
@@ -120,6 +138,7 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                         nextSong(false);
                         return;
                     }
+                    isNext = true;
                     UIHandler.sendEmptyMessageDelayed(UPDATEUI, 1000);//自己给自己刷新
                 }
             }
@@ -182,23 +201,25 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {//自动播放完后
-                Song song = MusicUtil.getNowSong();
-                if(lastSongId==null){
-                    lastSongName = song.getSongName();
-                    lastSongId = song.getSongId();
-                }
-                if (song.getSongName().equals(lastSongName) && song.getSongId().equals(lastSongId)) {
-                    Intent startIntent;
-                    if (isNext) {
-                        startIntent = new Intent(music_play_Activity.this, MusicService.class);
-                        startIntent.putExtra("action", MusicService.AUTONEXTMUSIC);
+                if (MusicUtil.isPlayMusic()) {
+                    Song song = MusicUtil.getNowSong();
+                    Log.d("jjjjj", song.toString());
+                    if (!(song.getSongName().equals(lastSongName) && song.getSongId().equals(lastSongId))) {
+                        Intent startIntent;
+                        if (isNext) {
+                            startIntent = new Intent(music_play_Activity.this, MusicService.class);
+                            startIntent.putExtra("action", MusicService.AUTONEXTMUSIC);
+                        } else {
+                            startIntent = new Intent(music_play_Activity.this, MusicService.class);
+                            startIntent.putExtra("action", MusicService.PREVIOUSMUSIC);
+                        }
+                        lastSongName = song.getSongName();
+                        lastSongId = song.getSongId();
+                        startService(startIntent);
                     } else {
-                        startIntent = new Intent(music_play_Activity.this, MusicService.class);
-                        startIntent.putExtra("action", MusicService.PREVIOUSMUSIC);
+                        lastSongName = song.getSongName();
+                        lastSongId = song.getSongId();
                     }
-                    startService(startIntent);
-                    lastSongName = song.getSongName();
-                    lastSongId = song.getSongId();
                 }
             }
         });
@@ -364,6 +385,8 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
     }
 
     private void preSong() {
+        lastSongName = MusicUtil.getNowSong().getSongName();
+        lastSongId = MusicUtil.getNowSong().getSongId();
         if (MusicUtil.getListSize() == 0) {
             Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
             return;
@@ -379,7 +402,11 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
         if (MusicUtil.getListSize() == 0) {
             Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
             return;
-        } else if (!MusicUtil.isPlayMusic()) {
+        }
+        Intent startIntent1 = new Intent(this, MusicService.class);
+        startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
+        startService(startIntent1);
+        if (!MusicUtil.isPlayMusic()) {
             music_play.setImageResource(R.drawable.music_stop);
             Intent playintent = new Intent(Fragment_Music.MUSIC_ACTION_PLAY);
             broadcastManager.sendBroadcast(playintent);
@@ -397,12 +424,11 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
             //停止UI刷新
             UIHandler.removeMessages(UPDATEUI);
         }
-        Intent startIntent1 = new Intent(this, MusicService.class);
-        startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
-        startService(startIntent1);
     }
 
     private void nextSong(boolean flag) {
+        lastSongName = MusicUtil.getNowSong().getSongName();
+        lastSongId = MusicUtil.getNowSong().getSongId();
         if (MusicUtil.getListSize() == 0) {
             Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
             return;
