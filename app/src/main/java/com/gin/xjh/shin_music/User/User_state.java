@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
+import com.gin.xjh.shin_music.bean.Follow;
 import com.gin.xjh.shin_music.bean.LikeSong;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.bean.User;
@@ -23,6 +24,7 @@ public class User_state {
     private static volatile boolean Login_flag = false;
     private static volatile User user = null;
     private static volatile List<Song> likeSongList = null;
+    private static volatile List<User> mConcernList = null;
 
 
     public static void setUse_4G(boolean use_4G) {
@@ -78,7 +80,7 @@ public class User_state {
         }
     }
 
-    public static void addLikeSongList(final Context context, final ImageView imageView, final Song song) {
+    public static void addLikeSong(final Context context, final ImageView imageView, final Song song) {
         synchronized (User_state.class) {
             if (likeSongList == null) {
                 likeSongList = new ArrayList<>();
@@ -91,7 +93,7 @@ public class User_state {
                         imageView.setImageResource(R.drawable.likesong);
                         song.setObjectId(s);
                         likeSongList.add(song);
-                        ListDataSaveUtil.setDataList("likesong", likeSongList);
+                        ListDataSaveUtil.setSongList("likesong", likeSongList);
                     } else {
                         Toast.makeText(context, "添加失败，请重试", Toast.LENGTH_SHORT).show();
                     }
@@ -112,7 +114,7 @@ public class User_state {
         return false;
     }
 
-    public static void removeLikeSongList(final Context context, final ImageView imageView, final Song song) {
+    public static void removeLikeSong(final Context context, final ImageView imageView, final Song song) {
         synchronized (User_state.class) {
             if (likeSongList == null) {
                 Toast.makeText(context, "喜欢的音乐中没有该歌曲", Toast.LENGTH_SHORT).show();
@@ -139,7 +141,87 @@ public class User_state {
                     if (e == null) {
                         imageView.setImageResource(R.drawable.unlikesong);
                         likeSongList.remove(finalIndex);
-                        ListDataSaveUtil.setDataList("likesong", likeSongList);
+                        ListDataSaveUtil.setSongList("likesong", likeSongList);
+                    } else {
+                        Toast.makeText(context, "删除失败，请重试", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    public static List<User> getConcernList() {
+        return mConcernList;
+    }
+
+    public static void setConcernList(List<User> concernList) {
+        synchronized (User_state.class) {
+            User_state.mConcernList = concernList;
+        }
+    }
+
+    public static void addConcern(final Context context, final ImageView imageView, final User user) {
+        synchronized (User_state.class) {
+            if (mConcernList == null) {
+                mConcernList = new ArrayList<>();
+            }
+            Follow concernUser = new Follow(User_state.getLoginUser().getUserId(), user);
+            concernUser.save(new SaveListener<String>() {
+                @Override
+                public void done(String s, BmobException e) {
+                    if (e == null) {
+                        imageView.setImageResource(R.drawable.concern_red);
+                        user.setObjectId(s);
+                        mConcernList.add(user);
+                        ListDataSaveUtil.setUserList("concernUser", mConcernList);
+                    } else {
+                        Toast.makeText(context, "添加失败，请重试", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    public static boolean isConcern(User user) {
+        if (mConcernList == null) {
+            return false;
+        }
+        for (User user1 : mConcernList) {
+            if (user1.equals(user)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void removeConcern(final Context context, final ImageView imageView, final User user) {
+        synchronized (User_state.class) {
+            if (mConcernList == null) {
+                Toast.makeText(context, "你没有关注任何人", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            int index = 0;
+            Follow concernUser = null;
+            for (User user1 : mConcernList) {
+                if (user1.equals(user)) {
+                    concernUser = new Follow(User_state.getLoginUser().getUserId(), user);
+                    concernUser.setObjectId(user1.getObjectId());
+                    break;
+                }
+                index++;
+            }
+            if (concernUser == null) {
+                Toast.makeText(context, "你没有关注该用户", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            final int finalIndex = index;
+            concernUser.delete(new UpdateListener() {
+                @Override
+                public void done(BmobException e) {
+                    if (e == null) {
+                        imageView.setImageResource(R.drawable.concern_gray);
+                        mConcernList.remove(finalIndex);
+                        ListDataSaveUtil.setUserList("concernUser", mConcernList);
                     } else {
                         Toast.makeText(context, "删除失败，请重试", Toast.LENGTH_SHORT).show();
                     }

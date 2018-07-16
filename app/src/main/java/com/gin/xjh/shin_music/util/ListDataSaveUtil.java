@@ -3,6 +3,7 @@ package com.gin.xjh.shin_music.util;
 import android.content.SharedPreferences;
 
 import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.bean.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -17,12 +18,12 @@ public class ListDataSaveUtil {
     }
 
     /**
-     * 保存List和当前歌曲号
+     * 保存List
      *
      * @param listtag
      * @param datalist
      */
-    public static void setDataList(String listtag, List<Song> datalist) {
+    public static void setSongList(String listtag, List<Song> datalist) {
         if (null == datalist || datalist.size() <= 0) {
             editor = preferences.edit();
             editor.putString(listtag, null);
@@ -56,7 +57,7 @@ public class ListDataSaveUtil {
      * @param tag
      * @return
      */
-    public static List<Song> getDataList(String tag) {
+    public static List<Song> getSongList(String tag) {
         List<Song> datalist;
         String Json = preferences.getString(tag, null);
         if (null == Json) {
@@ -65,6 +66,49 @@ public class ListDataSaveUtil {
 
         Gson gson = new Gson();
         datalist = gson.fromJson(Json, new TypeToken<List<Song>>() {
+
+        }.getType());
+        return datalist;
+
+    }
+
+    /**
+     * 保存List
+     *
+     * @param listtag
+     * @param datalist
+     */
+    public static void setUserList(String listtag, List<User> datalist) {
+        if (null == datalist || datalist.size() <= 0) {
+            editor = preferences.edit();
+            editor.putString(listtag, null);
+            editor.commit();
+            return;
+        }
+
+        Gson gson = new Gson();
+        //转换成json数据，再保存
+        editor = preferences.edit();
+        String Json = gson.toJson(datalist);
+        editor.putString(listtag, Json);
+        editor.commit();
+    }
+
+    /**
+     * 获取List
+     *
+     * @param tag
+     * @return
+     */
+    public static List<User> getUserList(String tag) {
+        List<User> datalist;
+        String Json = preferences.getString(tag, null);
+        if (null == Json) {
+            return null;
+        }
+
+        Gson gson = new Gson();
+        datalist = gson.fromJson(Json, new TypeToken<List<User>>() {
 
         }.getType());
         return datalist;

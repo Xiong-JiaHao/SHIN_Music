@@ -235,7 +235,7 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
                         song.setObjectId(likeSong.getObjectId());
                         mSongList.add(song);
                     }
-                    ListDataSaveUtil.setDataList("likesong", mSongList);
+                    ListDataSaveUtil.setSongList("likesong", mSongList);
                     updateUI();
                 } else {
                     album_hint.setText("无喜欢歌曲，请添加后查看");
@@ -317,7 +317,7 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
                     MusicUtil.addSong(song, false);
                 }
             }
-            ListDataSaveUtil.setDataList("songlist", MusicUtil.getSongList());
+            ListDataSaveUtil.setSongList("songlist", MusicUtil.getSongList());
         }
         if (flag) {
             Toast.makeText(mContext, "添加完成", Toast.LENGTH_SHORT).show();

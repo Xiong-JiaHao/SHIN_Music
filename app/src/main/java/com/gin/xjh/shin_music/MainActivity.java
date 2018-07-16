@@ -114,7 +114,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 user.changPublic_song();
             }
             User_state.Login(user);
-            User_state.setLikeSongList(ListDataSaveUtil.getDataList("likesong"));
+            User_state.setLikeSongList(ListDataSaveUtil.getSongList("likesong"));
+            User_state.setConcernList(ListDataSaveUtil.getUserList("concernUser"));
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong("time", nowtime);
             editor.commit();
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int index = sharedPreferences.getInt("index", -1);
         if (index >= 0) {
             MusicUtil.setIndex(index);
-            MusicUtil.changeSongList(ListDataSaveUtil.getDataList("songlist"));
+            MusicUtil.changeSongList(ListDataSaveUtil.getSongList("songlist"));
         }
     }
 

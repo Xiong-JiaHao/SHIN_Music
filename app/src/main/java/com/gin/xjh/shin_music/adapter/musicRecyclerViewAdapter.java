@@ -140,7 +140,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
                     }
                     if (isFlag) {
                         MusicUtil.addSong(song, true);
-                        ListDataSaveUtil.setDataList("songlist",MusicUtil.getSongList());
+                        ListDataSaveUtil.setSongList("songlist", MusicUtil.getSongList());
                     } else {
                         Toast.makeText(context, "该歌曲已经存在，请勿重复添加", Toast.LENGTH_SHORT).show();
                     }

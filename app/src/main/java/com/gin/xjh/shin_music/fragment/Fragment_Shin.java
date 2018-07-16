@@ -51,6 +51,8 @@ public class Fragment_Shin extends Fragment {
             return;
         }
         BmobQuery<Album> query = new BmobQuery<>();
+        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        query.setMaxCacheAge(86400000);//缓存有1天的有效期
         query.findObjects(new FindListener<Album>() {
             @Override
             public void done(List<Album> list, BmobException e) {

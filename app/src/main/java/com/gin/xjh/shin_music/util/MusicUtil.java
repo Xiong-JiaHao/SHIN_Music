@@ -75,7 +75,7 @@ public class MusicUtil {
     public static void changeSongList(List<Song> list){
         SongList = list;
         listSize = list.size();
-        ListDataSaveUtil.setDataList("songlist", SongList);
+        ListDataSaveUtil.setSongList("songlist", SongList);
     }
 
     public static void addSong(Song song, boolean flag) {
@@ -101,7 +101,7 @@ public class MusicUtil {
             index--;
         }
         listSize--;
-        ListDataSaveUtil.setDataList("songlist", SongList);
+        ListDataSaveUtil.setSongList("songlist", SongList);
         ListDataSaveUtil.setIndex("index", index);
     }
 

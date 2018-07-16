@@ -375,10 +375,10 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 }
                 if (islike) {
                     islike = false;
-                    User_state.removeLikeSongList(music_play_Activity.this, ilike, song);
+                    User_state.removeLikeSong(music_play_Activity.this, ilike, song);
                 } else {
                     islike = true;
-                    User_state.addLikeSongList(music_play_Activity.this, ilike, song);
+                    User_state.addLikeSong(music_play_Activity.this, ilike, song);
                 }
                 break;
         }
@@ -468,11 +468,11 @@ public class music_play_Activity extends AppCompatActivity implements View.OnCli
                 if (song != null && song.isOnline() && User_state.getState()) {
                     if (islike) {
                         islike = false;
-                        User_state.removeLikeSongList(music_play_Activity.this, ilike, song);
+                        User_state.removeLikeSong(music_play_Activity.this, ilike, song);
                         like.setText(R.string.unlike);
                     } else {
                         islike = true;
-                        User_state.addLikeSongList(music_play_Activity.this, ilike, song);
+                        User_state.addLikeSong(music_play_Activity.this, ilike, song);
                         like.setText(R.string.like);
                     }
                 } else if (song == null || !song.isOnline()) {

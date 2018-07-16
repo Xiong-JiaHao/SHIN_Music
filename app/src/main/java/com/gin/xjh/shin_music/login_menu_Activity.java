@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.User.User_state;
+import com.gin.xjh.shin_music.bean.Follow;
 import com.gin.xjh.shin_music.bean.LikeSong;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.bean.User;
@@ -285,6 +286,7 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         editor.putBoolean("public_song",user.isPublic_song());
         editor.commit();
         updateBmobLikeEvent();
+        updateBmobConcernEvent();
         logout.setVisibility(View.VISIBLE);
     }
 
@@ -306,9 +308,11 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         editor.putLong("time", -1L);
         editor.putString("likesong", null);
         editor.putString("likesonglistname",null);
+        editor.putString("concernUser",null);
         editor.putBoolean("public_song",false);
         editor.commit();
         User_state.setLikeSongList(null);
+        User_state.setConcernList(null);
 
         logout.setVisibility(View.GONE);
     }
@@ -330,14 +334,41 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
                         mSong.add(song);
                     }
                     User_state.setLikeSongList(mSong);
-                    ListDataSaveUtil.setDataList("likesong", mSong);
+                    ListDataSaveUtil.setSongList("likesong", mSong);
                 } else {
                     User_state.setLikeSongList(null);
-                    ListDataSaveUtil.setDataList("likesong", null);
+                    ListDataSaveUtil.setSongList("likesong", null);
                 }
             }
         });
 
+    }
+
+    private void updateBmobConcernEvent() {
+        BmobQuery<Follow> query = new BmobQuery<>();
+        query.addWhereEqualTo("UserId", User_state.getLoginUser().getUserId());//按当前登录的ID进行查找
+        query.include("FollowUser");
+        query.findObjects(new FindListener<Follow>() {
+            @Override
+            public void done(List<Follow> list, BmobException e) {
+                if (list != null && list.size() != 0) {
+                    User user;
+                    Follow concernUser;
+                    List<User> concernList = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++) {
+                        concernUser = list.get(i);
+                        user = concernUser.getFollowUser();
+                        user.setObjectId(concernUser.getObjectId());
+                        concernList.add(user);
+                    }
+                    User_state.setConcernList(concernList);
+                    ListDataSaveUtil.setUserList("concernUser", concernList);
+                } else {
+                    User_state.setConcernList(null);
+                    ListDataSaveUtil.setUserList("concernUser", null);
+                }
+            }
+        });
     }
 
 }

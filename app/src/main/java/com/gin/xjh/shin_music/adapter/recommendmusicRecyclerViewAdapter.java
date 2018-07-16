@@ -168,7 +168,7 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
                     }
                     if (isFlag) {
                         MusicUtil.addSong(song, true);
-                        ListDataSaveUtil.setDataList("songlist", MusicUtil.getSongList());
+                        ListDataSaveUtil.setSongList("songlist", MusicUtil.getSongList());
                     } else {
                         Toast.makeText(mContext, "该歌曲已经存在，请勿重复添加", Toast.LENGTH_SHORT).show();
                     }

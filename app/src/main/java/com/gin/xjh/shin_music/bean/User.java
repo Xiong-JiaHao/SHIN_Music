@@ -85,4 +85,13 @@ public class User extends BmobObject {
     public void setLikeSongListName(String likeSongListName) {
         this.likeSongListName = likeSongListName;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        User user = (User) obj;
+        if (!user.getUserId().equals(UserId)) {
+            return false;
+        }
+        return true;
+    }
 }
