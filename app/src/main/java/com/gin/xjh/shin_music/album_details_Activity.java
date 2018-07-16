@@ -142,7 +142,7 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
     private void editSongList() {
         AlertDialog.Builder builder = new AlertDialog.Builder(album_details_Activity.this);
         LayoutInflater inflater = LayoutInflater.from(album_details_Activity.this);
-        View viewDialog = inflater.inflate(R.layout.editlikesong_layout, null);
+        View viewDialog = inflater.inflate(R.layout.edit_likesong_layout, null);
         final EditText likeSongName = viewDialog.findViewById(R.id.likeSongName);
         final Switch is_Public = viewDialog.findViewById(R.id.is_Public);
         likeSongName.setHint(album_name.getText());
