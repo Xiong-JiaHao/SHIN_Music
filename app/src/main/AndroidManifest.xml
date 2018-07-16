@@ -64,6 +64,7 @@
             android:screenOrientation="portrait"/>
         <service android:name=".service.MusicService"/>
         <activity android:name=".personal_menu_Activity"/>
+        <activity android:name="concernList_Activity"/>
         <!--TODO 集成：1.2、添加推送所需要的服务和广播-->
         <service
             android:name="cn.bmob.push.lib.service.PushService"

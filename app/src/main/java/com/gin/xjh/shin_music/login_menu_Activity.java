@@ -38,9 +38,9 @@ import cn.bmob.v3.listener.FindListener;
 
 public class login_menu_Activity extends BaseActivity implements View.OnClickListener {
 
-    private ImageView go_back,User_img,User_Sex;
-    private TextView User_Name,User_QQ,User_Sign;
-    private LinearLayout edit_user, about, question, updata_password;
+    private ImageView go_back, User_img, User_Sex;
+    private TextView User_Name, User_QQ, User_Sign;
+    private LinearLayout edit_user, about, question, updata_password, toConcernList;
     private Button logout;
     private Switch fourg;
 
@@ -69,6 +69,7 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         logout = findViewById(R.id.logout);
         updata_password = findViewById(R.id.updata_password);
         fourg = findViewById(R.id.fourg);
+        toConcernList = findViewById(R.id.toConcernList);
     }
 
     private void initEvent() {
@@ -81,6 +82,7 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         question.setOnClickListener(this);
         logout.setOnClickListener(this);
         updata_password.setOnClickListener(this);
+        toConcernList.setOnClickListener(this);
         fourg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -222,6 +224,14 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
                     Toast.makeText(this, "请登录后再进行该项操作", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.toConcernList:
+                if (User_state.getState()) {
+                    Intent intent = new Intent(this, concernList_Activity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "请登录后再进行该项操作", Toast.LENGTH_SHORT).show();
+                }
+                break;
             case R.id.about:
                 AlertDialog.Builder builder3 = new AlertDialog.Builder(login_menu_Activity.this);
                 LayoutInflater inflater3 = LayoutInflater.from(login_menu_Activity.this);
@@ -287,6 +297,7 @@ public class login_menu_Activity extends BaseActivity implements View.OnClickLis
         editor.commit();
         updateBmobLikeEvent();
         updateBmobConcernEvent();
+
         logout.setVisibility(View.VISIBLE);
     }
 
