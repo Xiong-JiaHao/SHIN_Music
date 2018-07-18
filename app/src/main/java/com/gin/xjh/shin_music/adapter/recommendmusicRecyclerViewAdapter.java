@@ -50,7 +50,7 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
     //绑定视图
     @Override
     public void onBindViewHolder(recommendmusicRecyclerViewAdapter.MusicViewHolder holder, int position) {
-        holder.load(list.get(position), mContext, position);
+        holder.init(list.get(position), mContext, position);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class recommendmusicRecyclerViewAdapter extends RecyclerView.Adapter<reco
             sz = itemView.findViewById(R.id.music_sz);
         }
 
-        public void load(Song song, final Context context, final int position) {
+        public void init(Song song, final Context context, final int position) {
             SongName.setText(song.getSongName());
             SingerName.setText(song.toString());
             Picasso.get().load(song.getAlbumUrl())

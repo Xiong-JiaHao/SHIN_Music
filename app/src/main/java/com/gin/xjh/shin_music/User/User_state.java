@@ -124,7 +124,7 @@ public class User_state {
             int index = 0;
             for (Song likesong : likeSongList) {
                 if (likesong.equals(song)) {
-                    likeSong = new LikeSong(User_state.getLoginUser().getUserId(), likesong);
+                    likeSong = new LikeSong();
                     likeSong.setObjectId(likesong.getObjectId());
                     break;
                 }
@@ -204,7 +204,7 @@ public class User_state {
             Follow concernUser = null;
             for (User user1 : mConcernList) {
                 if (user1.equals(user)) {
-                    concernUser = new Follow(User_state.getLoginUser().getUserId(), user);
+                    concernUser = new Follow();
                     concernUser.setObjectId(user1.getObjectId());
                     break;
                 }
@@ -221,6 +221,24 @@ public class User_state {
                     if (e == null) {
                         imageView.setImageResource(R.drawable.concern_gray);
                         mConcernList.remove(finalIndex);
+                        ListDataSaveUtil.setUserList("concernUser", mConcernList);
+                    } else {
+                        Toast.makeText(context, "删除失败，请重试", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    public static void removeConcern(final Context context, final int index) {
+        synchronized (User_state.class) {
+            Follow concernUser = new Follow();
+            concernUser.setObjectId(mConcernList.get(index).getObjectId());
+            concernUser.delete(new UpdateListener() {
+                @Override
+                public void done(BmobException e) {
+                    if (e == null) {
+                        mConcernList.remove(index);
                         ListDataSaveUtil.setUserList("concernUser", mConcernList);
                     } else {
                         Toast.makeText(context, "删除失败，请重试", Toast.LENGTH_SHORT).show();

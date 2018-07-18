@@ -45,7 +45,7 @@ public class commentRecyclerViewAdapter extends RecyclerView.Adapter<commentRecy
     //绑定视图
     @Override
     public void onBindViewHolder(commentRecyclerViewAdapter.commentViewHolder holder, int position) {
-        holder.load(list.get(position), context);
+        holder.init(list.get(position), context);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class commentRecyclerViewAdapter extends RecyclerView.Adapter<commentRecy
             itemTimes = itemView.findViewById(R.id.comment_time);
         }
 
-        public void load(final Comment comment, final Context context) {
+        public void init(final Comment comment, final Context context) {
             try {
                 final AlertDialog[] dia = new AlertDialog[1];
                 itemName.setText(comment.getUserName());

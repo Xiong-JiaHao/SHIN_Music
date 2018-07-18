@@ -1,17 +1,36 @@
 package com.gin.xjh.shin_music;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class concernList_Activity extends BaseActivity implements View.OnClickListener {
+import com.gin.xjh.shin_music.User.User_state;
+import com.gin.xjh.shin_music.adapter.ConcernRecyclerViewAdapter;
+import com.gin.xjh.shin_music.bean.Follow;
+import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.util.ListDataSaveUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+
+public class concernList_Activity extends BaseActivity implements View.OnClickListener, ConcernRecyclerViewAdapter.IonSlidingViewClickListener {
 
     private ImageView go_back;
     private RecyclerView concern_rv;
     private TextView hint;
+    private List<User> mDate = new ArrayList<>();
+    private ConcernRecyclerViewAdapter mConcernRecyclerViewAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,6 +48,15 @@ public class concernList_Activity extends BaseActivity implements View.OnClickLi
 
     private void initEvent() {
         go_back.setOnClickListener(this);
+        List<User> users = User_state.getConcernList();
+        if (users == null || users.size() == 0) {
+            updateBmob();
+        } else {
+            for (int i = 0; i < users.size(); i++) {
+                mDate.add(users.get(i));
+            }
+            updateUI();
+        }
     }
 
     @Override
@@ -38,5 +66,60 @@ public class concernList_Activity extends BaseActivity implements View.OnClickLi
                 finish();
                 break;
         }
+    }
+
+    private void updateBmob() {
+        BmobQuery<Follow> query = new BmobQuery<>();
+        query.addWhereEqualTo("UserId", User_state.getLoginUser().getUserId());//按当前登录的ID进行查找
+        query.include("FollowUser");
+        query.findObjects(new FindListener<Follow>() {
+            @Override
+            public void done(List<Follow> list, BmobException e) {
+                if (list != null && list.size() != 0) {
+                    User user;
+                    Follow concernUser;
+                    List<User> concernList = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++) {
+                        concernUser = list.get(i);
+                        user = concernUser.getFollowUser();
+                        user.setObjectId(concernUser.getObjectId());
+                        concernList.add(user);
+                    }
+                    User_state.setConcernList(concernList);
+                    ListDataSaveUtil.setUserList("concernUser", concernList);
+                    for (int i = 0; i < concernList.size(); i++) {
+                        mDate.add(concernList.get(i));
+                    }
+                    updateUI();
+                } else {
+                    User_state.setConcernList(null);
+                    ListDataSaveUtil.setUserList("concernUser", null);
+                    hint.setText("当前未关注其他人");
+                }
+            }
+        });
+    }
+
+    private void updateUI() {
+        concern_rv.setLayoutManager(new LinearLayoutManager(this));
+        mConcernRecyclerViewAdapter = new ConcernRecyclerViewAdapter(this, mDate);
+        concern_rv.setItemAnimator(new DefaultItemAnimator());//默认动画
+        concern_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        concern_rv.setAdapter(mConcernRecyclerViewAdapter);
+        hint.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Intent intent = new Intent(this, personal_menu_Activity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("user", User_state.getConcernList().get(position));
+        intent.putExtra("user", bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDeleteBtnCilck(View view, int position) {
+        mConcernRecyclerViewAdapter.removeData(position);
     }
 }

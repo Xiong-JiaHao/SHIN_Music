@@ -51,7 +51,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
     //绑定视图
     @Override
     public void onBindViewHolder(musicRecyclerViewAdapter.MusicViewHolder holder, int position) {
-        holder.load(list.get(position), context, position);
+        holder.init(list.get(position), context, position);
     }
 
     @Override
@@ -174,7 +174,7 @@ public class musicRecyclerViewAdapter extends RecyclerView.Adapter<musicRecycler
             sz = itemView.findViewById(R.id.music_sz);
         }
 
-        public void load(final Song song, final Context context, final int position) {
+        public void init(final Song song, final Context context, final int position) {
             SongName.setText(song.getSongName());
             SingerName.setText(song.toString());
             itemView.setOnClickListener(new View.OnClickListener() {

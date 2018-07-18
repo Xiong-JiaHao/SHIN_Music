@@ -1,0 +1,95 @@
+<com.gin.xjh.shin_music.view.SlidingButtonView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginBottom="1dp"
+    android:background="@color/FindColor">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/ConcernUser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp">
+
+            <com.gin.xjh.shin_music.view.My_ImageView
+                android:id="@+id/ConcernUser_img"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/everyone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_toRightOf="@id/ConcernUser_img"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/ConcernUser_Name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lines="1"
+                        android:text="正在查询"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/ConcernUser_sex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/man" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/ConcernUser_QQ"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:lines="1"
+                    android:text="正在查询"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/ConcernUser_sign"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="正在查询"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/removeConcern"
+            android:layout_width="160dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/ConcernUser"
+            android:background="@color/RED"
+            android:gravity="center"
+            android:text="取消关注"
+            android:textColor="#DDFFFFFF"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+</com.gin.xjh.shin_music.view.SlidingButtonView>

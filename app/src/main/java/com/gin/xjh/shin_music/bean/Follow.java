@@ -7,6 +7,10 @@ public class Follow extends BmobObject {
     private String UserId;
     private User FollowUser;
 
+    public Follow() {
+
+    }
+
     public Follow(String UserId, User FollowUser) {
         this.UserId = UserId;
         this.FollowUser = FollowUser;
