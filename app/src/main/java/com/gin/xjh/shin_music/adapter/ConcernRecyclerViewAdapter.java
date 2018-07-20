@@ -3,18 +3,17 @@ package com.gin.xjh.shin_music.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.User.User_state;
 import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.util.DensityUtil;
 import com.gin.xjh.shin_music.view.SlidingButtonView;
 
 import java.util.List;
@@ -94,7 +93,6 @@ public class ConcernRecyclerViewAdapter extends RecyclerView.Adapter<ConcernRecy
      * 判断是否有菜单打开
      */
     public Boolean menuIsOpen() {
-        Log.d("jjjjj", mMenu == null ? "yes" : "no");
         if (mMenu != null) {
             return true;
         }
@@ -110,7 +108,7 @@ public class ConcernRecyclerViewAdapter extends RecyclerView.Adapter<ConcernRecy
     class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView removeConcern, mConcern_name, mConcern_QQ, mConcern_sign;
         public ImageView mConcern_sex;
-        public RelativeLayout mConcernUser;
+        public ViewGroup mConcernUser;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -142,11 +140,12 @@ public class ConcernRecyclerViewAdapter extends RecyclerView.Adapter<ConcernRecy
                     break;
             }
 
-            //设置内容布局的宽为屏幕宽度
+
+            //设置内容布局的宽为屏幕宽度减去margin的值，也就是显示控件的宽度
             WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
             DisplayMetrics outMetrics = new DisplayMetrics();
             wm.getDefaultDisplay().getMetrics(outMetrics);
-            mConcernUser.getLayoutParams().width = outMetrics.widthPixels;
+            mConcernUser.getLayoutParams().width = outMetrics.widthPixels - DensityUtil.dp2px(mContext, 49);
 
 
             mConcernUser.setOnClickListener(new View.OnClickListener() {

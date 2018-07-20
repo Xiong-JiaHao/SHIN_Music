@@ -70,7 +70,7 @@
                     <ImageView
                         android:id="@+id/User_sex"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
                         android:src="@drawable/man" />
@@ -93,8 +93,8 @@
                     android:layout_margin="2dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:textStyle="bold"
-                    android:text="" />
+                    android:text=""
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

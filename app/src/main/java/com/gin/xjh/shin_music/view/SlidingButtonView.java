@@ -2,7 +2,6 @@ package com.gin.xjh.shin_music.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -12,7 +11,7 @@ import com.gin.xjh.shin_music.R;
 
 public class SlidingButtonView extends HorizontalScrollView {
 
-    private TextView mTextView_Delete;
+    private TextView removeConcern;
 
     private int mScrollWidth;
 
@@ -41,7 +40,7 @@ public class SlidingButtonView extends HorizontalScrollView {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         if(!once){
-            mTextView_Delete = findViewById(R.id.removeConcern);
+            removeConcern = findViewById(R.id.removeConcern);
             once = true;
         }
 
@@ -53,8 +52,7 @@ public class SlidingButtonView extends HorizontalScrollView {
         if(changed){
             this.scrollTo(0,0);
             //获取水平滚动条可以滑动的范围，即右侧按钮的宽度
-            mScrollWidth = mTextView_Delete.getWidth();
-            Log.d("jjjjj", "mScrollWidth:" + mScrollWidth);
+            mScrollWidth = removeConcern.getWidth();
         }
 
     }
@@ -81,7 +79,6 @@ public class SlidingButtonView extends HorizontalScrollView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        mTextView_Delete.setTranslationX(l - mScrollWidth);
     }
 
     /**
@@ -90,12 +87,10 @@ public class SlidingButtonView extends HorizontalScrollView {
     public void changeScrollx(){
         if(getScrollX() >= (mScrollWidth/2)){
             this.smoothScrollTo(mScrollWidth, 0);
-            mTextView_Delete.setTranslationX(0);
             isOpen = true;
             mIonSlidingButtonListener.onMenuIsOpen(this);
         }else{
             this.smoothScrollTo(0, 0);
-            mTextView_Delete.setTranslationX(mScrollWidth);
             isOpen = false;
         }
     }
@@ -108,7 +103,6 @@ public class SlidingButtonView extends HorizontalScrollView {
             return;
         }
         this.smoothScrollTo(0, 0);
-        mTextView_Delete.setTranslationX(mScrollWidth);
         isOpen = false;
     }
 
