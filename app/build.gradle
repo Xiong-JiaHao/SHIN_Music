@@ -26,26 +26,20 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
-
     //Bmob的数据服务SDK
-    implementation('cn.bmob.android:bmob-sdk:3.6.3')
+    implementation 'cn.bmob.android:bmob-sdk:3.6.3'
     //Bmob的消息推送SDK
-    implementation('cn.bmob.android:bmob-push:1.0.2')
-
+    implementation 'cn.bmob.android:bmob-push:1.0.2'
     //动态申请权限
     annotationProcessor 'com.zhy:mpermission-compiler:1.0.0'
     implementation 'com.zhy:mpermission-api:1.0.0'
-
     //图片加载Picasso库
-    implementation ('com.squareup.picasso:picasso:2.71828')
-            {
-                exclude group: 'com.squareup.okio'
-            }
-
+    implementation('com.squareup.picasso:picasso:2.71828') {
+        exclude group: 'com.squareup.okio'
+    }
     //网络请求Retrofit库
-    implementation ('com.squareup.retrofit2:retrofit:2.4.0')
-            {
-                exclude group: 'com.squareup.okio'
-            }
-
+    implementation('com.squareup.retrofit2:retrofit:2.4.0') {
+        exclude group: 'com.squareup.okio'
+    }
+    implementation files('libs/mp3agic-0.9.2-SNAPSHOT.jar')
 }

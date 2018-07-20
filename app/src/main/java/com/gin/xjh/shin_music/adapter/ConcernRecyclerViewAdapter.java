@@ -54,8 +54,10 @@ public class ConcernRecyclerViewAdapter extends RecyclerView.Adapter<ConcernRecy
         return holder;
     }
 
-    public void removeData(int position) {
-        User_state.removeConcern(mContext, position);
+    public void removeData(int position, boolean isFlag) {
+        if (isFlag) {
+            User_state.removeConcern(mContext, position);
+        }
         mDatas.remove(position);
         notifyItemRemoved(position);
 

@@ -95,6 +95,9 @@ public class personal_menu_Activity extends BaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.go_back:
+                Intent intent = new Intent();
+                intent.putExtra("concern", isConcern);
+                setResult(97, intent);
                 finish();
                 break;
             case R.id.concern:
@@ -188,5 +191,13 @@ public class personal_menu_Activity extends BaseActivity implements View.OnClick
         } else {
             list_hint.setText("无喜欢歌曲，请添加后查看");
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent intent = new Intent();
+        intent.putExtra("concern", isConcern);
+        setResult(97, intent);
     }
 }

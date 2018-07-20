@@ -31,6 +31,7 @@ public class concernList_Activity extends BaseActivity implements View.OnClickLi
     private TextView hint;
     private List<User> mDate = new ArrayList<>();
     private ConcernRecyclerViewAdapter mConcernRecyclerViewAdapter;
+    private volatile int index;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,11 +116,31 @@ public class concernList_Activity extends BaseActivity implements View.OnClickLi
         Bundle bundle = new Bundle();
         bundle.putSerializable("user", User_state.getConcernList().get(position));
         intent.putExtra("user", bundle);
-        startActivity(intent);
+        index = position;
+        startActivityForResult(intent, 97);
     }
 
     @Override
     public void onDeleteBtnCilck(View view, int position) {
-        mConcernRecyclerViewAdapter.removeData(position);
+        mConcernRecyclerViewAdapter.removeData(position, true);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 97) {
+            if (data == null) {
+                if (User_state.getConcernList() == null) {
+                    mConcernRecyclerViewAdapter.removeData(index, false);
+                } else if (!User_state.isConcern(mDate.get(index))) {
+                    mConcernRecyclerViewAdapter.removeData(index, false);
+                }
+            } else {
+                boolean isConcern = data.getBooleanExtra("concern", true);
+                if (!isConcern) {
+                    mConcernRecyclerViewAdapter.removeData(index, false);
+                }
+            }
+        }
     }
 }
