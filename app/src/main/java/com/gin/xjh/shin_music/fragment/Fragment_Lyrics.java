@@ -23,6 +23,12 @@ import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.view.LyricView;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
+
+import java.io.IOException;
 
 /**
  * Created by Gin on 2018/4/23.
@@ -89,10 +95,40 @@ public class Fragment_Lyrics extends Fragment implements View.OnClickListener {
     private void initEvent() {
         Song song = MusicUtil.getNowSong();
         if (song != null) {
-            if (song.isOnline())
-                new getNetMusicLrc().getJson(lyricView, hint);
-            else {
-                hint.setText("本地歌曲没有歌词");
+            String lyric = song.getLyric();
+            if (lyric != null) {
+                if (lyric == "") {
+                    hint.setText("未找到歌词");
+                } else {
+                    lyricView.getLyric(lyric);
+                    hint.setVisibility(View.GONE);
+                }
+            } else {
+                if (song.isOnline())
+                    new getNetMusicLrc().getJson(lyricView, hint);
+                else {
+                    Mp3File mp3file;
+                    try {
+                        mp3file = new Mp3File(song.getUrl());
+                        if (mp3file.hasId3v2Tag()) {
+                            ID3v2 id3v2Tag = mp3file.getId3v2Tag();
+                            lyric = id3v2Tag.getLyrics();
+                            if (lyric == null) {
+                                song.setLyric("");
+                                hint.setText("未找到歌词");
+                            } else {
+                                song.setLyric(lyric);
+                                lyricView.getLyric(lyric);
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedTagException e) {
+                        e.printStackTrace();
+                    } catch (InvalidDataException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
@@ -135,7 +171,33 @@ public class Fragment_Lyrics extends Fragment implements View.OnClickListener {
                     break;
                 case LYRIC_ACTION_CHANGE:
                     hint.setVisibility(View.VISIBLE);
-                    new getNetMusicLrc().getJson(lyricView, hint);
+                    Song song = MusicUtil.getNowSong();
+                    String lyric = song.getLyric();
+                    if (lyric != null) {
+                        lyricView.getLyric(lyric);
+                        hint.setVisibility(View.GONE);
+                    } else {
+                        if (song.isOnline())
+                            new getNetMusicLrc().getJson(lyricView, hint);
+                        else {
+                            Mp3File mp3file;
+                            try {
+                                mp3file = new Mp3File(song.getUrl());
+                                if (mp3file.hasId3v2Tag()) {
+                                    ID3v2 id3v2Tag = mp3file.getId3v2Tag();
+                                    lyric = id3v2Tag.getLyrics();
+                                    song.setLyric(lyric);
+                                    lyricView.getLyric(lyric);
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (UnsupportedTagException e) {
+                                e.printStackTrace();
+                            } catch (InvalidDataException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                     break;
             }
         }

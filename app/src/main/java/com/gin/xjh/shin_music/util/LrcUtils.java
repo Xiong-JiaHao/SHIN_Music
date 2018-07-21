@@ -17,7 +17,7 @@ public class LrcUtils {
      * 读取文件
      */
     public static List<Lyric> readLRC(String lyrics) {
-        lyricList = new Vector<Lyric>();
+        lyricList = new Vector<>();
         String strTemp = "";
         for (int i = 0; i < lyrics.length(); i++) {
             char c = lyrics.charAt(i);

@@ -6,6 +6,10 @@ import android.media.MediaPlayer;
 import android.provider.MediaStore;
 
 import com.gin.xjh.shin_music.bean.Song;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
 
 import java.io.File;
 import java.io.IOException;
@@ -192,20 +196,30 @@ public class MusicUtil {
         play();
     }
 
-    public static List<Song> getLocalMusic(Context context){
+    public static List<Song> getLocalMusic(Context context) throws InvalidDataException, IOException, UnsupportedTagException {
+        Mp3File mp3file;
+        ID3v2 id3v2Tag;
+        Song song;
         List <Song> mSongList = new ArrayList<>();
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Audio.AudioColumns.IS_MUSIC);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
-                    String SongName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                    String SingerName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                    String AlbumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
                     String Url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                    Song song = new Song(SongName, SingerName, AlbumName, Url);
-                    song.setSongId(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
+                    mp3file = new Mp3File(Url);
+                    if (mp3file.hasId3v2Tag()) {
+                        id3v2Tag = mp3file.getId3v2Tag();
+                        String SongName = id3v2Tag.getTitle();
+                        String SingerName = id3v2Tag.getArtist();
+                        String AlbumName = id3v2Tag.getAlbum();
+                        song = new Song(SongName, SingerName, AlbumName, Url);
+                    } else {
+                        String SongName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                        String SingerName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                        String AlbumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                        song = new Song(SongName, SingerName, AlbumName, Url);
+                    }
                     song.setSongTime(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-                    song.setAlbumId(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
                     if (cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)) >= 800000 && new File(song.getUrl()).exists()) {
                         mSongList.add(song);
                     }

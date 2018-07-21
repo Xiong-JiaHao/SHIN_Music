@@ -22,7 +22,11 @@ import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.util.BitmapUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.view.CD_ImageView;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 /**
  * Created by Gin on 2018/4/23.
@@ -140,11 +144,19 @@ public class Fragment_Music extends Fragment {
                 mAlbum.setImageResource(R.drawable.album);
             }
         } else {
-            Bitmap bitmap = BitmapUtil.getAlbumArt(getContext(), song);
-            if (bitmap == null) {
-                mAlbum.setImageResource(R.drawable.album);
-            } else {
-                mAlbum.setImageBitmap(bitmap);
+            try {
+                Bitmap bitmap = BitmapUtil.getAlbumArt(song);
+                if (bitmap == null) {
+                    mAlbum.setImageResource(R.drawable.album);
+                } else {
+                    mAlbum.setImageBitmap(bitmap);
+                }
+            } catch (InvalidDataException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (UnsupportedTagException e) {
+                e.printStackTrace();
             }
         }
 

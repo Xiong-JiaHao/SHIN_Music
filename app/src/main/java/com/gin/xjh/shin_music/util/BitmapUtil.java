@@ -1,16 +1,15 @@
 package com.gin.xjh.shin_music.util;
 
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 
 import com.gin.xjh.shin_music.bean.Song;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.IOException;
 
 public class BitmapUtil {
     /**
@@ -19,21 +18,15 @@ public class BitmapUtil {
      * @param song 歌曲
      * @return
      */
-    public static Bitmap getAlbumArt(Context context, Song song) {
-        Uri artworkUri = Uri.parse("content://media/external/audio/albumart");
-        ContentResolver resolver = context.getContentResolver();
-        Uri uri = ContentUris.withAppendedId(artworkUri, song.getAlbumId());
-        InputStream is;
-        try {
-            is = resolver.openInputStream(uri);
-        } catch (FileNotFoundException ignored) {
-            return null;
+    public static Bitmap getAlbumArt(Song song) throws InvalidDataException, IOException, UnsupportedTagException {
+        Mp3File mp3file = new Mp3File(song.getUrl());
+        if (mp3file.hasId3v2Tag()) {
+            ID3v2 id3v2Tag = mp3file.getId3v2Tag();
+            byte[] imageData = id3v2Tag.getAlbumImage();
+            if (imageData != null) {
+                return BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+            }
         }
-        if (is == null) {
-            return null;
-        }
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
-        return BitmapFactory.decodeStream(is, null, options);
+        return null;
     }
 }

@@ -46,6 +46,7 @@ public class getNetMusicLrc {
                         String JSONString = AllObject.getString("lrc");
                         JSONObject jsonObject = new JSONObject(JSONString);
                         String lyric = jsonObject.getString("lyric");
+                        MusicUtil.getNowSong().setLyric(lyric);
                         lyricView.getLyric(lyric);
                         hint.setVisibility(View.GONE);
                     } catch (JSONException e) {

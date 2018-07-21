@@ -92,18 +92,20 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
     }
 
     public void getLyric(String lyrics) {
-        //Log.d("xjhlyric", lyrics);
-        lyricList = LrcUtils.readLRC(lyrics);
-        currentLine = -1;
-        handler.sendEmptyMessage(LYRIC);
+        if (lyrics != null) {
+            lyricList = LrcUtils.readLRC(lyrics);
+            currentLine = -1;
+            handler.sendEmptyMessage(LYRIC);
+        } else {
+            lyricList = null;
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         if (lyricList != null && lyricList.size() > 0) {
-            Lyric lyric = null;
+            Lyric lyric;
             //绘制播放过的歌词
-
             //特判起点不为0的时候
             if (currentLine == -1) {
                 currentLine = 0;

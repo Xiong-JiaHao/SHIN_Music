@@ -20,6 +20,7 @@ public class Song extends BmobObject implements Serializable {
     private int SongTime = 0;//歌曲时间
     private Long AlbumTime = null;
     private Long AlbumId = null;
+    private String Lyric = null;
 
     public Song() {
 
@@ -108,6 +109,14 @@ public class Song extends BmobObject implements Serializable {
 
     public Long getAlbumId() {
         return AlbumId;
+    }
+
+    public String getLyric() {
+        return Lyric;
+    }
+
+    public void setLyric(String lyric) {
+        Lyric = lyric;
     }
 
     public void setAlbumId(Long albumId) {
