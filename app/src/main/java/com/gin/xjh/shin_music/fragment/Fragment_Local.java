@@ -76,13 +76,17 @@ public class Fragment_Local extends Fragment {
     }
 
     private void initEvent() {
-        mMusicListViewAdapter = new musicRecyclerViewAdapter(getContext(), mSongList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());//默认动画
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        mRecyclerView.setAdapter(mMusicListViewAdapter);
+        if (mSongList != null) {
+            mMusicListViewAdapter = new musicRecyclerViewAdapter(getContext(), mSongList);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mRecyclerView.setItemAnimator(new DefaultItemAnimator());//默认动画
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+            mRecyclerView.setAdapter(mMusicListViewAdapter);
 
-        mMusic_hint.setVisibility(View.GONE);
+            mMusic_hint.setVisibility(View.GONE);
+        } else {
+            mMusic_hint.setText("当前未扫描到歌曲");
+        }
 
         mCheck.setOnClickListener(new View.OnClickListener() {
             @Override
