@@ -2,6 +2,9 @@ package com.gin.xjh.shin_music.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -45,6 +48,19 @@ public class Fragment_Local extends Fragment {
     private ImageView mCheck;
 
     private TextView mMusic_hint;
+    private Handler mMainHandler;
+
+    private void obtainMainHandler() {
+        if (mMainHandler != null) {
+            return;
+        }
+        mMainHandler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                initEvent();
+            }
+        };
+    }
 
     @Nullable
     @Override
@@ -52,7 +68,6 @@ public class Fragment_Local extends Fragment {
         View view = inflater.inflate(R.layout.fragment_local_music, null);
         initView(view);
         initData();
-        initEvent();
         return view;
     }
 
@@ -61,18 +76,28 @@ public class Fragment_Local extends Fragment {
         mFind = view.findViewById(R.id.find_local_name);
         mCheck = view.findViewById(R.id.find_Localmusic);
         mMusic_hint = view.findViewById(R.id.music_hint);
+
+        obtainMainHandler();
     }
 
     private void initData() {
-        try {
-            mSongList = MusicUtil.getLocalMusic(getContext());
-        } catch (InvalidDataException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (UnsupportedTagException e) {
-            e.printStackTrace();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mSongList = MusicUtil.getLocalMusic(getContext());
+                    Message msg = new Message();
+                    mMainHandler.sendMessage(msg);
+                } catch (InvalidDataException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedTagException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
     }
 
     private void initEvent() {
