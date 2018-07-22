@@ -16,11 +16,7 @@ import com.gin.xjh.shin_music.music_play_Activity;
 import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.BitmapUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.UnsupportedTagException;
 import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
 
 public class MusicNotification extends Notification {
 
@@ -141,19 +137,11 @@ public class MusicNotification extends Notification {
                     remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.album);
                 }
             } else {
-                try {
-                    Bitmap bitmap = BitmapUtil.getAlbumArt(song);
-                    if (bitmap == null) {
-                        remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.album);
-                    } else {
-                        remoteViews.setImageViewBitmap(R.id.notigication_album, bitmap);
-                    }
-                } catch (InvalidDataException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedTagException e) {
-                    e.printStackTrace();
+                Bitmap bitmap = BitmapUtil.getAlbumArt(song);
+                if (bitmap == null) {
+                    remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.album);
+                } else {
+                    remoteViews.setImageViewBitmap(R.id.notigication_album, bitmap);
                 }
             }
             if (MusicUtil.isPlayMusic()) {

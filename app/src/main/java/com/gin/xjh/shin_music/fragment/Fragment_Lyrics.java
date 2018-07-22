@@ -23,11 +23,17 @@ import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.view.LyricView;
-import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
 
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
+
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -107,25 +113,26 @@ public class Fragment_Lyrics extends Fragment implements View.OnClickListener {
                 if (song.isOnline())
                     new getNetMusicLrc().getJson(lyricView, hint);
                 else {
-                    Mp3File mp3file;
                     try {
-                        mp3file = new Mp3File(song.getUrl());
-                        if (mp3file.hasId3v2Tag()) {
-                            ID3v2 id3v2Tag = mp3file.getId3v2Tag();
-                            lyric = id3v2Tag.getLyrics();
-                            if (lyric == null) {
-                                song.setLyric("");
-                                hint.setText("未找到歌词");
-                            } else {
-                                song.setLyric(lyric);
-                                lyricView.getLyric(lyric);
-                            }
+                        AudioFile audioFile = AudioFileIO.read(new File(song.getUrl()));
+                        Tag tag = audioFile.getTag();
+                        lyric = tag.getFirst(FieldKey.LYRICS);
+                        if (lyric == null) {
+                            song.setLyric("");
+                        } else {
+                            song.setLyric(lyric);
                         }
+                        lyricView.getLyric(lyric);
+                        hint.setVisibility(View.GONE);
+                    } catch (CannotReadException e) {
+                        e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
-                    } catch (UnsupportedTagException e) {
+                    } catch (TagException e) {
                         e.printStackTrace();
-                    } catch (InvalidDataException e) {
+                    } catch (ReadOnlyFileException e) {
+                        e.printStackTrace();
+                    } catch (InvalidAudioFrameException e) {
                         e.printStackTrace();
                     }
                 }
@@ -174,26 +181,36 @@ public class Fragment_Lyrics extends Fragment implements View.OnClickListener {
                     Song song = MusicUtil.getNowSong();
                     String lyric = song.getLyric();
                     if (lyric != null) {
-                        lyricView.getLyric(lyric);
-                        hint.setVisibility(View.GONE);
+                        if (lyric == "") {
+                            hint.setText("未找到歌词");
+                        } else {
+                            lyricView.getLyric(lyric);
+                            hint.setVisibility(View.GONE);
+                        }
                     } else {
                         if (song.isOnline())
                             new getNetMusicLrc().getJson(lyricView, hint);
                         else {
-                            Mp3File mp3file;
                             try {
-                                mp3file = new Mp3File(song.getUrl());
-                                if (mp3file.hasId3v2Tag()) {
-                                    ID3v2 id3v2Tag = mp3file.getId3v2Tag();
-                                    lyric = id3v2Tag.getLyrics();
+                                AudioFile audioFile = AudioFileIO.read(new File(song.getUrl()));
+                                Tag tag = audioFile.getTag();
+                                lyric = tag.getFirst(FieldKey.LYRICS);
+                                if (lyric == null) {
+                                    song.setLyric("");
+                                } else {
                                     song.setLyric(lyric);
-                                    lyricView.getLyric(lyric);
                                 }
+                                lyricView.getLyric(lyric);
+                                hint.setVisibility(View.GONE);
+                            } catch (CannotReadException e) {
+                                e.printStackTrace();
                             } catch (IOException e) {
                                 e.printStackTrace();
-                            } catch (UnsupportedTagException e) {
+                            } catch (TagException e) {
                                 e.printStackTrace();
-                            } catch (InvalidDataException e) {
+                            } catch (ReadOnlyFileException e) {
+                                e.printStackTrace();
+                            } catch (InvalidAudioFrameException e) {
                                 e.printStackTrace();
                             }
                         }

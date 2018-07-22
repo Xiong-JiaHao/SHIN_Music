@@ -6,10 +6,15 @@ import android.media.MediaPlayer;
 import android.provider.MediaStore;
 
 import com.gin.xjh.shin_music.bean.Song;
-import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
+
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
 
 import java.io.File;
 import java.io.IOException;
@@ -196,32 +201,37 @@ public class MusicUtil {
         play();
     }
 
-    public static List<Song> getLocalMusic(Context context) throws InvalidDataException, IOException, UnsupportedTagException {
-        Mp3File mp3file;
-        ID3v2 id3v2Tag;
+    public static List<Song> getLocalMusic(Context context) {
+        AudioFile audioFile;
+        Tag tag;
         Song song;
         List <Song> mSongList = new ArrayList<>();
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Audio.AudioColumns.IS_MUSIC);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
-                    String Url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                    mp3file = new Mp3File(Url);
-                    if (mp3file.hasId3v2Tag()) {
-                        id3v2Tag = mp3file.getId3v2Tag();
-                        String SongName = id3v2Tag.getTitle();
-                        String SingerName = id3v2Tag.getArtist();
-                        String AlbumName = id3v2Tag.getAlbum();
+                    try {
+                        String Url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                        audioFile = AudioFileIO.read(new File(Url));
+                        tag = audioFile.getTag();
+                        String SongName = tag.getFirst(FieldKey.TITLE);
+                        String SingerName = tag.getFirst(FieldKey.ARTIST);
+                        String AlbumName = tag.getFirst(FieldKey.ALBUM);
                         song = new Song(SongName, SingerName, AlbumName, Url);
-                    } else {
-                        String SongName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                        String SingerName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                        String AlbumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                        song = new Song(SongName, SingerName, AlbumName, Url);
-                    }
-                    song.setSongTime(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-                    if (cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)) >= 800000 && new File(song.getUrl()).exists()) {
-                        mSongList.add(song);
+                        song.setSongTime(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+                        if (cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)) >= 800000 && new File(song.getUrl()).exists()) {
+                            mSongList.add(song);
+                        }
+                    } catch (CannotReadException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (TagException e) {
+                        e.printStackTrace();
+                    } catch (ReadOnlyFileException e) {
+                        e.printStackTrace();
+                    } catch (InvalidAudioFrameException e) {
+                        e.printStackTrace();
                     }
                 } while (cursor.moveToNext());
             }

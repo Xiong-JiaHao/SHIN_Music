@@ -24,11 +24,8 @@ import com.gin.xjh.shin_music.adapter.musicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.music_details_Activity;
 import com.gin.xjh.shin_music.util.MusicUtil;
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.UnsupportedTagException;
 import com.zhy.m.permission.MPermissions;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,17 +81,9 @@ public class Fragment_Local extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    mSongList = MusicUtil.getLocalMusic(getContext());
-                    Message msg = new Message();
-                    mMainHandler.sendMessage(msg);
-                } catch (InvalidDataException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedTagException e) {
-                    e.printStackTrace();
-                }
+                mSongList = MusicUtil.getLocalMusic(getContext());
+                Message msg = new Message();
+                mMainHandler.sendMessage(msg);
             }
         }).start();
 
