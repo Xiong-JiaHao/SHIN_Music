@@ -23,20 +23,25 @@ public class ListDataSaveUtil {
      * @param listtag
      * @param datalist
      */
-    public static void setSongList(String listtag, List<Song> datalist) {
-        if (null == datalist || datalist.size() <= 0) {
-            editor = preferences.edit();
-            editor.putString(listtag, null);
-            editor.commit();
-            return;
-        }
+    public static void setSongList(final String listtag, final List<Song> datalist) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (null == datalist || datalist.size() <= 0) {
+                    editor = preferences.edit();
+                    editor.putString(listtag, null);
+                    editor.commit();
+                    return;
+                }
 
-        Gson gson = new Gson();
-        //转换成json数据，再保存
-        editor = preferences.edit();
-        String Json = gson.toJson(datalist);
-        editor.putString(listtag, Json);
-        editor.commit();
+                Gson gson = new Gson();
+                //转换成json数据，再保存
+                editor = preferences.edit();
+                String Json = gson.toJson(datalist);
+                editor.putString(listtag, Json);
+                editor.commit();
+            }
+        }).start();
     }
 
     /**
@@ -78,7 +83,7 @@ public class ListDataSaveUtil {
      * @param listtag
      * @param datalist
      */
-    public static void setUserList(String listtag, List<User> datalist) {
+    public static void setUserList(final String listtag, final List<User> datalist) {
         if (null == datalist || datalist.size() <= 0) {
             editor = preferences.edit();
             editor.putString(listtag, null);
@@ -86,12 +91,17 @@ public class ListDataSaveUtil {
             return;
         }
 
-        Gson gson = new Gson();
-        //转换成json数据，再保存
-        editor = preferences.edit();
-        String Json = gson.toJson(datalist);
-        editor.putString(listtag, Json);
-        editor.commit();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Gson gson = new Gson();
+                //转换成json数据，再保存
+                editor = preferences.edit();
+                String Json = gson.toJson(datalist);
+                editor.putString(listtag, Json);
+                editor.commit();
+            }
+        }).start();
     }
 
     /**

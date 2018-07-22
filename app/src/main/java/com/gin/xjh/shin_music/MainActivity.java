@@ -71,7 +71,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initBmob();
-        initalize();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                initalize();
+            }
+        }).start();
         initView();
         initEvent();
         Intent startIntent = new Intent(this, MusicService.class);

@@ -222,7 +222,8 @@ public class album_details_Activity extends BaseActivity implements View.OnClick
 
     private void updateBmobLikeEvent() {
         BmobQuery<LikeSong> query = new BmobQuery<>();
-        query.addWhereEqualTo("UserId", User_state.getLoginUser().getUserId());//按当前登录的ID进行查找
+        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        query.setMaxCacheAge(86400000);//缓存有1天的有效期        query.addWhereEqualTo("UserId", User_state.getLoginUser().getUserId());//按当前登录的ID进行查找
         query.findObjects(new FindListener<LikeSong>() {
             @Override
             public void done(List<LikeSong> list, BmobException e) {
