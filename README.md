@@ -18,7 +18,7 @@
 
 ## 播放界面
 ![image](http://chuantu.biz/t6/347/1532350182x-1566688712.jpg)    ![image](http://chuantu.biz/t6/347/1532350214x-1566688712.jpg)    
-![image](http://chuantu.biz/t6/347/1532350237x-1566688712.jpg)    ![image](http://chuantu.biz/t6/347/1532350252x-1566688712.jpg)
+![image](http://chuantu.biz/t6/347/1532350237x-1566688712.jpg)    ![image](http://chuantu.biz/t6/347/1532351075x-1566680676.jpg)
 
 可以切换旋转CD界面，歌词界面以及通知栏界面
 
@@ -38,6 +38,6 @@
 喜欢可以关注，关注后可以从菜单中直接到达对方的歌单（公开的情况）
 
 ## 关于我
-![image](http://chuantu.biz/t6/347/1532350559x-1566688556.jpg)     ![image](http://chuantu.biz/t6/347/1532350717x1822611251.jpg）
+![image](http://chuantu.biz/t6/347/1532351297x-1566680517.jpg)     ![image](http://chuantu.biz/t6/347/1532351254x-1566680316.jpg)
 
 关于程序的建议以及BUG可以与我联系，谢谢
