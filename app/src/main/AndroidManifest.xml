@@ -40,7 +40,7 @@
         android:hardwareAccelerated="false"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity"
+        <activity android:name=".activity.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -49,22 +49,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".music_play_Activity"
+        <activity android:name=".activity.MusicPlayActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-        <activity android:name=".login_menu_Activity"/>
-        <activity android:name=".album_details_Activity"/>
-        <activity android:name=".add_question"/>
-        <activity android:name=".register_Activity"/>
-        <activity android:name=".updata_Activity"/>
-        <activity android:name=".updata_password_Activity"/>
-        <activity android:name=".music_details_Activity"/>
-        <activity android:name=".All_comment"
+        <activity android:name=".activity.LoginMenuActivity"/>
+        <activity android:name=".activity.AlbumDetailsActivity"/>
+        <activity android:name=".activity.AddQuestionActivity"/>
+        <activity android:name=".activity.RegisterActivity"/>
+        <activity android:name=".activity.UpdataActivity"/>
+        <activity android:name=".activity.UpdataPasswordActivity"/>
+        <activity android:name=".activity.MusicDetailsActivity"/>
+        <activity android:name=".activity.AllCommentActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <service android:name=".service.MusicService"/>
-        <activity android:name=".personal_menu_Activity"/>
-        <activity android:name="concernList_Activity"/>
+        <activity android:name=".activity.PersonalMenuActivity"/>
+        <activity android:name=".activity.ConcernListActivity"/>
         <!--TODO 集成：1.2、添加推送所需要的服务和广播-->
         <service
             android:name="cn.bmob.push.lib.service.PushService"

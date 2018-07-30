@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/Ilike"
-    tools:context="com.gin.xjh.shin_music.MainActivity">
+    tools:context="com.gin.xjh.shin_music.activity.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/Top_bar"
@@ -22,14 +22,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:src="@drawable/shin_bg" />
+                android:src="@drawable/bg_shin" />
 
             <ImageView
                 android:id="@+id/Topbar_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:src="@drawable/main_icon" />
+                android:src="@drawable/btn_main" />
 
             <ImageView
                 android:id="@+id/Topbar_music"
@@ -39,7 +39,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/music_icon" />
+                android:src="@drawable/btn_music" />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
@@ -91,7 +91,7 @@
                 android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:src="@drawable/shin_white" />
+                android:src="@drawable/icon_shin_white" />
 
             <TextView
                 android:id="@+id/shin_text"
@@ -118,7 +118,7 @@
                 android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:src="@drawable/online_music_white" />
+                android:src="@drawable/icon_online_music_white" />
 
             <TextView
                 android:id="@+id/Online_music_text"
@@ -145,7 +145,7 @@
                 android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:src="@drawable/local_music_white" />
+                android:src="@drawable/icon_local_music_white" />
 
             <TextView
                 android:id="@+id/Local_music_text"

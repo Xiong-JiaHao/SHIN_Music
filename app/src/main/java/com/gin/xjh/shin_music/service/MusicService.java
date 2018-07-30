@@ -13,7 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
-import com.gin.xjh.shin_music.music_play_Activity;
+import com.gin.xjh.shin_music.activity.MusicPlayActivity;
 import com.gin.xjh.shin_music.notification.MusicNotification;
 import com.gin.xjh.shin_music.util.MusicUtil;
 
@@ -46,7 +46,7 @@ public class MusicService extends Service {
     private MusicBroadCast musicBroadCast = null;
     private MusicNotification musicNotifi = null;
 
-    private Intent changeIntent = new Intent(music_play_Activity.MUSIC_ACTION_CHANGE);
+    private Intent changeIntent = new Intent(MusicPlayActivity.MUSIC_ACTION_CHANGE);
 
     private void acquireWakeLock() {
         if (null == wakeLock) {

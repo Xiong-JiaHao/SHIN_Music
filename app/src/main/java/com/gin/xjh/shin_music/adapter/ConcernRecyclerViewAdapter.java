@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.User.User_state;
+import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.bean.User;
 import com.gin.xjh.shin_music.util.DensityUtil;
 import com.gin.xjh.shin_music.view.SlidingButtonView;
@@ -56,7 +56,7 @@ public class ConcernRecyclerViewAdapter extends RecyclerView.Adapter<ConcernRecy
 
     public void removeData(int position, boolean isFlag) {
         if (isFlag) {
-            User_state.removeConcern(mContext, position);
+            UserState.removeConcern(mContext, position);
         }
         mDatas.remove(position);
         notifyItemRemoved(position);
@@ -132,13 +132,13 @@ public class ConcernRecyclerViewAdapter extends RecyclerView.Adapter<ConcernRecy
             mConcern_sign.setText("个人简介：" + user.getPersonal_profile());
             switch (user.getUserSex()) {
                 case 0:
-                    mConcern_sex.setImageResource(R.drawable.man);
+                    mConcern_sex.setImageResource(R.drawable.sel_sex_man);
                     break;
                 case 1:
-                    mConcern_sex.setImageResource(R.drawable.woman);
+                    mConcern_sex.setImageResource(R.drawable.sel_sex_woman);
                     break;
                 case 2:
-                    mConcern_sex.setImageResource(R.drawable.alien);
+                    mConcern_sex.setImageResource(R.drawable.sel_sex_alien);
                     break;
             }
 

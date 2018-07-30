@@ -12,7 +12,7 @@ import android.widget.RemoteViews;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
-import com.gin.xjh.shin_music.music_play_Activity;
+import com.gin.xjh.shin_music.activity.MusicPlayActivity;
 import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.BitmapUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
@@ -44,7 +44,7 @@ public class MusicNotification extends Notification {
     private MusicNotification (Context context){
         this.context = context;
         // 初始化操作
-        remoteViews = new RemoteViews(context.getPackageName(), R.layout.customnotice);
+        remoteViews = new RemoteViews(context.getPackageName(), R.layout.customnotice_layout);
         builder = new Builder(context);
         play = new Intent();
         play.setAction(MusicService.MUSIC_NOTIFICATION_ACTION_PLAY);
@@ -81,7 +81,7 @@ public class MusicNotification extends Notification {
         remoteViews.setOnClickPendingIntent(R.id.notigication_pre, ppre);
 
         //4.设置点击事件（调转到播放界面）
-        Intent intent = new Intent(context, music_play_Activity.class);
+        Intent intent = new Intent(context, MusicPlayActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,0);
 
         builder.setContent(remoteViews)
@@ -121,7 +121,7 @@ public class MusicNotification extends Notification {
         if (song==null){
             remoteViews.setTextViewText(R.id.notigication_songName,"未知");
             remoteViews.setTextViewText(R.id.notigication_singer,"未知");
-            remoteViews.setImageViewResource(R.id.notigication_album,R.drawable.album);
+            remoteViews.setImageViewResource(R.id.notigication_album,R.drawable.def_album);
         }
         else {
             remoteViews.setTextViewText(R.id.notigication_songName, song.getSongName());
@@ -131,15 +131,15 @@ public class MusicNotification extends Notification {
                 if (song.getAlbumUrl() != null) {
                     Picasso.get()
                             .load(song.getAlbumUrl())
-                            .error(R.drawable.album)
+                            .error(R.drawable.def_album)
                             .into(remoteViews, R.id.notigication_album, NOTIFICATION_ID, musicNotifi);
                 } else {
-                    remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.album);
+                    remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.def_album);
                 }
             } else {
                 Bitmap bitmap = BitmapUtil.getAlbumArt(song);
                 if (bitmap == null) {
-                    remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.album);
+                    remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.def_album);
                 } else {
                     remoteViews.setImageViewBitmap(R.id.notigication_album, bitmap);
                 }

@@ -249,7 +249,7 @@ public class MusicUtil {
             mediaPlayer.reset();
             if (song.getUrl() == null) {
                 //获取网络歌曲
-                mediaPlayer.setDataSource(Constant.MUSIC_URL + song.getSongId() + Constant.SUFFIX_MP3);
+                mediaPlayer.setDataSource(ConstantUtil.MUSIC_URL + song.getSongId() + ConstantUtil.SUFFIX_MP3);
             } else {
                 mediaPlayer.setDataSource(song.getUrl());
             }

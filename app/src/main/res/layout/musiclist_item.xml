@@ -25,6 +25,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="5dp"
         android:layout_weight="1"
-        android:src="@drawable/removesong" />
+        android:src="@drawable/btn_remove_song" />
 
 </LinearLayout>

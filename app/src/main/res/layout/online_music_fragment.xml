@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/FragmentBGColor"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/FindColor"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/find_online_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/find_Onlinemusic"
+            android:layout_weight="10"
+            android:background="@drawable/btn_white"
+            android:cursorVisible="false"
+            android:gravity="center"
+            android:singleLine="true"
+            android:hint="搜索网络歌曲"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/find_Onlinemusic"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_find_music" />
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/Online_music_gv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:columnWidth="200dp"
+        android:gravity="center"
+        android:numColumns="3"
+        android:stretchMode="spacingWidthUniform"></GridView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:text="热门音乐" />
+
+    <TextView
+        android:id="@+id/new_Song_hint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="正在加载歌曲数据，请稍后..."
+        android:textColor="@color/FindColor"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_recommend_music_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>
