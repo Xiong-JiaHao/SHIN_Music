@@ -11,8 +11,8 @@ import android.os.Build;
 import android.widget.RemoteViews;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.activity.MusicPlayActivity;
+import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.BitmapUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
@@ -25,7 +25,7 @@ public class MusicNotification extends Notification {
     private final int NOTIFICATION_ID = 100;
 
     private Context context;
-    private final int REQUEST_CODE = 207;
+    private final int REQUEST_CODE = 0;
 
     private NotificationManager manager = null;
     private Builder builder;
@@ -82,7 +82,7 @@ public class MusicNotification extends Notification {
 
         //4.设置点击事件（调转到播放界面）
         Intent intent = new Intent(context, MusicPlayActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, REQUEST_CODE, intent, 0);
 
         builder.setContent(remoteViews)
                 .setWhen(System.currentTimeMillis())
