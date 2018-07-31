@@ -18,6 +18,7 @@ import com.gin.xjh.shin_music.util.BitmapUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.squareup.picasso.Picasso;
 
+
 public class MusicNotification extends Notification {
 
     private static MusicNotification notifyInstance = null;
@@ -67,22 +68,22 @@ public class MusicNotification extends Notification {
 
         // 1.注册控制点击事件
 
-        PendingIntent pplay = PendingIntent.getBroadcast(context, REQUEST_CODE, play, 0);
+        PendingIntent pplay = PendingIntent.getBroadcast(context, REQUEST_CODE, play, PendingIntent.FLAG_UPDATE_CURRENT);//因为每次更新UI都会重建所以设置flag无效
         remoteViews.setOnClickPendingIntent(R.id.notigication_playorpaues, pplay);
 
         // 2.注册下一首点击事件
 
-        PendingIntent pnext = PendingIntent.getBroadcast(context, REQUEST_CODE, next, 0);
+        PendingIntent pnext = PendingIntent.getBroadcast(context, REQUEST_CODE, next, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.notigication_next, pnext);
 
         // 3.注册上一首点击事件
 
-        PendingIntent ppre = PendingIntent.getBroadcast(context, REQUEST_CODE, pre, 0);
+        PendingIntent ppre = PendingIntent.getBroadcast(context, REQUEST_CODE, pre, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.notigication_pre, ppre);
 
         //4.设置点击事件（调转到播放界面）
         Intent intent = new Intent(context, MusicPlayActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, REQUEST_CODE, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         builder.setContent(remoteViews)
                 .setWhen(System.currentTimeMillis())
