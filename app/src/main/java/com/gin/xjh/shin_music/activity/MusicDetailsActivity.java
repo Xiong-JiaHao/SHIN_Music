@@ -33,7 +33,7 @@ public class MusicDetailsActivity extends BaseActivity implements View.OnClickLi
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.music_details_activity);
+        setContentView(R.layout.activity_music_details);
         initView();
         Intent intent = getIntent();
         isOnline = intent.getBooleanExtra("isOnline", true);

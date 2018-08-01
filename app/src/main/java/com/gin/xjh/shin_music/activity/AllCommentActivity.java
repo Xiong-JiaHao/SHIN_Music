@@ -45,7 +45,7 @@ public class AllCommentActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.all_comment_activity);
+        setContentView(R.layout.activity_all_comment);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("song");
         mSong = (Song) bundle.get("song");
@@ -98,7 +98,7 @@ public class AllCommentActivity extends BaseActivity implements View.OnClickList
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(AllCommentActivity.this);
                 LayoutInflater inflater = LayoutInflater.from(AllCommentActivity.this);
-                View viewDialog = inflater.inflate(R.layout.add_comment_layout, null);
+                View viewDialog = inflater.inflate(R.layout.dialog_add_comment, null);
                 final EditText Personal_profile = viewDialog.findViewById(R.id.Personal_profile);
                 builder.setView(viewDialog);
                 builder.setTitle("添加评论(100字以内)：");

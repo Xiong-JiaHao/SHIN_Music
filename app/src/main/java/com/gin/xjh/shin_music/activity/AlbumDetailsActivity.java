@@ -64,7 +64,7 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.album_details_activity);
+        setContentView(R.layout.activity_album_details);
         Intent intent = getIntent();
         isAlbum = intent.getBooleanExtra("isAlbum", true);
         if (isAlbum) {
@@ -143,7 +143,7 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
     private void editSongList() {
         AlertDialog.Builder builder = new AlertDialog.Builder(AlbumDetailsActivity.this);
         LayoutInflater inflater = LayoutInflater.from(AlbumDetailsActivity.this);
-        View viewDialog = inflater.inflate(R.layout.edit_likesong_layout, null);
+        View viewDialog = inflater.inflate(R.layout.dialog_edit_likesong, null);
         final EditText likeSongName = viewDialog.findViewById(R.id.likeSongName);
         final Switch is_Public = viewDialog.findViewById(R.id.is_Public);
         likeSongName.setHint(mAlbumName.getText());

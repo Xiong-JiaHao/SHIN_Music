@@ -39,7 +39,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
 
     @Override
     public CommentRecyclerViewAdapter.commentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new commentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item, parent, false));
+        return new commentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false));
     }
 
     //绑定视图
@@ -75,7 +75,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
                         final User[] user = new User[1];
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         LayoutInflater inflater = LayoutInflater.from(context);
-                        View viewDialog = inflater.inflate(R.layout.comment_details_layout, null);
+                        View viewDialog = inflater.inflate(R.layout.dialog_comment_details, null);
 
                         final TextView User_name = viewDialog.findViewById(R.id.User_name);
                         final ImageView User_sex = viewDialog.findViewById(R.id.User_sex);

@@ -34,7 +34,7 @@ public class FragmentShin extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.shin_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_shin, null);
         initView(view);
         initData();
         return view;

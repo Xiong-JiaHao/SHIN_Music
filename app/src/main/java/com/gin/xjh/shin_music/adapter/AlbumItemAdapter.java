@@ -55,7 +55,7 @@ public class AlbumItemAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.fragment_shin_item, null);
+            convertView = mInflater.inflate(R.layout.item_fragment_shin, null);
             holder = new ViewHolder();
             holder.mShinImg = convertView.findViewById(R.id.shin_img);
             holder.mShinText = convertView.findViewById(R.id.shin_text);

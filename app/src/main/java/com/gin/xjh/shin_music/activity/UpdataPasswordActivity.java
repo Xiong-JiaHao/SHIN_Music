@@ -24,7 +24,7 @@ public class UpdataPasswordActivity extends BaseActivity implements View.OnClick
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.updata_password_activity);
+        setContentView(R.layout.activity_updata_password);
         initView();
         initEvent();
     }

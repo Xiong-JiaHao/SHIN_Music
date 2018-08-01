@@ -62,7 +62,7 @@ public class FragmentLocal extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.local_music_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_local_music, null);
         initView(view);
         initData();
         return view;

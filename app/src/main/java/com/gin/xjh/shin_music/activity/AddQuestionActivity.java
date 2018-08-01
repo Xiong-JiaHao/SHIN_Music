@@ -26,7 +26,7 @@ public class AddQuestionActivity extends BaseActivity implements View.OnClickLis
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_question_activity);
+        setContentView(R.layout.activity_add_question);
         initView();
         initEvent();
     }

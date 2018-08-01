@@ -48,7 +48,7 @@ public class ConcernRecyclerViewAdapter extends RecyclerView.Adapter<ConcernRecy
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup arg0, int arg1) {
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.concern_item, arg0, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_concern, arg0, false);
         MyViewHolder holder = new MyViewHolder(view);
 
         return holder;

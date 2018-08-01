@@ -44,7 +44,7 @@ public class RecommendMusicRecyclerViewAdapter extends RecyclerView.Adapter<Reco
 
     @Override
     public RecommendMusicRecyclerViewAdapter.MusicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MusicViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recommend_music_item, parent, false));
+        return new MusicViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recommend_music, parent, false));
     }
 
     //绑定视图
@@ -114,7 +114,7 @@ public class RecommendMusicRecyclerViewAdapter extends RecyclerView.Adapter<Reco
         final Dialog bottomDialog = new Dialog(mContext, R.style.BottomDialog);
         final Song song = mSongList.get(position);
         View contentView = null;
-        contentView = LayoutInflater.from(mContext).inflate(R.layout.content_circle_dialog, null);
+        contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_content_circle, null);
         TextView icComment = contentView.findViewById(R.id.ic_comment);
         if (song.isOnline()) {
             icComment.setTextColor(mContext.getResources().getColor(R.color.Check));

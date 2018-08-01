@@ -45,7 +45,7 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
 
     @Override
     public MusicRecyclerViewAdapter.MusicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MusicViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.music_item, parent, false));
+        return new MusicViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_music, parent, false));
     }
 
     //绑定视图
@@ -65,7 +65,7 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
         final Song song = mSongList.get(position);
         View contentView = null;
         if(song.isOnline()){
-            contentView = LayoutInflater.from(mContext).inflate(R.layout.content_circle_dialog, null);
+            contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_content_circle, null);
             TextView icComment = contentView.findViewById(R.id.ic_comment);
             if (song.isOnline()) {
                 icComment.setTextColor(mContext.getResources().getColor(R.color.Check));
@@ -87,7 +87,7 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
                 }
             });
         } else {
-            contentView = LayoutInflater.from(mContext).inflate(R.layout.content_circle_local_dialog, null);
+            contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_content_circle_local, null);
             TextView icDelete = contentView.findViewById(R.id.ic_delete);
             icDelete.setOnClickListener(new View.OnClickListener() {
                 @Override

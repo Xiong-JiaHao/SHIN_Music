@@ -37,7 +37,7 @@ public class ConcernListActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.concernlist_activity);
+        setContentView(R.layout.activity_concernlist);
         initView();
         initEvent();
     }

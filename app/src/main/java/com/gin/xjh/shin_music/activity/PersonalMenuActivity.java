@@ -43,7 +43,7 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         mUser = (User) intent.getBundleExtra("user").get("user");
-        setContentView(R.layout.personal_menu_activity);
+        setContentView(R.layout.activity_personal_menu);
         initView();
         initEvent();
         updateBmobLikeEvent();

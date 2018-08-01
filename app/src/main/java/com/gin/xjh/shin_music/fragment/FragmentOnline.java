@@ -51,7 +51,7 @@ public class FragmentOnline extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.online_music_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_online_music, null);
         initView(view);
         initData();
         initEvent(view);
@@ -80,7 +80,7 @@ public class FragmentOnline extends Fragment {
         //GridView
         String[] from = {"img", "text"};
         int[] to = {R.id.music_img, R.id.music_text};
-        mAdapter = new SimpleAdapter(getContext(), mDataList, R.layout.online_music_item, from, to);
+        mAdapter = new SimpleAdapter(getContext(), mDataList, R.layout.listitem_online_music, from, to);
 
         mGridView.setAdapter(mAdapter);
 

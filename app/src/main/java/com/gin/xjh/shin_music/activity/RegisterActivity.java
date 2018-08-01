@@ -33,7 +33,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register_layout);
+        setContentView(R.layout.activity_register);
         initView();
         initEvent();
     }

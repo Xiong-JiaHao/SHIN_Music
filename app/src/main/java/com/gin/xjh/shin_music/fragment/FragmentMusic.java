@@ -42,7 +42,7 @@ public class FragmentMusic extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.music_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_music, null);
         mCDBroadCast = new CDBroadCast();
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();

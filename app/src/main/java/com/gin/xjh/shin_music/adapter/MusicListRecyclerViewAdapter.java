@@ -34,7 +34,7 @@ public class MusicListRecyclerViewAdapter extends RecyclerView.Adapter<MusicList
 
     @Override
     public MusicListRecyclerViewAdapter.MusicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MusicViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.musiclist_item, parent, false));
+        return new MusicViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_music, parent, false));
     }
 
     //绑定视图

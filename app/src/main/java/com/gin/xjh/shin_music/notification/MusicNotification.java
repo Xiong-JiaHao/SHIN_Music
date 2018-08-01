@@ -45,7 +45,7 @@ public class MusicNotification extends Notification {
     private MusicNotification (Context context){
         this.mContext = context;
         // 初始化操作
-        mRemoteViews = new RemoteViews(context.getPackageName(), R.layout.customnotice_layout);
+        mRemoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_layout_music);
         mBuilder = new Builder(context);
         mPlay = new Intent();
         mPlay.setAction(MusicService.MUSIC_NOTIFICATION_ACTION_PLAY);

@@ -52,7 +52,7 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_menu_activity);
+        setContentView(R.layout.activity_login_menu);
         initView();
         initEvent();
     }
@@ -135,7 +135,7 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
                 if (!UserState.getState()) {
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(LoginMenuActivity.this);
                     LayoutInflater inflater1 = LayoutInflater.from(LoginMenuActivity.this);
-                    View viewDialog1 = inflater1.inflate(R.layout.login_layout, null);
+                    View viewDialog1 = inflater1.inflate(R.layout.dialog_login, null);
                     final EditText UserId = viewDialog1.findViewById(R.id.UserId);
                     final EditText UserPassword = viewDialog1.findViewById(R.id.User_Password);
                     builder1.setView(viewDialog1);
@@ -197,7 +197,7 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
                 if (UserState.getState()) {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(LoginMenuActivity.this);
                     LayoutInflater inflater2 = LayoutInflater.from(LoginMenuActivity.this);
-                    View viewDialog2 = inflater2.inflate(R.layout.password_validate_dialog, null);
+                    View viewDialog2 = inflater2.inflate(R.layout.dialog_password_validate, null);
                     final EditText Password = viewDialog2.findViewById(R.id.UserPassword);
                     builder2.setView(viewDialog2);
                     builder2.setPositiveButton("确认", new DialogInterface.OnClickListener() {
@@ -236,7 +236,7 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
             case R.id.about:
                 AlertDialog.Builder builder3 = new AlertDialog.Builder(LoginMenuActivity.this);
                 LayoutInflater inflater3 = LayoutInflater.from(LoginMenuActivity.this);
-                View viewDialog3 = inflater3.inflate(R.layout.about_me_layout, null);
+                View viewDialog3 = inflater3.inflate(R.layout.dialog_about_me, null);
                 builder3.setView(viewDialog3);
                 builder3.create();
                 builder3.show();

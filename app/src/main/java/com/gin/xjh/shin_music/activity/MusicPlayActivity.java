@@ -145,7 +145,7 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.music_play_activity);
+        setContentView(R.layout.activity_music_play);
         mSongBroadCast = new SongBroadCast();
         mBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
@@ -445,7 +445,7 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
     private void showSettingsbottomDialog() {
         final Dialog bottomDialog = new Dialog(this, R.style.BottomDialog);
         bottomDialog.setCanceledOnTouchOutside(true);
-        View contentView = LayoutInflater.from(this).inflate(R.layout.content_circle_inplay_dialog, null);
+        View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content_circle_inplay, null);
         TextView ic_comment2 = contentView.findViewById(R.id.ic_comment);
         final TextView like = contentView.findViewById(R.id.like);
         final Song song = MusicUtil.getNowSong();
@@ -544,7 +544,7 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
     private void showListbottomDialog() {
         final Dialog bottomDialog = new Dialog(this, R.style.BottomDialog);
         bottomDialog.setCanceledOnTouchOutside(true);
-        View contentView = LayoutInflater.from(this).inflate(R.layout.content_circle_setting_dialog, null);
+        View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_content_circle_setting, null);
 
         final TextView play_style_name = contentView.findViewById(R.id.play_style_name);
         TextView play_style_num = contentView.findViewById(R.id.play_style_num);

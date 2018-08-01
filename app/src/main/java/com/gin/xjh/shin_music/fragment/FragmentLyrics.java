@@ -54,7 +54,7 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.lyrics_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_lyrics, null);
         mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
         mMyVolumeReceiver = new MyVolumeReceiver();
         IntentFilter intentFilter = new IntentFilter();
