@@ -16,11 +16,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.adapter.CommentRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Comment;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.user.UserState;
 
 import java.util.Collections;
 import java.util.Date;
@@ -33,13 +33,13 @@ import cn.bmob.v3.listener.SaveListener;
 
 public class AllCommentActivity extends BaseActivity implements View.OnClickListener {
 
-    private ImageView go_back, write_comment;
-    private RecyclerView comment_rv;
+    private ImageView mGoBack, mWriteComment;
+    private RecyclerView mCommentRv;
 
     private List<Comment> mCommentList;
     private CommentRecyclerViewAdapter mCommentRecyclerViewAdapter;
 
-    private Song song;
+    private Song mSong;
 
 
     @Override
@@ -48,22 +48,22 @@ public class AllCommentActivity extends BaseActivity implements View.OnClickList
         setContentView(R.layout.all_comment_activity);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("song");
-        song = (Song) bundle.get("song");
+        mSong = (Song) bundle.get("song");
         initView();
         initData();
     }
 
     private void initView() {
-        go_back = findViewById(R.id.go_back);
-        write_comment = findViewById(R.id.write_comment);
-        comment_rv = findViewById(R.id.comment_rv);
-        go_back.setOnClickListener(this);
-        write_comment.setOnClickListener(this);
+        mGoBack = findViewById(R.id.go_back);
+        mWriteComment = findViewById(R.id.write_comment);
+        mCommentRv = findViewById(R.id.comment_rv);
+        mGoBack.setOnClickListener(this);
+        mWriteComment.setOnClickListener(this);
     }
 
     private void initData() {
         BmobQuery<Comment> query = new BmobQuery<>();
-        query.addWhereEqualTo("SongId", song.getSongId());
+        query.addWhereEqualTo("SongId", mSong.getSongId());
         query.findObjects(new FindListener<Comment>() {
             @Override
             public void done(List<Comment> list, BmobException e) {
@@ -78,10 +78,10 @@ public class AllCommentActivity extends BaseActivity implements View.OnClickList
 
     private void initEvent() {
         mCommentRecyclerViewAdapter = new CommentRecyclerViewAdapter(this, mCommentList);
-        comment_rv.setLayoutManager(new LinearLayoutManager(this));
-        comment_rv.setItemAnimator(new DefaultItemAnimator());//默认动画
-        comment_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        comment_rv.setAdapter(mCommentRecyclerViewAdapter);
+        mCommentRv.setLayoutManager(new LinearLayoutManager(this));
+        mCommentRv.setItemAnimator(new DefaultItemAnimator());//默认动画
+        mCommentRv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mCommentRv.setAdapter(mCommentRecyclerViewAdapter);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class AllCommentActivity extends BaseActivity implements View.OnClickList
                         if (comment.length() == 0 && comment.equals("")) {
                             Toast.makeText(AllCommentActivity.this, "请输入内容后点击提交", Toast.LENGTH_SHORT).show();
                         } else {
-                            final Comment mComment = new Comment(user.getUserName(), user.getUserId(), song.getSongId(), comment, date.getTime());
+                            final Comment mComment = new Comment(user.getUserName(), user.getUserId(), mSong.getSongId(), comment, date.getTime());
                             mComment.save(new SaveListener<String>() {
                                 @Override
                                 public void done(String s, BmobException e) {

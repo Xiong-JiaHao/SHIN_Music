@@ -15,12 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gin.xjh.shin_music.activity.AllCommentActivity;
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.user.UserState;
-import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.activity.AllCommentActivity;
 import com.gin.xjh.shin_music.activity.MusicPlayActivity;
+import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.service.MusicService;
+import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.util.DensityUtil;
 import com.gin.xjh.shin_music.util.ListDataSaveUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
@@ -35,12 +35,12 @@ import java.util.List;
  */
 
 public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecyclerViewAdapter.MusicViewHolder> {
-    public List<Song> list;
-    private Context context;
+    public List<Song> mSongList;
+    private Context mContext;
 
     public MusicRecyclerViewAdapter(Context context, List<Song> list) {
-        this.list = list;
-        this.context = context;
+        this.mSongList = list;
+        this.mContext = context;
     }
 
     @Override
@@ -51,56 +51,56 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
     //绑定视图
     @Override
     public void onBindViewHolder(MusicRecyclerViewAdapter.MusicViewHolder holder, int position) {
-        holder.init(list.get(position), context, position);
+        holder.init(mSongList.get(position), mContext, position);
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return mSongList.size();
     }
 
     @SuppressLint("ResourceAsColor")
     private void showbottomDialog(final int position) {
-        final Dialog bottomDialog = new Dialog(context, R.style.BottomDialog);
-        final Song song = list.get(position);
+        final Dialog bottomDialog = new Dialog(mContext, R.style.BottomDialog);
+        final Song song = mSongList.get(position);
         View contentView = null;
         if(song.isOnline()){
-            contentView = LayoutInflater.from(context).inflate(R.layout.content_circle_dialog, null);
-            TextView ic_comment = contentView.findViewById(R.id.ic_comment);
+            contentView = LayoutInflater.from(mContext).inflate(R.layout.content_circle_dialog, null);
+            TextView icComment = contentView.findViewById(R.id.ic_comment);
             if (song.isOnline()) {
-                ic_comment.setTextColor(context.getResources().getColor(R.color.Check));
+                icComment.setTextColor(mContext.getResources().getColor(R.color.Check));
             }
-            ic_comment.setOnClickListener(new View.OnClickListener() {
+            icComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //发消息告知弹出评论
                     if (song.isOnline()) {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("song", song);
-                        Intent ic_comment_intent = new Intent(context, AllCommentActivity.class);
+                        Intent ic_comment_intent = new Intent(mContext, AllCommentActivity.class);
                         ic_comment_intent.putExtra("song", bundle);
-                        context.startActivity(ic_comment_intent);
+                        mContext.startActivity(ic_comment_intent);
                     } else {
-                        Toast.makeText(context, "该歌曲不支持评论功能", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "该歌曲不支持评论功能", Toast.LENGTH_SHORT).show();
                     }
                     bottomDialog.dismiss();
                 }
             });
         } else {
-            contentView = LayoutInflater.from(context).inflate(R.layout.content_circle_local_dialog, null);
-            TextView ic_delete = contentView.findViewById(R.id.ic_delete);
-            ic_delete.setOnClickListener(new View.OnClickListener() {
+            contentView = LayoutInflater.from(mContext).inflate(R.layout.content_circle_local_dialog, null);
+            TextView icDelete = contentView.findViewById(R.id.ic_delete);
+            icDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.getContentResolver().delete(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, MediaStore.Video.Media.DATA+"='" + song.getUrl() + "'", null);
+                    mContext.getContentResolver().delete(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, MediaStore.Video.Media.DATA + "='" + song.getUrl() + "'", null);
                     File mf = new File(song.getUrl());
                     if (mf.exists()) {
                         mf.delete();
-                        Toast.makeText(context, "删除成功", Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, "删除成功", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(context, "该文件不存在", Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, "该文件不存在", Toast.LENGTH_LONG).show();
                     }
-                    list.remove(position);
+                    mSongList.remove(position);
                     notifyItemRemoved(position);
                     notifyDataSetChanged();
                     bottomDialog.dismiss();
@@ -108,16 +108,16 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
             });
         }
 
-        TextView ic_play = contentView.findViewById(R.id.ic_play);
-        ic_play.setOnClickListener(new View.OnClickListener() {
+        TextView icPlay = contentView.findViewById(R.id.ic_play);
+        icPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (song.isOnline()) {
-                    if (NetStateUtil.getNetWorkState(context) == NetStateUtil.NO_STATE) {
-                        Toast.makeText(context, "当前网络无法播放", Toast.LENGTH_SHORT).show();
+                    if (NetStateUtil.getNetWorkState(mContext) == NetStateUtil.NO_STATE) {
+                        Toast.makeText(mContext, "当前网络无法播放", Toast.LENGTH_SHORT).show();
                         return;
-                    } else if (NetStateUtil.getNetWorkState(context) == NetStateUtil.DATA_STATE && UserState.isUse_4G() == false) {
-                        Toast.makeText(context, "请允许4G播放后尝试", Toast.LENGTH_SHORT).show();
+                    } else if (NetStateUtil.getNetWorkState(mContext) == NetStateUtil.DATA_STATE && UserState.isUse_4G() == false) {
+                        Toast.makeText(mContext, "请允许4G播放后尝试", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
@@ -125,9 +125,9 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
                     List<Song> mSong = new ArrayList<>();
                     mSong.add(song);
                     MusicUtil.changeSongList(mSong);
-                    Intent startIntent = new Intent(context, MusicService.class);
+                    Intent startIntent = new Intent(mContext, MusicService.class);
                     startIntent.putExtra("action", MusicService.PLAY);
-                    context.startService(startIntent);
+                    mContext.startService(startIntent);
                 } else {
                     List<Song> mlist = MusicUtil.getSongList();
                     boolean isFlag = true;
@@ -142,21 +142,21 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
                         MusicUtil.addSong(song, true);
                         ListDataSaveUtil.setSongList("songlist", MusicUtil.getSongList());
                     } else {
-                        Toast.makeText(context, "该歌曲已经存在，请勿重复添加", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "该歌曲已经存在，请勿重复添加", Toast.LENGTH_SHORT).show();
                     }
                 }
                 bottomDialog.dismiss();
             }
         });
-        TextView ic_singer = contentView.findViewById(R.id.ic_singer);
-        TextView ic_album = contentView.findViewById(R.id.ic_album);
-        ic_album.setText(song.getAlbumName());
-        ic_singer.setText(song.getSingerName());
+        TextView icSinger = contentView.findViewById(R.id.ic_singer);
+        TextView icAlbum = contentView.findViewById(R.id.ic_album);
+        icAlbum.setText(song.getAlbumName());
+        icSinger.setText(song.getSingerName());
         bottomDialog.setCanceledOnTouchOutside(true);
         bottomDialog.setContentView(contentView);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();
-        params.width = context.getResources().getDisplayMetrics().widthPixels - DensityUtil.dp2px(context, 16f);
-        params.bottomMargin = DensityUtil.dp2px(context, 8f);
+        params.width = mContext.getResources().getDisplayMetrics().widthPixels - DensityUtil.dp2px(mContext, 16f);
+        params.bottomMargin = DensityUtil.dp2px(mContext, 8f);
         contentView.setLayoutParams(params);
         bottomDialog.getWindow().setGravity(Gravity.BOTTOM);
         bottomDialog.getWindow().setWindowAnimations(R.style.BottomDialog_Animation);
@@ -164,19 +164,19 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
     }
 
     public class MusicViewHolder extends RecyclerView.ViewHolder {
-        private TextView SongName, SingerName;
-        private ImageView sz;
+        private TextView mSongName, mSingerName;
+        private ImageView mAbout;
 
         public MusicViewHolder(View itemView) {
             super(itemView);
-            SongName = itemView.findViewById(R.id.itemSongName);
-            SingerName = itemView.findViewById(R.id.itemSingerName);
-            sz = itemView.findViewById(R.id.music_sz);
+            mSongName = itemView.findViewById(R.id.itemSongName);
+            mSingerName = itemView.findViewById(R.id.itemSingerName);
+            mAbout = itemView.findViewById(R.id.music_sz);
         }
 
         public void init(final Song song, final Context context, final int position) {
-            SongName.setText(song.getSongName());
-            SingerName.setText(song.toString());
+            mSongName.setText(song.getSongName());
+            mSingerName.setText(song.toString());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -190,8 +190,8 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
                         }
                     }
                     List<Song> mList = new ArrayList<>();
-                    for (int i = 0; i < list.size(); i++) {
-                        mList.add(list.get(i));
+                    for (int i = 0; i < mSongList.size(); i++) {
+                        mList.add(mSongList.get(i));
                     }
                     MusicUtil.changeSongList(mList);
                     MusicUtil.setIndex(position);
@@ -203,7 +203,7 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
                 }
             });
 
-            sz.setOnClickListener(new View.OnClickListener() {
+            mAbout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showbottomDialog(position);

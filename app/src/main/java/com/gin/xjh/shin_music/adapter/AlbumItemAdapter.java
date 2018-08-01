@@ -57,8 +57,8 @@ public class AlbumItemAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.fragment_shin_item, null);
             holder = new ViewHolder();
-            holder.shin_Img = convertView.findViewById(R.id.shin_img);
-            holder.shin_Text = convertView.findViewById(R.id.shin_text);
+            holder.mShinImg = convertView.findViewById(R.id.shin_img);
+            holder.mShinText = convertView.findViewById(R.id.shin_text);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -66,9 +66,9 @@ public class AlbumItemAdapter extends BaseAdapter {
         Picasso.get().load(mList.get(position).getAlbumUrl())
                 .placeholder(R.drawable.def_album)
                 .error(R.drawable.def_album)
-                .into(holder.shin_Img);
-        holder.shin_Text.setText(mList.get(position).getAlbumName());
-        holder.shin_Img.setOnClickListener(new View.OnClickListener() {
+                .into(holder.mShinImg);
+        holder.mShinText.setText(mList.get(position).getAlbumName());
+        holder.mShinImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (NetStateUtil.getNetWorkState(mContext) == NetStateUtil.NO_STATE) {
@@ -91,8 +91,8 @@ public class AlbumItemAdapter extends BaseAdapter {
     }
 
     public class ViewHolder {
-        private TextView shin_Text;
-        private ImageView shin_Img;
+        private TextView mShinText;
+        private ImageView mShinImg;
     }
 
 }

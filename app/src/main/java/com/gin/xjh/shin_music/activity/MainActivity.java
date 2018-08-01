@@ -20,13 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.adapter.FragmentAdapter;
 import com.gin.xjh.shin_music.bean.User;
 import com.gin.xjh.shin_music.fragment.FragmentLocal;
 import com.gin.xjh.shin_music.fragment.FragmentOnline;
 import com.gin.xjh.shin_music.fragment.FragmentShin;
 import com.gin.xjh.shin_music.service.MusicService;
+import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.util.ListDataSaveUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.util.TimesUtil;
@@ -48,24 +48,24 @@ import cn.bmob.v3.exception.BmobException;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar mTopbar;
-    private ImageView Topbar_setting, Topbar_music;//菜单按钮，播放器按钮
+    private ImageView mTopbarSetting, mTopbarMusic;//菜单按钮，播放器按钮
     private ViewPager mViewPager;
-    private LinearLayout mline, shin, Online_music, Local_music;
-    private ImageView shin_img, Online_music_img, Local_music_img;
-    private TextView shin_text, Online_music_text, Local_music_text;
+    private LinearLayout mLine, mShin, mOnlineMusic, mLocalMusic;
+    private ImageView mShinImg, mOnlineMusicImg, mLocalMusicImg;
+    private TextView mShinText, mOnlineMusicText, mLocalMusicText;
 
-    private List<Fragment> fragments = new ArrayList<>();
-    private FragmentAdapter adapter;
+    private List<Fragment> mFragmentList = new ArrayList<>();
+    private FragmentAdapter mAdapter;
 
     //记录当前为哪个Fragment以及当前的屏幕宽度
-    private int Index;
+    private int mIndex;
     private int mSreenWidth;
 
 
     private static final int REQUECT_CODE_SDCARD = 2;
 
 
-    private MusicService musicService;
+    private MusicService mMusicService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,37 +137,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         mTopbar = findViewById(R.id.Top_bar);
-        Topbar_setting = findViewById(R.id.Topbar_setting);
-        Topbar_music = findViewById(R.id.Topbar_music);
+        mTopbarSetting = findViewById(R.id.Topbar_setting);
+        mTopbarMusic = findViewById(R.id.Topbar_music);
         mViewPager = findViewById(R.id.fragment_VP);
-        mline = findViewById(R.id.main_line);
-        shin = findViewById(R.id.shin);
-        Online_music = findViewById(R.id.Online_music);
-        Local_music = findViewById(R.id.Local_music);
-        shin_img = findViewById(R.id.shin_img);
-        Online_music_img = findViewById(R.id.Online_music_img);
-        Local_music_img = findViewById(R.id.Local_music_img);
-        shin_text = findViewById(R.id.shin_text);
-        Online_music_text = findViewById(R.id.Online_music_text);
-        Local_music_text = findViewById(R.id.Local_music_text);
+        mLine = findViewById(R.id.main_line);
+        mShin = findViewById(R.id.shin);
+        mOnlineMusic = findViewById(R.id.Online_music);
+        mLocalMusic = findViewById(R.id.Local_music);
+        mShinImg = findViewById(R.id.shin_img);
+        mOnlineMusicImg = findViewById(R.id.Online_music_img);
+        mLocalMusicImg = findViewById(R.id.Local_music_img);
+        mShinText = findViewById(R.id.shin_text);
+        mOnlineMusicText = findViewById(R.id.Online_music_text);
+        mLocalMusicText = findViewById(R.id.Local_music_text);
     }
 
     private void initEvent() {
-        fragments.add(new FragmentShin());
-        fragments.add(new FragmentOnline());
-        fragments.add(new FragmentLocal());
+        mFragmentList.add(new FragmentShin());
+        mFragmentList.add(new FragmentOnline());
+        mFragmentList.add(new FragmentLocal());
 
-        Index = 0;
-        shin_img.setImageResource(R.drawable.icon_shin_red);
-        shin_text.setTextColor(Color.RED);
+        mIndex = 0;
+        mShinImg.setImageResource(R.drawable.icon_shin_red);
+        mShinText.setTextColor(Color.RED);
         mSreenWidth = getWindowManager().getDefaultDisplay().getWidth();
 
-        adapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
-        mViewPager.setAdapter(adapter);
+        mAdapter = new FragmentAdapter(getSupportFragmentManager(), mFragmentList);
+        mViewPager.setAdapter(mAdapter);
 
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mline.getLayoutParams();
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mLine.getLayoutParams();
         lp.width = mSreenWidth / 3;
-        mline.setLayoutParams(lp);
+        mLine.setLayoutParams(lp);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -188,10 +188,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              **/
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (Index == position) {//向右移动
-                    ChangeLine((int) ((Index + positionOffset) * mSreenWidth / 3));
+                if (mIndex == position) {//向右移动
+                    ChangeLine((int) ((mIndex + positionOffset) * mSreenWidth / 3));
                 } else {//向左移动
-                    ChangeLine((int) ((Index + positionOffset - 1) * mSreenWidth / 3));
+                    ChangeLine((int) ((mIndex + positionOffset - 1) * mSreenWidth / 3));
                 }
             }
 
@@ -205,42 +205,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
-                        if (Index == 1) {
-                            Online_music_img.setImageResource(R.drawable.icon_online_music_white);
-                            Online_music_text.setTextColor(Color.WHITE);
-                        } else if (Index == 2) {
-                            Local_music_img.setImageResource(R.drawable.icon_local_music_white);
-                            Local_music_text.setTextColor(Color.WHITE);
+                        if (mIndex == 1) {
+                            mOnlineMusicImg.setImageResource(R.drawable.icon_online_music_white);
+                            mOnlineMusicText.setTextColor(Color.WHITE);
+                        } else if (mIndex == 2) {
+                            mLocalMusicImg.setImageResource(R.drawable.icon_local_music_white);
+                            mLocalMusicText.setTextColor(Color.WHITE);
                         }
-                        shin_img.setImageResource(R.drawable.icon_shin_red);
-                        shin_text.setTextColor(Color.RED);
-                        Index = 0;
+                        mShinImg.setImageResource(R.drawable.icon_shin_red);
+                        mShinText.setTextColor(Color.RED);
+                        mIndex = 0;
                         ChangeLine(0);
                         break;
                     case 1:
-                        if (Index == 0) {
-                            shin_img.setImageResource(R.drawable.icon_shin_white);
-                            shin_text.setTextColor(Color.WHITE);
-                        } else if (Index == 2) {
-                            Local_music_img.setImageResource(R.drawable.icon_local_music_white);
-                            Local_music_text.setTextColor(Color.WHITE);
+                        if (mIndex == 0) {
+                            mShinImg.setImageResource(R.drawable.icon_shin_white);
+                            mShinText.setTextColor(Color.WHITE);
+                        } else if (mIndex == 2) {
+                            mLocalMusicImg.setImageResource(R.drawable.icon_local_music_white);
+                            mLocalMusicText.setTextColor(Color.WHITE);
                         }
-                        Online_music_img.setImageResource(R.drawable.icon_online_music_red);
-                        Online_music_text.setTextColor(Color.RED);
-                        Index = 1;
+                        mOnlineMusicImg.setImageResource(R.drawable.icon_online_music_red);
+                        mOnlineMusicText.setTextColor(Color.RED);
+                        mIndex = 1;
                         ChangeLine(mSreenWidth / 3);
                         break;
                     case 2:
-                        if (Index == 0) {
-                            shin_img.setImageResource(R.drawable.icon_shin_white);
-                            shin_text.setTextColor(Color.WHITE);
-                        } else if (Index == 1) {
-                            Online_music_img.setImageResource(R.drawable.icon_online_music_white);
-                            Online_music_text.setTextColor(Color.WHITE);
+                        if (mIndex == 0) {
+                            mShinImg.setImageResource(R.drawable.icon_shin_white);
+                            mShinText.setTextColor(Color.WHITE);
+                        } else if (mIndex == 1) {
+                            mOnlineMusicImg.setImageResource(R.drawable.icon_online_music_white);
+                            mOnlineMusicText.setTextColor(Color.WHITE);
                         }
-                        Local_music_img.setImageResource(R.drawable.icon_local_music_red);
-                        Local_music_text.setTextColor(Color.RED);
-                        Index = 2;
+                        mLocalMusicImg.setImageResource(R.drawable.icon_local_music_red);
+                        mLocalMusicText.setTextColor(Color.RED);
+                        mIndex = 2;
                         ChangeLine(2 * (mSreenWidth / 3));
                         break;
                 }
@@ -260,11 +260,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        shin.setOnClickListener(this);
-        Online_music.setOnClickListener(this);
-        Local_music.setOnClickListener(this);
-        Topbar_music.setOnClickListener(this);
-        Topbar_setting.setOnClickListener(this);
+        mShin.setOnClickListener(this);
+        mOnlineMusic.setOnClickListener(this);
+        mLocalMusic.setOnClickListener(this);
+        mTopbarMusic.setOnClickListener(this);
+        mTopbarSetting.setOnClickListener(this);
 
 
         MPermissions.requestPermissions(MainActivity.this, REQUECT_CODE_SDCARD, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -277,9 +277,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param len
      */
     private void ChangeLine(int len) {
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mline.getLayoutParams();
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mLine.getLayoutParams();
         lp.leftMargin = len;
-        mline.setLayoutParams(lp);
+        mLine.setLayoutParams(lp);
     }
 
 
@@ -329,8 +329,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service1) {
-            musicService = ((MusicService.MusicBinder) service1).getService();
-            musicService.changNotifi();
+            mMusicService = ((MusicService.MusicBinder) service1).getService();
+            mMusicService.changNotifi();
         }
 
         @Override

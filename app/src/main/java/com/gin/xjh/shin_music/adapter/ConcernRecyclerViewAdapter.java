@@ -108,17 +108,17 @@ public class ConcernRecyclerViewAdapter extends RecyclerView.Adapter<ConcernRecy
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView removeConcern, mConcern_name, mConcern_QQ, mConcern_sign;
-        public ImageView mConcern_sex;
+        public TextView mRemoveConcern, mConcernName, mConcernQQ, mConcernSign;
+        public ImageView mConcernSex;
         public ViewGroup mConcernUser;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            removeConcern = itemView.findViewById(R.id.removeConcern);
-            mConcern_name = itemView.findViewById(R.id.ConcernUser_Name);
-            mConcern_QQ = itemView.findViewById(R.id.ConcernUser_QQ);
-            mConcern_sex = itemView.findViewById(R.id.ConcernUser_sex);
-            mConcern_sign = itemView.findViewById(R.id.ConcernUser_sign);
+            mRemoveConcern = itemView.findViewById(R.id.removeConcern);
+            mConcernName = itemView.findViewById(R.id.ConcernUser_Name);
+            mConcernQQ = itemView.findViewById(R.id.ConcernUser_QQ);
+            mConcernSex = itemView.findViewById(R.id.ConcernUser_sex);
+            mConcernSign = itemView.findViewById(R.id.ConcernUser_sign);
             mConcernUser = itemView.findViewById(R.id.ConcernUser);
 
             ((SlidingButtonView) itemView).setSlidingButtonListener(ConcernRecyclerViewAdapter.this);
@@ -127,18 +127,18 @@ public class ConcernRecyclerViewAdapter extends RecyclerView.Adapter<ConcernRecy
         public void init(int position) {
             //设置数据
             User user = mDatas.get(position);
-            mConcern_name.setText(user.getUserName());
-            mConcern_QQ.setText("QQ:" + user.getUserQQ());
-            mConcern_sign.setText("个人简介：" + user.getPersonal_profile());
+            mConcernName.setText(user.getUserName());
+            mConcernQQ.setText("QQ:" + user.getUserQQ());
+            mConcernSign.setText("个人简介：" + user.getPersonal_profile());
             switch (user.getUserSex()) {
                 case 0:
-                    mConcern_sex.setImageResource(R.drawable.sel_sex_man);
+                    mConcernSex.setImageResource(R.drawable.sel_sex_man);
                     break;
                 case 1:
-                    mConcern_sex.setImageResource(R.drawable.sel_sex_woman);
+                    mConcernSex.setImageResource(R.drawable.sel_sex_woman);
                     break;
                 case 2:
-                    mConcern_sex.setImageResource(R.drawable.sel_sex_alien);
+                    mConcernSex.setImageResource(R.drawable.sel_sex_alien);
                     break;
             }
 
@@ -163,7 +163,7 @@ public class ConcernRecyclerViewAdapter extends RecyclerView.Adapter<ConcernRecy
 
                 }
             });
-            removeConcern.setOnClickListener(new View.OnClickListener() {
+            mRemoveConcern.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int n = getLayoutPosition();

@@ -44,7 +44,7 @@ public class FragmentLocal extends Fragment {
     private EditText mFind = null;
     private ImageView mCheck;
 
-    private TextView mMusic_hint;
+    private TextView mMusicHint;
     private Handler mMainHandler;
 
     private void obtainMainHandler() {
@@ -72,7 +72,7 @@ public class FragmentLocal extends Fragment {
         mRecyclerView = view.findViewById(R.id.fragment_local_music_list);
         mFind = view.findViewById(R.id.find_local_name);
         mCheck = view.findViewById(R.id.find_Localmusic);
-        mMusic_hint = view.findViewById(R.id.music_hint);
+        mMusicHint = view.findViewById(R.id.music_hint);
 
         obtainMainHandler();
     }
@@ -97,9 +97,9 @@ public class FragmentLocal extends Fragment {
             mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
             mRecyclerView.setAdapter(mMusicListViewAdapter);
 
-            mMusic_hint.setVisibility(View.GONE);
+            mMusicHint.setVisibility(View.GONE);
         } else {
-            mMusic_hint.setText("当前未扫描到歌曲");
+            mMusicHint.setText("当前未扫描到歌曲");
         }
 
         mCheck.setOnClickListener(new View.OnClickListener() {

@@ -25,37 +25,37 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
     public static final String LYRIC_ACTION_PLAY = "Lyric.To.Play";
     public static final String LYRIC_ACTION_PAUSE = "Lyric.To.Pause";
     private static final int LYRIC = 206;
-    private List<Lyric> lyricList;
+    private List<Lyric> mLyricList;
     // 标记当前行
-    private int currentLine = -1;
-    private Paint currentPaint;
-    private Paint otherPaint;
-    private int currentColor = Color.rgb(80, 4, 4);
-    private float currentTextSize = 19;
-    private int otherColor = Color.BLACK;
-    private float otherTextSize = 16;
+    private int mCurrentLine = -1;
+    private Paint mCurrentPaint;
+    private Paint mOtherPaint;
+    private int mCurrentColor = Color.rgb(80, 4, 4);
+    private float mCurrentTextSize = 19;
+    private int mOtherColor = Color.BLACK;
+    private float mOtherTextSize = 16;
     //歌词总行数一半
-    private int MAX_LYRIC = 10;
+    private static final int MAX_LYRIC = 10;
     // 行间距
-    private float lineSpace = 30;
+    private float mLineSpace = 30;
     //当前歌词字体
-    private Typeface currentTypeface = Typeface.DEFAULT_BOLD;
+    private Typeface mCurrentTypeface = Typeface.DEFAULT_BOLD;
     //其他歌词字体
-    private Typeface otherTypeface = Typeface.SERIF;
-    private Handler handler = new Handler() {
+    private Typeface mOtherTypeface = Typeface.SERIF;
+    private Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
-            if(lyricList != null){
-                if (currentLine != lyricList.size() - 1) {
-                    if (MusicUtil.getPlayTime() > lyricList.get(currentLine + 1).timePoint) {
-                        while (currentLine < lyricList.size() - 1 && MusicUtil.getPlayTime() > lyricList.get(currentLine + 1).timePoint) {
-                            currentLine++;
+            if(mLyricList != null){
+                if (mCurrentLine != mLyricList.size() - 1) {
+                    if (MusicUtil.getPlayTime() > mLyricList.get(mCurrentLine + 1).timePoint) {
+                        while (mCurrentLine < mLyricList.size() - 1 && MusicUtil.getPlayTime() > mLyricList.get(mCurrentLine + 1).timePoint) {
+                            mCurrentLine++;
                         }
                         invalidate(); // 刷新,会再次调用onDraw方法
                     }
                     if (MusicUtil.isPlayMusic()) {
-                        handler.sendEmptyMessageDelayed(LYRIC, 50);//自己给自己刷新
+                        mHandler.sendEmptyMessageDelayed(LYRIC, 50);//自己给自己刷新
                     }
                 }
             }
@@ -67,21 +67,21 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
 
     public LyricView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        currentPaint = new Paint();
-        otherPaint = new Paint();
-        lyricList = null;
+        mCurrentPaint = new Paint();
+        mOtherPaint = new Paint();
+        mLyricList = null;
 
-        lineSpace = DisplayUtils.sp2px(context, lineSpace);
+        mLineSpace = DisplayUtils.sp2px(context, mLineSpace);
 
-        currentPaint.setColor(currentColor);
-        currentPaint.setTextSize(DisplayUtils.sp2px(context, currentTextSize));
-        currentPaint.setTextAlign(Paint.Align.CENTER); // 画在中间
-        currentPaint.setTypeface(currentTypeface);
+        mCurrentPaint.setColor(mCurrentColor);
+        mCurrentPaint.setTextSize(DisplayUtils.sp2px(context, mCurrentTextSize));
+        mCurrentPaint.setTextAlign(Paint.Align.CENTER); // 画在中间
+        mCurrentPaint.setTypeface(mCurrentTypeface);
 
-        otherPaint.setColor(otherColor);
-        otherPaint.setTextSize(DisplayUtils.sp2px(context, otherTextSize));
-        otherPaint.setTextAlign(Paint.Align.CENTER);
-        otherPaint.setTypeface(otherTypeface);
+        mOtherPaint.setColor(mOtherColor);
+        mOtherPaint.setTextSize(DisplayUtils.sp2px(context, mOtherTextSize));
+        mOtherPaint.setTextAlign(Paint.Align.CENTER);
+        mOtherPaint.setTypeface(mOtherTypeface);
 
         mLyricBroadCast = new LyricBroadCast();
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(context);
@@ -93,42 +93,42 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
 
     public void getLyric(String lyrics) {
         if (lyrics != null) {
-            lyricList = LrcUtils.readLRC(lyrics);
-            currentLine = -1;
-            handler.sendEmptyMessage(LYRIC);
+            mLyricList = LrcUtils.readLRC(lyrics);
+            mCurrentLine = -1;
+            mHandler.sendEmptyMessage(LYRIC);
         } else {
-            lyricList = null;
+            mLyricList = null;
         }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (lyricList != null && lyricList.size() > 0) {
+        if (mLyricList != null && mLyricList.size() > 0) {
             Lyric lyric;
             //绘制播放过的歌词
             //特判起点不为0的时候
-            if (currentLine == -1) {
-                currentLine = 0;
+            if (mCurrentLine == -1) {
+                mCurrentLine = 0;
             }
 
-            for (int i = currentLine - 1, j = 0; i >= 0 && j < MAX_LYRIC; i--, j++) {
-                lyric = lyricList.get(i);
+            for (int i = mCurrentLine - 1, j = 0; i >= 0 && j < MAX_LYRIC; i--, j++) {
+                lyric = mLyricList.get(i);
                 canvas.drawText(lyric.lricString, getWidth() / 2,
-                        getHeight() / 2 + lineSpace * (i - currentLine), otherPaint);
+                        getHeight() / 2 + mLineSpace * (i - mCurrentLine), mOtherPaint);
             }
-            lyric = lyricList.get(currentLine);
+            lyric = mLyricList.get(mCurrentLine);
             // 绘制正在播放的歌词
             canvas.drawText(lyric.lricString, getWidth() / 2,
-                    getHeight() / 2, currentPaint);
+                    getHeight() / 2, mCurrentPaint);
             //绘制未播放的歌词
-            for (int i = currentLine + 1, j = 0; i < lyricList.size() && j < MAX_LYRIC; i++, j++) {
-                lyric = lyricList.get(i);
+            for (int i = mCurrentLine + 1, j = 0; i < mLyricList.size() && j < MAX_LYRIC; i++, j++) {
+                lyric = mLyricList.get(i);
                 canvas.drawText(lyric.lricString, getWidth() / 2,
-                        getHeight() / 2 + lineSpace * (i - currentLine), otherPaint);
+                        getHeight() / 2 + mLineSpace * (i - mCurrentLine), mOtherPaint);
             }
         } else {
             canvas.drawText("未找到歌词", getWidth() / 2,
-                    getHeight() / 2, otherPaint);
+                    getHeight() / 2, mOtherPaint);
         }
         super.onDraw(canvas);
     }
@@ -139,11 +139,11 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case LYRIC_ACTION_PLAY:
-                    currentLine = -1;
-                    handler.sendEmptyMessage(LYRIC);
+                    mCurrentLine = -1;
+                    mHandler.sendEmptyMessage(LYRIC);
                     break;
                 case LYRIC_ACTION_PAUSE:
-                    handler.removeMessages(LYRIC);
+                    mHandler.removeMessages(LYRIC);
                     break;
             }
         }

@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.user.UserState;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
@@ -18,9 +18,9 @@ import cn.bmob.v3.listener.UpdateListener;
 public class UpdataPasswordActivity extends BaseActivity implements View.OnClickListener {
 
 
-    private ImageView go_back;
-    private EditText UserPassword, AgainPassword;
-    private Button submit;
+    private ImageView mGoBack;
+    private EditText mUserPassword, mAgainPassword;
+    private Button mSubmit;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,15 +30,15 @@ public class UpdataPasswordActivity extends BaseActivity implements View.OnClick
     }
 
     private void initView() {
-        go_back = findViewById(R.id.go_back);
-        UserPassword = findViewById(R.id.UserPassword);
-        AgainPassword = findViewById(R.id.AgainPassword);
-        submit = findViewById(R.id.submit);
+        mGoBack = findViewById(R.id.go_back);
+        mUserPassword = findViewById(R.id.UserPassword);
+        mAgainPassword = findViewById(R.id.AgainPassword);
+        mSubmit = findViewById(R.id.submit);
     }
 
     private void initEvent() {
-        go_back.setOnClickListener(this);
-        submit.setOnClickListener(this);
+        mGoBack.setOnClickListener(this);
+        mSubmit.setOnClickListener(this);
     }
 
     @Override
@@ -48,8 +48,8 @@ public class UpdataPasswordActivity extends BaseActivity implements View.OnClick
                 finish();
                 break;
             case R.id.submit:
-                String password = UserPassword.getText().toString();
-                String againpassword = AgainPassword.getText().toString();
+                String password = mUserPassword.getText().toString();
+                String againpassword = mAgainPassword.getText().toString();
                 if (password.compareTo(againpassword) == 0) {
                     User user = new User();
                     String userid = UserState.getLoginUser().getUserId();
@@ -76,8 +76,8 @@ public class UpdataPasswordActivity extends BaseActivity implements View.OnClick
                     });
                 } else {
                     Toast.makeText(this, "两次密码不正确,请重新输入", Toast.LENGTH_SHORT).show();
-                    UserPassword.setText("");
-                    AgainPassword.setText("");
+                    mUserPassword.setText("");
+                    mAgainPassword.setText("");
                 }
                 break;
         }

@@ -19,11 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.bean.Follow;
 import com.gin.xjh.shin_music.bean.LikeSong;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.util.ListDataSaveUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.util.NetStateUtil;
@@ -39,15 +39,15 @@ import cn.bmob.v3.listener.FindListener;
 
 public class LoginMenuActivity extends BaseActivity implements View.OnClickListener {
 
-    private ImageView go_back, User_img, User_Sex;
-    private TextView User_Name, User_QQ, User_Sign;
-    private LinearLayout edit_user, about, question, updata_password, toConcernList;
-    private Button logout;
-    private Switch fourg;
+    private ImageView mGoBack, mUserImg, mUserSex;
+    private TextView mUserName, mUserQQ, mUserSign;
+    private LinearLayout mEditUser, mAbout, mQuestion, mUpdataPassword, mToConcernList;
+    private Button mLogout;
+    private Switch mFourG;
 
 
-    private static int edit_requestCode = 0x110;
-    private static int register_requestCode = 0x111;
+    private static final int EDIT_REQUEST_CODE = 0x110;
+    private static final int REGISTER_REQUEST_CODE = 0x111;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,33 +58,33 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initView() {
-        go_back = findViewById(R.id.go_back);
-        User_img = findViewById(R.id.User_img);
-        User_Name = findViewById(R.id.User_Name);
-        User_Sex = findViewById(R.id.User_sex);
-        User_QQ = findViewById(R.id.User_QQ);
-        User_Sign = findViewById(R.id.User_sign);
-        edit_user = findViewById(R.id.edit_user);
-        about = findViewById(R.id.about);
-        question = findViewById(R.id.question);
-        logout = findViewById(R.id.logout);
-        updata_password = findViewById(R.id.updata_password);
-        fourg = findViewById(R.id.fourg);
-        toConcernList = findViewById(R.id.toConcernList);
+        mGoBack = findViewById(R.id.go_back);
+        mUserImg = findViewById(R.id.User_img);
+        mUserName = findViewById(R.id.User_Name);
+        mUserSex = findViewById(R.id.User_sex);
+        mUserQQ = findViewById(R.id.User_QQ);
+        mUserSign = findViewById(R.id.User_sign);
+        mEditUser = findViewById(R.id.edit_user);
+        mAbout = findViewById(R.id.about);
+        mQuestion = findViewById(R.id.question);
+        mLogout = findViewById(R.id.logout);
+        mUpdataPassword = findViewById(R.id.updata_password);
+        mFourG = findViewById(R.id.fourg);
+        mToConcernList = findViewById(R.id.toConcernList);
     }
 
     private void initEvent() {
-        fourg.setChecked(UserState.isUse_4G());
+        mFourG.setChecked(UserState.isUse_4G());
 
-        go_back.setOnClickListener(this);
-        User_Name.setOnClickListener(this);
-        edit_user.setOnClickListener(this);
-        about.setOnClickListener(this);
-        question.setOnClickListener(this);
-        logout.setOnClickListener(this);
-        updata_password.setOnClickListener(this);
-        toConcernList.setOnClickListener(this);
-        fourg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mGoBack.setOnClickListener(this);
+        mUserName.setOnClickListener(this);
+        mEditUser.setOnClickListener(this);
+        mAbout.setOnClickListener(this);
+        mQuestion.setOnClickListener(this);
+        mLogout.setOnClickListener(this);
+        mUpdataPassword.setOnClickListener(this);
+        mToConcernList.setOnClickListener(this);
+        mFourG.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
@@ -94,7 +94,7 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
                         for (Song song : mSongList) {
                             if (song != null && song.isOnline() && NetStateUtil.getNetWorkState(LoginMenuActivity.this) == NetStateUtil.DATA_STATE) {
                                 Toast.makeText(LoginMenuActivity.this, "当前歌单中存在在线歌曲，关闭失败", Toast.LENGTH_SHORT).show();
-                                fourg.setChecked(true);
+                                mFourG.setChecked(true);
                                 flag = true;
                                 break;
                             }
@@ -178,7 +178,7 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent registerintent = new Intent(LoginMenuActivity.this, RegisterActivity.class);
-                            startActivityForResult(registerintent, register_requestCode);
+                            startActivityForResult(registerintent, REGISTER_REQUEST_CODE);
                         }
                     });
                     builder1.create();
@@ -188,7 +188,7 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
             case R.id.edit_user:
                 if (UserState.getState()) {
                     Intent editintent = new Intent(this, UpdataActivity.class);
-                    startActivityForResult(editintent, edit_requestCode);
+                    startActivityForResult(editintent, EDIT_REQUEST_CODE);
                 } else {
                     Toast.makeText(this, "请登录后再进行该项操作", Toast.LENGTH_SHORT).show();
                 }
@@ -267,19 +267,19 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
 
     private void updataLogin() {
         User user = UserState.getLoginUser();
-        User_Name.setText(user.getUserName());
-        User_QQ.setText("QQ:" + user.getUserQQ());
-        User_Sign.setText("个人简介：" + user.getPersonal_profile());
-        User_Sex.setVisibility(View.VISIBLE);
+        mUserName.setText(user.getUserName());
+        mUserQQ.setText("QQ:" + user.getUserQQ());
+        mUserSign.setText("个人简介：" + user.getPersonal_profile());
+        mUserSex.setVisibility(View.VISIBLE);
         switch (user.getUserSex()) {
             case 0:
-                User_Sex.setImageResource(R.drawable.sel_sex_man);
+                mUserSex.setImageResource(R.drawable.sel_sex_man);
                 break;
             case 1:
-                User_Sex.setImageResource(R.drawable.sel_sex_woman);
+                mUserSex.setImageResource(R.drawable.sel_sex_woman);
                 break;
             case 2:
-                User_Sex.setImageResource(R.drawable.sel_sex_alien);
+                mUserSex.setImageResource(R.drawable.sel_sex_alien);
                 break;
         }
 
@@ -299,14 +299,14 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
         updateBmobLikeEvent();
         updateBmobConcernEvent();
 
-        logout.setVisibility(View.VISIBLE);
+        mLogout.setVisibility(View.VISIBLE);
     }
 
     private void updataLogout() {
-        User_Name.setText("登录/注册");
-        User_QQ.setText("");
-        User_Sign.setText("");
-        User_Sex.setVisibility(View.GONE);
+        mUserName.setText("登录/注册");
+        mUserQQ.setText("");
+        mUserSign.setText("");
+        mUserSex.setVisibility(View.GONE);
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -326,7 +326,7 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
         UserState.setLikeSongList(null);
         UserState.setConcernList(null);
 
-        logout.setVisibility(View.GONE);
+        mLogout.setVisibility(View.GONE);
     }
 
     private void updateBmobLikeEvent() {

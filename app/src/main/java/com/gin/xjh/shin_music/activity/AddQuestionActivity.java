@@ -17,12 +17,12 @@ import cn.bmob.v3.listener.SaveListener;
 
 public class AddQuestionActivity extends BaseActivity implements View.OnClickListener {
 
-    private ImageView go_back;
+    private ImageView mGoBack;
 
-    private RadioGroup Question_Classify;
-    private EditText Question_Content, Question_User;
+    private RadioGroup mQuestionClassify;
+    private EditText mQuestionContent, mQuestionUser;
 
-    private Button submit;
+    private Button mSubmit;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,16 +32,16 @@ public class AddQuestionActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initView() {
-        go_back = findViewById(R.id.go_back);
-        Question_Classify = findViewById(R.id.question_rg);
-        Question_Content = findViewById(R.id.question);
-        Question_User = findViewById(R.id.user);
-        submit = findViewById(R.id.submit);
+        mGoBack = findViewById(R.id.go_back);
+        mQuestionClassify = findViewById(R.id.question_rg);
+        mQuestionContent = findViewById(R.id.question);
+        mQuestionUser = findViewById(R.id.user);
+        mSubmit = findViewById(R.id.submit);
     }
 
     private void initEvent() {
-        go_back.setOnClickListener(this);
-        submit.setOnClickListener(this);
+        mGoBack.setOnClickListener(this);
+        mSubmit.setOnClickListener(this);
     }
 
     @Override
@@ -57,12 +57,12 @@ public class AddQuestionActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void Submit_Question() {
-        String question = Question_Content.getText().toString();
-        String question_user = Question_User.getText().toString();
+        String question = mQuestionContent.getText().toString();
+        String question_user = mQuestionUser.getText().toString();
         String category = "";
 
         if (question != "" && question.length() > 0) {
-            switch (Question_Classify.getCheckedRadioButtonId()) {
+            switch (mQuestionClassify.getCheckedRadioButtonId()) {
                 case R.id.suggest_rb:
                     category = "产品建议";
                     break;
@@ -75,8 +75,8 @@ public class AddQuestionActivity extends BaseActivity implements View.OnClickLis
                 @Override
                 public void done(String s, BmobException e) {
                     if (e == null) {
-                        Question_Content.setText("");
-                        Question_User.setText("");
+                        mQuestionContent.setText("");
+                        mQuestionUser.setText("");
                         Toast.makeText(AddQuestionActivity.this, "提交成功，稍后会进行解决", Toast.LENGTH_SHORT).show();
                         finish();
                     }

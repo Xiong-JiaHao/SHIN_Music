@@ -31,14 +31,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.netrequest.GetNetMusicDetail;
-import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.adapter.FragmentAdapter;
 import com.gin.xjh.shin_music.adapter.MusicListRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.fragment.FragmentLyrics;
 import com.gin.xjh.shin_music.fragment.FragmentMusic;
+import com.gin.xjh.shin_music.netrequest.GetNetMusicDetail;
 import com.gin.xjh.shin_music.service.MusicService;
+import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.util.DensityUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.util.NetStateUtil;
@@ -51,21 +51,21 @@ import java.util.List;
 
 public class MusicPlayActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageView go_back, change_style, ic_comment, setting;
-    private ImageView leftto, music_play, rightto, cycle_style, song_sheet, ilike;
-    private TextView Song_Name, Singer_Name, change_flag, nowtime, endtime;
-    private SeekBar time_seekbar;
-    private ViewPager fragment_VP;
+    private ImageView mGoBack, mChangeStyle, mIcComment, mSetting;
+    private ImageView mPreSong, mMusicPlay, mNextSong, mCycleStyle, mSongSheet, mLike;
+    private TextView mSongName, mSingerName, mChangeFlag, mNowTime, mEndTime;
+    private SeekBar mtTmeSeekbar;
+    private ViewPager mFragmentVP;
 
 
-    private List<Fragment> fragments = new ArrayList<>();
-    private FragmentAdapter adapter;
-    private int Index = 0;
+    private List<Fragment> mFragmentList = new ArrayList<>();
+    private FragmentAdapter mAdapter;
+    private int mIndex = 0;
 
     private SongBroadCast mSongBroadCast;
-    private LocalBroadcastManager broadcastManager;
+    private LocalBroadcastManager mBroadcastManager;
 
-    private MusicListRecyclerViewAdapter musiclistRecyclerViewAdapter;
+    private MusicListRecyclerViewAdapter mMusiclistRecyclerViewAdapter;
 
     private boolean isChange = false;
 
@@ -75,9 +75,9 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
 
     private final long INTERVAL = 500L; //防止连续点击的时间间隔
     private long lastClickTime = 0L; //上一次点击的时间
-    private volatile String lastSongName = null;
-    private volatile Long lastSongId = null;
-    private volatile int lasttime = 0;
+    private volatile String mLastSongName = null;
+    private volatile Long mLastSongId = null;
+    private volatile int mLasttime = 0;
     private volatile boolean isNext = true;
     private volatile boolean islike;
 
@@ -99,8 +99,8 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
             if (msg.what == UPDATEUI && !isChange && MusicUtil.isPlayMusic()) {
                 String timeStr = null;
                 int time = MusicUtil.getPlayTime();
-                if (lasttime == -1) {
-                    lasttime = 0;
+                if (mLasttime == -1) {
+                    mLasttime = 0;
                     Toast.makeText(MusicPlayActivity.this, "\"" + MusicUtil.getNowSong().getSongName() + "\"无版权无法播放", Toast.LENGTH_SHORT).show();
                     if (isNext) {
                         nextSong(true);
@@ -109,12 +109,12 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
                     }
                     return;
                 }
-                if (lasttime == time) {
+                if (mLasttime == time) {
                     if (time == 0) {
-                        lasttime = -1;
+                        mLasttime = -1;
                         UIHandler.sendEmptyMessageDelayed(UPDATEUI, 1000);//自己给自己刷新
                     } else {
-                        lasttime = 0;
+                        mLasttime = 0;
                         Toast.makeText(MusicPlayActivity.this, "\"" + MusicUtil.getNowSong().getSongName() + "\"无版权无法播放", Toast.LENGTH_SHORT).show();
                         if (isNext) {
                             nextSong(true);
@@ -128,9 +128,9 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    time_seekbar.setProgress(time);
-                    lasttime = time;
-                    nowtime.setText(timeStr);
+                    mtTmeSeekbar.setProgress(time);
+                    mLasttime = time;
+                    mNowTime.setText(timeStr);
                     if (time >= MusicUtil.getNowSong().getSongTime()) {
                         nextSong(false);
                         return;
@@ -147,52 +147,52 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.music_play_activity);
         mSongBroadCast = new SongBroadCast();
-        broadcastManager = LocalBroadcastManager.getInstance(this);
+        mBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(MUSIC_ACTION_CHANGE);
-        broadcastManager.registerReceiver(mSongBroadCast, intentFilter);
+        mBroadcastManager.registerReceiver(mSongBroadCast, intentFilter);
         initView();
         initEvent();
         changSong();
     }
 
     private void initView() {
-        go_back = findViewById(R.id.go_back);
-        change_style = findViewById(R.id.change_style);
-        ic_comment = findViewById(R.id.ic_comment);
-        setting = findViewById(R.id.settings);
-        leftto = findViewById(R.id.leftto);
-        music_play = findViewById(R.id.music_play);
-        rightto = findViewById(R.id.rightto);
-        cycle_style = findViewById(R.id.cycle_style);
-        song_sheet = findViewById(R.id.song_sheet);
-        Song_Name = findViewById(R.id.Song_Name);
-        Singer_Name = findViewById(R.id.Singer_Name);
-        change_flag = findViewById(R.id.change_flag);
-        nowtime = findViewById(R.id.nowtime);
-        endtime = findViewById(R.id.endtime);
-        time_seekbar = findViewById(R.id.time_seekbar);
-        fragment_VP = findViewById(R.id.fragment_VP);
-        ilike = findViewById(R.id.ilike);
+        mGoBack = findViewById(R.id.go_back);
+        mChangeStyle = findViewById(R.id.change_style);
+        mIcComment = findViewById(R.id.ic_comment);
+        mSetting = findViewById(R.id.settings);
+        mPreSong = findViewById(R.id.leftto);
+        mMusicPlay = findViewById(R.id.music_play);
+        mNextSong = findViewById(R.id.rightto);
+        mCycleStyle = findViewById(R.id.cycle_style);
+        mSongSheet = findViewById(R.id.song_sheet);
+        mSongName = findViewById(R.id.Song_Name);
+        mSingerName = findViewById(R.id.Singer_Name);
+        mChangeFlag = findViewById(R.id.change_flag);
+        mNowTime = findViewById(R.id.nowtime);
+        mEndTime = findViewById(R.id.endtime);
+        mtTmeSeekbar = findViewById(R.id.time_seekbar);
+        mFragmentVP = findViewById(R.id.fragment_VP);
+        mLike = findViewById(R.id.ilike);
     }
 
     private void initEvent() {
-        fragments.add(new FragmentMusic());
-        fragments.add(new FragmentLyrics());
-        Index = 0;
-        adapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
-        fragment_VP.setAdapter(adapter);
+        mFragmentList.add(new FragmentMusic());
+        mFragmentList.add(new FragmentLyrics());
+        mIndex = 0;
+        mAdapter = new FragmentAdapter(getSupportFragmentManager(), mFragmentList);
+        mFragmentVP.setAdapter(mAdapter);
 
-        go_back.setOnClickListener(this);
-        change_style.setOnClickListener(this);
-        ic_comment.setOnClickListener(this);
-        setting.setOnClickListener(this);
-        cycle_style.setOnClickListener(this);
-        leftto.setOnClickListener(this);
-        music_play.setOnClickListener(this);
-        rightto.setOnClickListener(this);
-        song_sheet.setOnClickListener(this);
-        ilike.setOnClickListener(this);
+        mGoBack.setOnClickListener(this);
+        mChangeStyle.setOnClickListener(this);
+        mIcComment.setOnClickListener(this);
+        mSetting.setOnClickListener(this);
+        mCycleStyle.setOnClickListener(this);
+        mPreSong.setOnClickListener(this);
+        mMusicPlay.setOnClickListener(this);
+        mNextSong.setOnClickListener(this);
+        mSongSheet.setOnClickListener(this);
+        mLike.setOnClickListener(this);
 
         MediaPlayer mMediaPlayer = MusicUtil.getMediaPlayer();
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -200,7 +200,7 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
             public void onCompletion(MediaPlayer mp) {//自动播放完后
                 if (MusicUtil.isPlayMusic()) {
                     Song song = MusicUtil.getNowSong();
-                    if (!(song.getSongName().equals(lastSongName) && song.getSongId().equals(lastSongId))) {
+                    if (!(song.getSongName().equals(mLastSongName) && song.getSongId().equals(mLastSongId))) {
                         Intent startIntent;
                         if (isNext) {
                             startIntent = new Intent(MusicPlayActivity.this, MusicService.class);
@@ -209,25 +209,25 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
                             startIntent = new Intent(MusicPlayActivity.this, MusicService.class);
                             startIntent.putExtra("action", MusicService.PREVIOUSMUSIC);
                         }
-                        lastSongName = song.getSongName();
-                        lastSongId = song.getSongId();
+                        mLastSongName = song.getSongName();
+                        mLastSongId = song.getSongId();
                         startService(startIntent);
                     } else {
-                        lastSongName = song.getSongName();
-                        lastSongId = song.getSongId();
+                        mLastSongName = song.getSongName();
+                        mLastSongId = song.getSongId();
                     }
                 }
             }
         });
 
-        time_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mtTmeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
                     MusicUtil.setSeekTo(progress);
-                    lasttime = progress;
+                    mLasttime = progress;
                     Intent intent = new Intent(LyricView.LYRIC_ACTION_PLAY);
-                    broadcastManager.sendBroadcast(intent);
+                    mBroadcastManager.sendBroadcast(intent);
                 }
             }
 
@@ -246,31 +246,31 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
                 else{
                     MusicUtil.setSeekTo(seekBar.getProgress());
                 }
-                lasttime = seekBar.getProgress();
+                mLasttime = seekBar.getProgress();
                 isChange = false;
                 //恢复UI刷新
-                lasttime = 0;
+                mLasttime = 0;
                 UIHandler.sendEmptyMessage(UPDATEUI);
             }
         });
 
         if (MusicUtil.isPlayMusic()) {
-            music_play.setImageResource(R.drawable.btn_music_pause);
+            mMusicPlay.setImageResource(R.drawable.btn_music_pause);
             //恢复UI刷新
-            lasttime = 0;
+            mLasttime = 0;
             UIHandler.sendEmptyMessage(UPDATEUI);
         }
         switch (MusicUtil.getPlay_state()) {
             case MusicUtil.SINGLE_CYCLE:
-                cycle_style.setImageResource(R.drawable.btn_single_cycle);
+                mCycleStyle.setImageResource(R.drawable.btn_single_cycle);
                 break;
 
             case MusicUtil.ORDER_CYCLE:
-                cycle_style.setImageResource(R.drawable.btn_order_cycle);
+                mCycleStyle.setImageResource(R.drawable.btn_order_cycle);
                 break;
 
             case MusicUtil.DISORDERLY_CYCLE:
-                cycle_style.setImageResource(R.drawable.btn_disorderly_cycle);
+                mCycleStyle.setImageResource(R.drawable.btn_disorderly_cycle);
                 break;
         }
     }
@@ -280,17 +280,17 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.go_back:
                 Intent intent = new Intent(LyricView.LYRIC_ACTION_PAUSE);
-                broadcastManager.sendBroadcast(intent);
+                mBroadcastManager.sendBroadcast(intent);
                 finish();
                 break;
             case R.id.change_style:
-                Index ^= 1;
-                if (Index == 0) {
-                    change_flag.setText("词");
+                mIndex ^= 1;
+                if (mIndex == 0) {
+                    mChangeFlag.setText("词");
                 } else {
-                    change_flag.setText("CD");
+                    mChangeFlag.setText("CD");
                 }
-                fragment_VP.setCurrentItem(Index);
+                mFragmentVP.setCurrentItem(mIndex);
                 break;
             case R.id.ic_comment:
                 if (MusicUtil.getListSize() > 0) {
@@ -313,13 +313,13 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
             case R.id.cycle_style:
                 MusicUtil.changeType();
                 if (MusicUtil.getPlay_state() == MusicUtil.SINGLE_CYCLE) {
-                    cycle_style.setImageResource(R.drawable.btn_single_cycle);
+                    mCycleStyle.setImageResource(R.drawable.btn_single_cycle);
                     Toast.makeText(this, "单曲循环", Toast.LENGTH_SHORT).show();
                 } else if (MusicUtil.getPlay_state() == MusicUtil.ORDER_CYCLE) {
-                    cycle_style.setImageResource(R.drawable.btn_order_cycle);
+                    mCycleStyle.setImageResource(R.drawable.btn_order_cycle);
                     Toast.makeText(this, "顺序播放", Toast.LENGTH_SHORT).show();
                 } else {
-                    cycle_style.setImageResource(R.drawable.btn_disorderly_cycle);
+                    mCycleStyle.setImageResource(R.drawable.btn_disorderly_cycle);
                     Toast.makeText(this, "随机播放", Toast.LENGTH_SHORT).show();
                 }
                 SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
@@ -371,23 +371,23 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
                 }
                 if (islike) {
                     islike = false;
-                    UserState.removeLikeSong(MusicPlayActivity.this, ilike, song);
+                    UserState.removeLikeSong(MusicPlayActivity.this, mLike, song);
                 } else {
                     islike = true;
-                    UserState.addLikeSong(MusicPlayActivity.this, ilike, song);
+                    UserState.addLikeSong(MusicPlayActivity.this, mLike, song);
                 }
                 break;
         }
     }
 
     private void preSong() {
-        lastSongName = MusicUtil.getNowSong().getSongName();
-        lastSongId = MusicUtil.getNowSong().getSongId();
+        mLastSongName = MusicUtil.getNowSong().getSongName();
+        mLastSongId = MusicUtil.getNowSong().getSongId();
         if (MusicUtil.getListSize() == 0) {
             Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
             return;
         } else if (!MusicUtil.isPlayMusic()) {
-            music_play.setImageResource(R.drawable.btn_music_pause);
+            mMusicPlay.setImageResource(R.drawable.btn_music_pause);
         }
         Intent startIntent2 = new Intent(this, MusicService.class);
         startIntent2.putExtra("action", MusicService.PREVIOUSMUSIC);
@@ -403,35 +403,35 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
         startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
         startService(startIntent1);
         if (!MusicUtil.isPlayMusic()) {
-            music_play.setImageResource(R.drawable.btn_music_pause);
+            mMusicPlay.setImageResource(R.drawable.btn_music_pause);
             Intent playintent = new Intent(FragmentMusic.MUSIC_ACTION_PLAY);
-            broadcastManager.sendBroadcast(playintent);
+            mBroadcastManager.sendBroadcast(playintent);
             playintent = new Intent(LyricView.LYRIC_ACTION_PLAY);
-            broadcastManager.sendBroadcast(playintent);
+            mBroadcastManager.sendBroadcast(playintent);
             //恢复UI刷新
-            lasttime = 0;
+            mLasttime = 0;
             UIHandler.sendEmptyMessage(UPDATEUI);
         } else {
-            music_play.setImageResource(R.drawable.btn_music_play);
+            mMusicPlay.setImageResource(R.drawable.btn_music_play);
             Intent playintent = new Intent(FragmentMusic.MUSIC_ACTION_PAUSE);
-            broadcastManager.sendBroadcast(playintent);
+            mBroadcastManager.sendBroadcast(playintent);
             playintent = new Intent(LyricView.LYRIC_ACTION_PAUSE);
-            broadcastManager.sendBroadcast(playintent);
+            mBroadcastManager.sendBroadcast(playintent);
             //停止UI刷新
             UIHandler.removeMessages(UPDATEUI);
         }
     }
 
     private void nextSong(boolean flag) {
-        lastSongName = MusicUtil.getNowSong().getSongName();
-        lastSongId = MusicUtil.getNowSong().getSongId();
+        mLastSongName = MusicUtil.getNowSong().getSongName();
+        mLastSongId = MusicUtil.getNowSong().getSongId();
         if (MusicUtil.getListSize() == 0) {
             Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
             return;
         } else if (!MusicUtil.isPlayMusic()) {
-            music_play.setImageResource(R.drawable.btn_music_pause);
+            mMusicPlay.setImageResource(R.drawable.btn_music_pause);
         }
-        lasttime = 0;
+        mLasttime = 0;
         Intent startIntent3 = new Intent(this, MusicService.class);
         if (flag) {
             startIntent3.putExtra("action", MusicService.NEXTMUSIC);
@@ -464,11 +464,11 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
                 if (song != null && song.isOnline() && UserState.getState()) {
                     if (islike) {
                         islike = false;
-                        UserState.removeLikeSong(MusicPlayActivity.this, ilike, song);
+                        UserState.removeLikeSong(MusicPlayActivity.this, mLike, song);
                         like.setText(R.string.unlike);
                     } else {
                         islike = true;
-                        UserState.addLikeSong(MusicPlayActivity.this, ilike, song);
+                        UserState.addLikeSong(MusicPlayActivity.this, mLike, song);
                         like.setText(R.string.like);
                     }
                 } else if (song == null || !song.isOnline()) {
@@ -522,7 +522,7 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
                     MusicUtil.removeSong(num);
                     MusicUtil.autonext();
                     Intent Musicintent = new Intent(MusicPlayActivity.MUSIC_ACTION_CHANGE);
-                    broadcastManager.sendBroadcast(Musicintent);
+                    mBroadcastManager.sendBroadcast(Musicintent);
                     bottomDialog.dismiss();
                 }
             }
@@ -551,11 +551,11 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
         final ImageView play_style_img = contentView.findViewById(R.id.play_style_img);
 
         RecyclerView music_list_rv = contentView.findViewById(R.id.music_list_rv);
-        musiclistRecyclerViewAdapter = new MusicListRecyclerViewAdapter(this, MusicUtil.getSongList(), play_style_num);
+        mMusiclistRecyclerViewAdapter = new MusicListRecyclerViewAdapter(this, MusicUtil.getSongList(), play_style_num);
         music_list_rv.setLayoutManager(new LinearLayoutManager(this));
         music_list_rv.setItemAnimator(new DefaultItemAnimator());//默认动画
         music_list_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        music_list_rv.setAdapter(musiclistRecyclerViewAdapter);
+        music_list_rv.setAdapter(mMusiclistRecyclerViewAdapter);
 
         if (MusicUtil.getPlay_state() == MusicUtil.SINGLE_CYCLE) {
             play_style_img.setImageResource(R.drawable.btn_single_cycle);
@@ -573,17 +573,17 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
             public void onClick(View v) {
                 MusicUtil.changeType();
                 if (MusicUtil.getPlay_state() == MusicUtil.SINGLE_CYCLE) {
-                    cycle_style.setImageResource(R.drawable.btn_single_cycle);
+                    mCycleStyle.setImageResource(R.drawable.btn_single_cycle);
                     play_style_img.setImageResource(R.drawable.btn_single_cycle);
                     play_style_name.setText("单曲循环");
                     Toast.makeText(MusicPlayActivity.this, "单曲循环", Toast.LENGTH_SHORT).show();
                 } else if (MusicUtil.getPlay_state() == MusicUtil.ORDER_CYCLE) {
-                    cycle_style.setImageResource(R.drawable.btn_order_cycle);
+                    mCycleStyle.setImageResource(R.drawable.btn_order_cycle);
                     play_style_img.setImageResource(R.drawable.btn_order_cycle);
                     play_style_name.setText("顺序播放");
                     Toast.makeText(MusicPlayActivity.this, "顺序播放", Toast.LENGTH_SHORT).show();
                 } else {
-                    cycle_style.setImageResource(R.drawable.btn_disorderly_cycle);
+                    mCycleStyle.setImageResource(R.drawable.btn_disorderly_cycle);
                     play_style_img.setImageResource(R.drawable.btn_disorderly_cycle);
                     play_style_name.setText("随机播放");
                     Toast.makeText(MusicPlayActivity.this, "随机播放", Toast.LENGTH_SHORT).show();
@@ -613,52 +613,52 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
     private void changSong() {
         Song song = MusicUtil.getNowSong();
         if (song == null) {
-            nowtime.setText("00:00");
-            Song_Name.setText("未知");
-            Singer_Name.setText("未知");
-            time_seekbar.setProgress(0);
+            mNowTime.setText("00:00");
+            mSongName.setText("未知");
+            mSingerName.setText("未知");
+            mtTmeSeekbar.setProgress(0);
         } else {
-            Song_Name.setText(song.getSongName());
-            Singer_Name.setText(song.getSingerName());
+            mSongName.setText(song.getSongName());
+            mSingerName.setText(song.getSingerName());
             islike = false;
             if (UserState.getState()) {
                 islike = UserState.isLikeSong(song);
             }
             if (islike) {
-                ilike.setImageResource(R.drawable.btn_like_song);
+                mLike.setImageResource(R.drawable.btn_like_song);
             } else {
-                ilike.setImageResource(R.drawable.btn_unlike_song);
+                mLike.setImageResource(R.drawable.btn_unlike_song);
             }
             try {
                 if (song.getSongTime() == 0) {
                     new GetNetMusicDetail().getJson(this);
                 } else {
-                    endtime.setText(TimesUtil.longToString(song.getSongTime(), "mm:ss"));
+                    mEndTime.setText(TimesUtil.longToString(song.getSongTime(), "mm:ss"));
                 }
                 if (MusicUtil.isPlayMusic()) {
-                    time_seekbar.setProgress(MusicUtil.getPlayTime());
+                    mtTmeSeekbar.setProgress(MusicUtil.getPlayTime());
                 } else {
-                    time_seekbar.setProgress(0);
+                    mtTmeSeekbar.setProgress(0);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            time_seekbar.setMax(song.getSongTime());
+            mtTmeSeekbar.setMax(song.getSongTime());
             Intent playintent = new Intent(FragmentLyrics.LYRIC_ACTION_CHANGE);
-            broadcastManager.sendBroadcast(playintent);
+            mBroadcastManager.sendBroadcast(playintent);
             if(MusicUtil.isPlayMusic()){
                 //恢复UI刷新
-                lasttime = 0;
+                mLasttime = 0;
                 UIHandler.sendEmptyMessage(UPDATEUI);
-                music_play.setImageResource(R.drawable.btn_music_pause);
+                mMusicPlay.setImageResource(R.drawable.btn_music_pause);
                 Intent intent1 = new Intent(FragmentMusic.MUSIC_ACTION_CHANGE);
-                broadcastManager.sendBroadcast(intent1);
+                mBroadcastManager.sendBroadcast(intent1);
             } else {
-                music_play.setImageResource(R.drawable.btn_music_play);
+                mMusicPlay.setImageResource(R.drawable.btn_music_play);
                 //暂停UI刷新
                 UIHandler.removeMessages(UPDATEUI);
                 Intent intent1 = new Intent(FragmentMusic.MUSIC_ACTION_PAUSE);
-                broadcastManager.sendBroadcast(intent1);
+                mBroadcastManager.sendBroadcast(intent1);
             }
         }
     }
@@ -684,7 +684,7 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     protected void onDestroy() {
-        broadcastManager.unregisterReceiver(mSongBroadCast);
+        mBroadcastManager.unregisterReceiver(mSongBroadCast);
         //停止UI刷新
         UIHandler.removeMessages(UPDATEUI);
         super.onDestroy();

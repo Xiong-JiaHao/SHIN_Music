@@ -35,21 +35,21 @@ public class FragmentMusic extends Fragment {
     public static final String MUSIC_ACTION_PLAY = "MusicNotificaion.To.PLAY";
     public static final String MUSIC_ACTION_PAUSE = "MusicNotificaion.To.PAUSE";
     public static final String MUSIC_ACTION_CHANGE = "MusicNotificaion.To.CHANGEMUSIC";
-    private CDBroadCast cdBroadCast = null;
+    private CDBroadCast mCDBroadCast = null;
 
-    private ObjectAnimator objAnim = null;
+    private ObjectAnimator mObjAnim = null;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.music_fragment, null);
-        cdBroadCast = new CDBroadCast();
+        mCDBroadCast = new CDBroadCast();
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(MUSIC_ACTION_PLAY);
         intentFilter.addAction(MUSIC_ACTION_PAUSE);
         intentFilter.addAction(MUSIC_ACTION_CHANGE);
-        broadcastManager.registerReceiver(cdBroadCast,intentFilter);
+        broadcastManager.registerReceiver(mCDBroadCast,intentFilter);
         initView(view);
         initEvent();
         return view;
@@ -62,15 +62,15 @@ public class FragmentMusic extends Fragment {
         }
 
         //设定动画作用于的控件，以及什么动画，旋转的开始角度和结束角度
-        objAnim = ObjectAnimator.ofFloat(mAlbum, "rotation", 0.0f, 360.0f);
+        mObjAnim = ObjectAnimator.ofFloat(mAlbum, "rotation", 0.0f, 360.0f);
         //设定动画的旋转周期
-        objAnim.setDuration(20000);
+        mObjAnim.setDuration(20000);
         //设置动画的插值器，这个为匀速旋转
-        objAnim.setInterpolator(new LinearInterpolator());
+        mObjAnim.setInterpolator(new LinearInterpolator());
         //设置动画为无限重复
-        objAnim.setRepeatCount(-1);
+        mObjAnim.setRepeatCount(-1);
         //设置动画重复模式
-        objAnim.setRepeatMode(ObjectAnimator.RESTART);
+        mObjAnim.setRepeatMode(ObjectAnimator.RESTART);
 
     }
 
@@ -92,13 +92,13 @@ public class FragmentMusic extends Fragment {
             }
         });
         if (MusicUtil.isPlayMusic()) {
-            objAnim.start();
+            mObjAnim.start();
         }
     }
 
     @Override
     public void onDestroy() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(cdBroadCast);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mCDBroadCast);
         mAlbum.clearAnimation();
         super.onDestroy();
     }
@@ -110,19 +110,19 @@ public class FragmentMusic extends Fragment {
             switch (intent.getAction()) {
                 case MUSIC_ACTION_PLAY:
                     changeAlbum();
-                    if (objAnim.isPaused()) {
-                        objAnim.resume();
+                    if (mObjAnim.isPaused()) {
+                        mObjAnim.resume();
                     } else {
-                        objAnim.start();
+                        mObjAnim.start();
                     }
                     break;
                 case MUSIC_ACTION_PAUSE:
-                    objAnim.pause();
+                    mObjAnim.pause();
                     break;
                 case MUSIC_ACTION_CHANGE:
                     changeAlbum();
-                    objAnim.end();
-                    objAnim.start();
+                    mObjAnim.end();
+                    mObjAnim.start();
                     break;
             }
         }
@@ -155,7 +155,7 @@ public class FragmentMusic extends Fragment {
         super.onDestroyView();
 
         // 控件被移除时，取消动画
-        objAnim.cancel();
+        mObjAnim.cancel();
         mAlbum.clearAnimation();// 清除此ImageView身上的动画
     }
 }

@@ -31,8 +31,8 @@ import retrofit2.Retrofit;
 
 public class GetNetMusicList {
 
-    private RecyclerView music_list_rv;
-    private TextView music_list_hint;
+    private RecyclerView mMusicListRv;
+    private TextView mMusicListHint;
     private Context mContext;
 
     private List<Song> mSongList;
@@ -81,13 +81,13 @@ public class GetNetMusicList {
 
                         //RecyclerView
                         mMusicRecyclerViewAdapter = new MusicRecyclerViewAdapter(mContext, mSongList);
-                        music_list_rv.setLayoutManager(new LinearLayoutManager(mContext));
-                        music_list_rv.setItemAnimator(new DefaultItemAnimator());//默认动画
-                        music_list_rv.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
-                        music_list_rv.setAdapter(mMusicRecyclerViewAdapter);
+                        mMusicListRv.setLayoutManager(new LinearLayoutManager(mContext));
+                        mMusicListRv.setItemAnimator(new DefaultItemAnimator());//默认动画
+                        mMusicListRv.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
+                        mMusicListRv.setAdapter(mMusicRecyclerViewAdapter);
 
                         //取消加载提醒
-                        music_list_hint.setVisibility(View.GONE);
+                        mMusicListHint.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -97,8 +97,8 @@ public class GetNetMusicList {
     }
 
     public void getJson(int id, View music_list_rv, View music_list_hint, Context mContext, List<Song> mSongList) {
-        this.music_list_rv = (RecyclerView) music_list_rv;
-        this.music_list_hint = (TextView) music_list_hint;
+        this.mMusicListRv = (RecyclerView) music_list_rv;
+        this.mMusicListHint = (TextView) music_list_hint;
         this.mContext = mContext;
         this.mSongList = mSongList;
         obtainMainHandler();

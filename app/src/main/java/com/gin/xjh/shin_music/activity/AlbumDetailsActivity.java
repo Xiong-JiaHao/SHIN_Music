@@ -22,14 +22,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.netrequest.GetNetAlbumList;
-import com.gin.xjh.shin_music.netrequest.GetNetMusicList;
-import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.adapter.MusicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Album;
 import com.gin.xjh.shin_music.bean.LikeSong;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.netrequest.GetNetAlbumList;
+import com.gin.xjh.shin_music.netrequest.GetNetMusicList;
+import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.util.ListDataSaveUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
 import com.gin.xjh.shin_music.util.NetStateUtil;
@@ -47,16 +47,16 @@ import cn.bmob.v3.listener.UpdateListener;
 
 public class AlbumDetailsActivity extends BaseActivity implements View.OnClickListener {
 
-    private ImageView go_back,album_img;
-    private RecyclerView album_rv;
-    private TextView album_name, album_singer, album_times, album_hint;
-    private LinearLayout addAll;
+    private ImageView mGoBack, mAlbumImg;
+    private RecyclerView mAlbumRv;
+    private TextView mAlbumName, mAlbumSinger, mAlbumTimes, mAlbumHint;
+    private LinearLayout mAddAll;
 
     private List<Song> mSongList;
     private MusicRecyclerViewAdapter mMusicRecyclerViewAdapter;
-    private Album album;
-    private String name,url;
-    private int id;
+    private Album mAlbum;
+    private String mName, mUrl;
+    private int mID;
     private boolean isAlbum;
     private volatile boolean isPublic = false;
 
@@ -68,42 +68,42 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
         Intent intent = getIntent();
         isAlbum = intent.getBooleanExtra("isAlbum", true);
         if (isAlbum) {
-            album = (Album) intent.getBundleExtra("def_album").get("def_album");
+            mAlbum = (Album) intent.getBundleExtra("def_album").get("def_album");
         } else {
-            id = intent.getIntExtra("id",0);
-            name = intent.getStringExtra("name");
-            url=intent.getStringExtra("url");
+            mID = intent.getIntExtra("id", 0);
+            mName = intent.getStringExtra("name");
+            mUrl = intent.getStringExtra("url");
         }
         initView();
         initEvent();
     }
 
     private void initView() {
-        go_back = findViewById(R.id.go_back);
-        album_img = findViewById(R.id.album_img);
-        album_name = findViewById(R.id.album_name);
-        album_singer = findViewById(R.id.album_singer);
-        album_times = findViewById(R.id.album_times);
-        addAll = findViewById(R.id.addAll);
-        album_rv = findViewById(R.id.album_rv);
-        album_hint = findViewById(R.id.album_hint);
+        mGoBack = findViewById(R.id.go_back);
+        mAlbumImg = findViewById(R.id.album_img);
+        mAlbumName = findViewById(R.id.album_name);
+        mAlbumSinger = findViewById(R.id.album_singer);
+        mAlbumTimes = findViewById(R.id.album_times);
+        mAddAll = findViewById(R.id.addAll);
+        mAlbumRv = findViewById(R.id.album_rv);
+        mAlbumHint = findViewById(R.id.album_hint);
     }
 
     private void initEvent() {
-        go_back.setOnClickListener(this);
-        addAll.setOnClickListener(this);
+        mGoBack.setOnClickListener(this);
+        mAddAll.setOnClickListener(this);
         mContext = this;
         if (isAlbum) {
-            if (album.getAlbumId() == -1) {
+            if (mAlbum.getAlbumId() == -1) {
                 String str = UserState.getLoginUser().getLikeSongListName();
                 if (str != null) {
-                    album_name.setText(str);
+                    mAlbumName.setText(str);
                 } else {
-                    album_name.setText(album.getAlbumName());
+                    mAlbumName.setText(mAlbum.getAlbumName());
                 }
-                album_singer.setText("创建者：" + UserState.getLoginUser().getUserName());
-                album_times.setText("编辑歌单信息");
-                album_times.setOnClickListener(new View.OnClickListener() {
+                mAlbumSinger.setText("创建者：" + UserState.getLoginUser().getUserName());
+                mAlbumTimes.setText("编辑歌单信息");
+                mAlbumTimes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         editSongList();
@@ -116,26 +116,26 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
                     updateUI();
                 }
             } else {
-                album_singer.setText("歌手：" + album.getSinger());
+                mAlbumSinger.setText("歌手：" + mAlbum.getSinger());
                 try {
-                    album_times.setText("发行时间：" + TimesUtil.longToString(album.getTimes(), "yyyy-MM-dd"));
+                    mAlbumTimes.setText("发行时间：" + TimesUtil.longToString(mAlbum.getTimes(), "yyyy-MM-dd"));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                album_name.setText(album.getAlbumName());
+                mAlbumName.setText(mAlbum.getAlbumName());
                 updateBmobEvent();
             }
-            Picasso.get().load(album.getAlbumUrl())
+            Picasso.get().load(mAlbum.getAlbumUrl())
                     .placeholder(R.drawable.def_album)
                     .error(R.drawable.def_album)
-                    .into(album_img);
+                    .into(mAlbumImg);
         } else {
-            Picasso.get().load(url)
+            Picasso.get().load(mUrl)
                 .placeholder(R.drawable.def_album)
                 .error(R.drawable.def_album)
-                .into(album_img);
-            album_name.setTextSize(25);
-            album_name.setText(name);
+                    .into(mAlbumImg);
+            mAlbumName.setTextSize(25);
+            mAlbumName.setText(mName);
             updateOnlineEvent();
         }
     }
@@ -146,7 +146,7 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
         View viewDialog = inflater.inflate(R.layout.edit_likesong_layout, null);
         final EditText likeSongName = viewDialog.findViewById(R.id.likeSongName);
         final Switch is_Public = viewDialog.findViewById(R.id.is_Public);
-        likeSongName.setHint(album_name.getText());
+        likeSongName.setHint(mAlbumName.getText());
         is_Public.setChecked(UserState.getLoginUser().isPublic_song());
         is_Public.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -203,7 +203,7 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
                                 UserState.getLoginUser().setLikeSongListName(name);
                                 editor.putString("likesonglistname", name);
                                 editor.commit();
-                                album_name.setText(name);
+                                mAlbumName.setText(name);
                             } else {
                                 Toast.makeText(AlbumDetailsActivity.this, "保存失败，请重试", Toast.LENGTH_SHORT).show();
                             }
@@ -240,7 +240,7 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
                     ListDataSaveUtil.setSongList("likesong", mSongList);
                     updateUI();
                 } else {
-                    album_hint.setText("无喜欢歌曲，请添加后查看");
+                    mAlbumHint.setText("无喜欢歌曲，请添加后查看");
                 }
             }
         });
@@ -249,19 +249,19 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private void updateBmobEvent() {
         BmobQuery<Song> query = new BmobQuery<>();
-        query.addWhereEqualTo("AlbumName", album.getAlbumName());
+        query.addWhereEqualTo("AlbumName", mAlbum.getAlbumName());
         query.findObjects(new FindListener<Song>() {
             @Override
             public void done(List<Song> list, BmobException e) {
                 if (list != null && list.size() != 0) {
                     mSongList = list;
                     for (int i = 0; i < mSongList.size(); i++) {
-                        mSongList.get(i).setAlbumId(album.getAlbumId());
-                        mSongList.get(i).setAlbumTime(album.getTimes());
+                        mSongList.get(i).setAlbumId(mAlbum.getAlbumId());
+                        mSongList.get(i).setAlbumTime(mAlbum.getTimes());
                     }
                     updateUI();
                 } else {
-                    new GetNetAlbumList().getJson(album.getAlbumId(), album_rv, album_hint, mContext);
+                    new GetNetAlbumList().getJson(mAlbum.getAlbumId(), mAlbumRv, mAlbumHint, mContext);
                 }
             }
         });
@@ -270,7 +270,7 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private void updateOnlineEvent() {
         mSongList = new ArrayList<>();
-        new GetNetMusicList().getJson(id, findViewById(R.id.album_rv), findViewById(R.id.album_hint), mContext, mSongList);
+        new GetNetMusicList().getJson(mID, findViewById(R.id.album_rv), findViewById(R.id.album_hint), mContext, mSongList);
     }
 
     @Override
@@ -327,15 +327,15 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void updateUI() {
-        album_hint.setVisibility(View.GONE);
+        mAlbumHint.setVisibility(View.GONE);
         if (mSongList != null && mSongList.size() > 0) {
             mMusicRecyclerViewAdapter = new MusicRecyclerViewAdapter(mContext, mSongList);
-            album_rv.setLayoutManager(new LinearLayoutManager(mContext));
-            album_rv.setItemAnimator(new DefaultItemAnimator());//默认动画
-            album_rv.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
-            album_rv.setAdapter(mMusicRecyclerViewAdapter);
+            mAlbumRv.setLayoutManager(new LinearLayoutManager(mContext));
+            mAlbumRv.setItemAnimator(new DefaultItemAnimator());//默认动画
+            mAlbumRv.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
+            mAlbumRv.setAdapter(mMusicRecyclerViewAdapter);
         } else {
-            album_hint.setText("无喜欢歌曲，请添加后查看");
+            mAlbumHint.setText("无喜欢歌曲，请添加后查看");
         }
     }
 }

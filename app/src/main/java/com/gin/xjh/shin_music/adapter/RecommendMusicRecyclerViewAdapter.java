@@ -14,12 +14,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gin.xjh.shin_music.activity.AllCommentActivity;
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.user.UserState;
-import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.activity.AllCommentActivity;
 import com.gin.xjh.shin_music.activity.MusicPlayActivity;
+import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.service.MusicService;
+import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.util.DensityUtil;
 import com.gin.xjh.shin_music.util.ListDataSaveUtil;
 import com.gin.xjh.shin_music.util.MusicUtil;
@@ -34,11 +34,11 @@ import java.util.List;
  */
 
 public class RecommendMusicRecyclerViewAdapter extends RecyclerView.Adapter<RecommendMusicRecyclerViewAdapter.MusicViewHolder> {
-    public List<Song> list;
+    public List<Song> mSongList;
     private Context mContext;
 
     public RecommendMusicRecyclerViewAdapter(Context context, List<Song> list) {
-        this.list = list;
+        this.mSongList = list;
         this.mContext = context;
     }
 
@@ -50,33 +50,33 @@ public class RecommendMusicRecyclerViewAdapter extends RecyclerView.Adapter<Reco
     //绑定视图
     @Override
     public void onBindViewHolder(RecommendMusicRecyclerViewAdapter.MusicViewHolder holder, int position) {
-        holder.init(list.get(position), mContext, position);
+        holder.init(mSongList.get(position), mContext, position);
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return mSongList.size();
     }
 
     public class MusicViewHolder extends RecyclerView.ViewHolder {
-        private TextView SongName, SingerName;
-        private ImageView cover, sz;
+        private TextView mSongName, mSingerName;
+        private ImageView mCover, mAbout;
 
         public MusicViewHolder(View itemView) {
             super(itemView);
-            SongName = itemView.findViewById(R.id.itemSongName);
-            SingerName = itemView.findViewById(R.id.itemSingerName);
-            cover = itemView.findViewById(R.id.cover);
-            sz = itemView.findViewById(R.id.music_sz);
+            mSongName = itemView.findViewById(R.id.itemSongName);
+            mSingerName = itemView.findViewById(R.id.itemSingerName);
+            mCover = itemView.findViewById(R.id.cover);
+            mAbout = itemView.findViewById(R.id.music_sz);
         }
 
         public void init(Song song, final Context context, final int position) {
-            SongName.setText(song.getSongName());
-            SingerName.setText(song.toString());
+            mSongName.setText(song.getSongName());
+            mSingerName.setText(song.toString());
             Picasso.get().load(song.getAlbumUrl())
                     .placeholder(R.drawable.def_album)
                     .error(R.drawable.def_album)
-                    .into(cover);
+                    .into(mCover);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -88,8 +88,8 @@ public class RecommendMusicRecyclerViewAdapter extends RecyclerView.Adapter<Reco
                         return;
                     }
                     List<Song> mList = new ArrayList<>();
-                    for (int i = 0; i < list.size(); i++) {
-                        mList.add(list.get(i));
+                    for (int i = 0; i < mSongList.size(); i++) {
+                        mList.add(mSongList.get(i));
                     }
                     MusicUtil.changeSongList(mList);
                     MusicUtil.setIndex(position);
@@ -100,7 +100,7 @@ public class RecommendMusicRecyclerViewAdapter extends RecyclerView.Adapter<Reco
                     context.startActivity(intent);
                 }
             });
-            sz.setOnClickListener(new View.OnClickListener() {
+            mAbout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showbottomDialog(position);
@@ -112,14 +112,14 @@ public class RecommendMusicRecyclerViewAdapter extends RecyclerView.Adapter<Reco
     @SuppressLint("ResourceAsColor")
     private void showbottomDialog(final int position) {
         final Dialog bottomDialog = new Dialog(mContext, R.style.BottomDialog);
-        final Song song = list.get(position);
+        final Song song = mSongList.get(position);
         View contentView = null;
         contentView = LayoutInflater.from(mContext).inflate(R.layout.content_circle_dialog, null);
-        TextView ic_comment = contentView.findViewById(R.id.ic_comment);
+        TextView icComment = contentView.findViewById(R.id.ic_comment);
         if (song.isOnline()) {
-            ic_comment.setTextColor(mContext.getResources().getColor(R.color.Check));
+            icComment.setTextColor(mContext.getResources().getColor(R.color.Check));
         }
-        ic_comment.setOnClickListener(new View.OnClickListener() {
+        icComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //发消息告知弹出评论
@@ -136,8 +136,8 @@ public class RecommendMusicRecyclerViewAdapter extends RecyclerView.Adapter<Reco
             }
         });
 
-        TextView ic_play = contentView.findViewById(R.id.ic_play);
-        ic_play.setOnClickListener(new View.OnClickListener() {
+        TextView icPlay = contentView.findViewById(R.id.ic_play);
+        icPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (song.isOnline()) {
@@ -176,10 +176,10 @@ public class RecommendMusicRecyclerViewAdapter extends RecyclerView.Adapter<Reco
                 bottomDialog.dismiss();
             }
         });
-        TextView ic_singer = contentView.findViewById(R.id.ic_singer);
-        TextView ic_album = contentView.findViewById(R.id.ic_album);
-        ic_album.setText(song.getAlbumName());
-        ic_singer.setText(song.getSingerName());
+        TextView icSinger = contentView.findViewById(R.id.ic_singer);
+        TextView icAlbum = contentView.findViewById(R.id.ic_album);
+        icAlbum.setText(song.getAlbumName());
+        icSinger.setText(song.getSingerName());
         bottomDialog.setCanceledOnTouchOutside(true);
         bottomDialog.setContentView(contentView);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();

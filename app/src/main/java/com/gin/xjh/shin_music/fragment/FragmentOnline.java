@@ -32,17 +32,17 @@ import java.util.Map;
 
 public class FragmentOnline extends Fragment {
 
-    private GridView gridView;
-    private List<Map<String, Object>> dataList;
-    private SimpleAdapter adapter;
+    private GridView mGridView;
+    private List<Map<String, Object>> mDataList;
+    private SimpleAdapter mAdapter;
 
     private EditText mFind = null;
     private ImageView mCheck;
 
-    private int[] bitmapids = new int[]{R.drawable.icon_top, R.drawable.icon_hitfmtop, R.drawable.icon_billboard, R.drawable.btn_classical, R.drawable.icon_hiphop, R.drawable.icon_electricsong};
-    private String[] bitmapname = new String[]{"中国Top榜", "HitFMTop榜", "Billboard榜", "金曲榜", "嘻哈榜", "电音榜"};
-    private int[] ids = new int[]{15, 9, 6, 17, 18, 4};
-    private String[] bitmapUrl = new String[]{"http://p1.music.126.net/d8faOLHxwWPta02fskrdDQ==/2057186255569164.jpg",
+    private int[] mBitmapIds = new int[]{R.drawable.icon_top, R.drawable.icon_hitfmtop, R.drawable.icon_billboard, R.drawable.btn_classical, R.drawable.icon_hiphop, R.drawable.icon_electricsong};
+    private String[] mBitmapName = new String[]{"中国Top榜", "HitFMTop榜", "Billboard榜", "金曲榜", "嘻哈榜", "电音榜"};
+    private int[] mIds = new int[]{15, 9, 6, 17, 18, 4};
+    private String[] mBitmapUrl = new String[]{"http://p1.music.126.net/d8faOLHxwWPta02fskrdDQ==/2057186255569164.jpg",
                                                 "http://p1.music.126.net/ZRvvfxWy6l12Kzth56Jzaw==/2034096511385987.jpg",
                                                 "http://p1.music.126.net/BmeUMF4Cr0f343lCwj1_7Q==/2105564767199852.jpg",
                                                 "http://p1.music.126.net/N2whh2Prf0l8QHmCpShrcQ==/19140298416347251.jpg",
@@ -59,18 +59,18 @@ public class FragmentOnline extends Fragment {
     }
 
     private void initView(View view) {
-        gridView = view.findViewById(R.id.Online_music_gv);
+        mGridView = view.findViewById(R.id.Online_music_gv);
         mFind = view.findViewById(R.id.find_online_name);
         mCheck = view.findViewById(R.id.find_Onlinemusic);
     }
 
     private void initData() {
-        dataList = new ArrayList<>();
+        mDataList = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             Map<String, Object> map = new HashMap<>();
-            map.put("img", bitmapids[i]);
-            map.put("text", bitmapname[i]);
-            dataList.add(map);
+            map.put("img", mBitmapIds[i]);
+            map.put("text", mBitmapName[i]);
+            mDataList.add(map);
         }
 
     }
@@ -80,11 +80,11 @@ public class FragmentOnline extends Fragment {
         //GridView
         String[] from = {"img", "text"};
         int[] to = {R.id.music_img, R.id.music_text};
-        adapter = new SimpleAdapter(getContext(), dataList, R.layout.online_music_item, from, to);
+        mAdapter = new SimpleAdapter(getContext(), mDataList, R.layout.online_music_item, from, to);
 
-        gridView.setAdapter(adapter);
+        mGridView.setAdapter(mAdapter);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 if (NetStateUtil.getNetWorkState(getContext()) == NetStateUtil.NO_STATE) {
@@ -94,9 +94,9 @@ public class FragmentOnline extends Fragment {
 
                 Intent intent = new Intent(getContext(), AlbumDetailsActivity.class);
                 intent.putExtra("isAlbum", false);
-                intent.putExtra("name", bitmapname[arg2]);
-                intent.putExtra("id", ids[arg2]);
-                intent.putExtra("url",bitmapUrl[arg2]);
+                intent.putExtra("name", mBitmapName[arg2]);
+                intent.putExtra("id", mIds[arg2]);
+                intent.putExtra("url", mBitmapUrl[arg2]);
                 startActivity(intent);
             }
         });

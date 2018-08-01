@@ -27,9 +27,9 @@ import cn.bmob.v3.listener.FindListener;
 
 public class FragmentShin extends Fragment {
 
-    private GridView gridView;
-    private List<Album> dataList;
-    private AlbumItemAdapter adapter;
+    private GridView mGridView;
+    private List<Album> mDataList;
+    private AlbumItemAdapter mAdapter;
 
     @Nullable
     @Override
@@ -41,7 +41,7 @@ public class FragmentShin extends Fragment {
     }
 
     private void initView(View view) {
-        gridView = view.findViewById(R.id.gridview_shin);
+        mGridView = view.findViewById(R.id.gridview_shin);
     }
 
 
@@ -58,7 +58,7 @@ public class FragmentShin extends Fragment {
             public void done(List<Album> list, BmobException e) {
                 if(list!=null){
                     Collections.sort(list, new SortByTime());
-                    dataList = list;
+                    mDataList = list;
                     initEvent();
                 }
             }
@@ -68,8 +68,8 @@ public class FragmentShin extends Fragment {
 
     private void initEvent() {
         //GridView
-        adapter = new AlbumItemAdapter(getContext(), dataList);
-        gridView.setAdapter(adapter);
+        mAdapter = new AlbumItemAdapter(getContext(), mDataList);
+        mGridView.setAdapter(mAdapter);
     }
 
     private class SortByTime implements java.util.Comparator {

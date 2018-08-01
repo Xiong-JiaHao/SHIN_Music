@@ -12,23 +12,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.netrequest.FindNetMusic;
 import com.gin.xjh.shin_music.adapter.MusicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
+import com.gin.xjh.shin_music.netrequest.FindNetMusic;
 
 import java.util.List;
 
 public class MusicDetailsActivity extends BaseActivity implements View.OnClickListener {
 
-    private ImageView go_back;
-    private TextView find_name, mFind_hint;
-    private RecyclerView music_rv;
+    private ImageView mGoBack;
+    private TextView mFindName, mFindHint;
+    private RecyclerView mMusicRv;
 
     private List<Song> mSongList;
     private MusicRecyclerViewAdapter mMusicListViewAdapter;
 
     private boolean isOnline;
-    private String mFind_Name;
+    private String mFindNameStr;
 
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class MusicDetailsActivity extends BaseActivity implements View.OnClickLi
         initView();
         Intent intent = getIntent();
         isOnline = intent.getBooleanExtra("isOnline", true);
-        mFind_Name = intent.getStringExtra("name");
+        mFindNameStr = intent.getStringExtra("name");
         if (!isOnline) {
             mSongList = (List<Song>) intent.getBundleExtra("songlist").get("songlist");
         }
@@ -45,26 +45,26 @@ public class MusicDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initView() {
-        go_back = findViewById(R.id.go_back);
-        find_name = findViewById(R.id.find_name);
-        music_rv = findViewById(R.id.music_rv);
-        mFind_hint = findViewById(R.id.mFind_hint);
+        mGoBack = findViewById(R.id.go_back);
+        mFindName = findViewById(R.id.find_name);
+        mMusicRv = findViewById(R.id.music_rv);
+        mFindHint = findViewById(R.id.mFind_hint);
     }
 
     private void initEvent() {
-        find_name.setText(mFind_Name);
+        mFindName.setText(mFindNameStr);
         if (isOnline) {
-            new FindNetMusic().getJson(mFind_Name, music_rv, mFind_hint, this);
+            new FindNetMusic().getJson(mFindNameStr, mMusicRv, mFindHint, this);
         } else {
             mMusicListViewAdapter = new MusicRecyclerViewAdapter(this, mSongList);
-            music_rv.setLayoutManager(new LinearLayoutManager(this));
-            music_rv.setItemAnimator(new DefaultItemAnimator());//默认动画
-            music_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-            music_rv.setAdapter(mMusicListViewAdapter);
+            mMusicRv.setLayoutManager(new LinearLayoutManager(this));
+            mMusicRv.setItemAnimator(new DefaultItemAnimator());//默认动画
+            mMusicRv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+            mMusicRv.setAdapter(mMusicListViewAdapter);
 
-            mFind_hint.setVisibility(View.GONE);
+            mFindHint.setVisibility(View.GONE);
         }
-        go_back.setOnClickListener(this);
+        mGoBack.setOnClickListener(this);
 
     }
 

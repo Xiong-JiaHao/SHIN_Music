@@ -33,7 +33,7 @@ import retrofit2.Retrofit;
 public class FindNetMusic {
 
     private RecyclerView mRecyclerView;
-    private TextView list_hint;
+    private TextView mListHint;
     private Context mContext;
 
     private List<Song> mSongList;
@@ -88,7 +88,7 @@ public class FindNetMusic {
                         mRecyclerView.setAdapter(mMusicListViewAdapter);
 
                         //取消加载提醒
-                        list_hint.setVisibility(View.GONE);
+                        mListHint.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -99,7 +99,7 @@ public class FindNetMusic {
 
     public void getJson(String name, View mRecyclerView, View list_hint, Context mContext) {
         this.mRecyclerView = (RecyclerView) mRecyclerView;
-        this.list_hint = (TextView) list_hint;
+        this.mListHint = (TextView) list_hint;
         this.mContext = mContext;
         mSongList = new ArrayList<>();
         obtainMainHandler();

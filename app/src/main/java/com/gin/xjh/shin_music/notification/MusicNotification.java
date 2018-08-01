@@ -21,46 +21,46 @@ import com.squareup.picasso.Picasso;
 
 public class MusicNotification extends Notification {
 
-    private static MusicNotification notifyInstance = null;
-    private Notification musicNotifi = null;
+    private static MusicNotification mNotifyInstance = null;
+    private Notification mMusicNotifi = null;
     private final int NOTIFICATION_ID = 100;
 
-    private Context context;
+    private Context mContext;
     private final int REQUEST_CODE = 0;
 
-    private NotificationManager manager = null;
-    private Builder builder;
+    private NotificationManager mManager = null;
+    private Builder mBuilder;
 
-    private RemoteViews remoteViews;
-    private Intent play, next, pre;
+    private RemoteViews mRemoteViews;
+    private Intent mPlay, mNext, mPre;
 
 
     public void setContext(Context context){
-        this.context=context;
+        this.mContext =context;
     }
     public void setManager(NotificationManager manager) {
-        this.manager = manager;
+        this.mManager = manager;
     }
 
     private MusicNotification (Context context){
-        this.context = context;
+        this.mContext = context;
         // 初始化操作
-        remoteViews = new RemoteViews(context.getPackageName(), R.layout.customnotice_layout);
-        builder = new Builder(context);
-        play = new Intent();
-        play.setAction(MusicService.MUSIC_NOTIFICATION_ACTION_PLAY);
-        next = new Intent();
-        next.setAction(MusicService.MUSIC_NOTIFICATION_ACTION_NEXT);
-        pre = new Intent();
-        pre.setAction(MusicService.MUSIC_NOTIFICATION_ACTION_PRE);
+        mRemoteViews = new RemoteViews(context.getPackageName(), R.layout.customnotice_layout);
+        mBuilder = new Builder(context);
+        mPlay = new Intent();
+        mPlay.setAction(MusicService.MUSIC_NOTIFICATION_ACTION_PLAY);
+        mNext = new Intent();
+        mNext.setAction(MusicService.MUSIC_NOTIFICATION_ACTION_NEXT);
+        mPre = new Intent();
+        mPre.setAction(MusicService.MUSIC_NOTIFICATION_ACTION_PRE);
 
     }
 
     public static MusicNotification getMusicNotification(Context context){
-        if (notifyInstance == null) {
-            notifyInstance = new MusicNotification(context);
+        if (mNotifyInstance == null) {
+            mNotifyInstance = new MusicNotification(context);
         }
-        return notifyInstance;
+        return mNotifyInstance;
     }
 
     public void onCreateMusicNotifi() {
@@ -68,31 +68,31 @@ public class MusicNotification extends Notification {
 
         // 1.注册控制点击事件
 
-        PendingIntent pplay = PendingIntent.getBroadcast(context, REQUEST_CODE, play, PendingIntent.FLAG_UPDATE_CURRENT);//因为每次更新UI都会重建所以设置flag无效
-        remoteViews.setOnClickPendingIntent(R.id.notigication_playorpaues, pplay);
+        PendingIntent pplay = PendingIntent.getBroadcast(mContext, REQUEST_CODE, mPlay, PendingIntent.FLAG_UPDATE_CURRENT);//因为每次更新UI都会重建所以设置flag无效
+        mRemoteViews.setOnClickPendingIntent(R.id.notigication_playorpaues, pplay);
 
         // 2.注册下一首点击事件
 
-        PendingIntent pnext = PendingIntent.getBroadcast(context, REQUEST_CODE, next, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.notigication_next, pnext);
+        PendingIntent pnext = PendingIntent.getBroadcast(mContext, REQUEST_CODE, mNext, PendingIntent.FLAG_UPDATE_CURRENT);
+        mRemoteViews.setOnClickPendingIntent(R.id.notigication_next, pnext);
 
         // 3.注册上一首点击事件
 
-        PendingIntent ppre = PendingIntent.getBroadcast(context, REQUEST_CODE, pre, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.notigication_pre, ppre);
+        PendingIntent ppre = PendingIntent.getBroadcast(mContext, REQUEST_CODE, mPre, PendingIntent.FLAG_UPDATE_CURRENT);
+        mRemoteViews.setOnClickPendingIntent(R.id.notigication_pre, ppre);
 
         //4.设置点击事件（调转到播放界面）
-        Intent intent = new Intent(context, MusicPlayActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(mContext, MusicPlayActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        builder.setContent(remoteViews)
+        mBuilder.setContent(mRemoteViews)
                 .setWhen(System.currentTimeMillis())
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)//必须手动代码清除
                 .setSmallIcon(R.drawable.notification_icon);//设置下拉图标
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.setCategory(Notification.CATEGORY_PROGRESS)
+            mBuilder.setCategory(Notification.CATEGORY_PROGRESS)
                     .setVisibility(Notification.VISIBILITY_PUBLIC);
         }
 
@@ -101,54 +101,54 @@ public class MusicNotification extends Notification {
             String channelName = "SHIN_Music";
             NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_DEFAULT);//取消提示
             channel.setSound(null, null);//取消提示音
-            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager manager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
             manager.createNotificationChannel(channel);
 
-            builder.setChannelId(channelID);
-            musicNotifi = builder.build();
+            mBuilder.setChannelId(channelID);
+            mMusicNotifi = mBuilder.build();
         } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            musicNotifi = builder.getNotification();
+            mMusicNotifi = mBuilder.getNotification();
         } else {
-            musicNotifi = builder.build();
+            mMusicNotifi = mBuilder.build();
         }
-        musicNotifi.flags = Notification.FLAG_ONGOING_EVENT;
-        manager.notify(NOTIFICATION_ID, musicNotifi);
+        mMusicNotifi.flags = Notification.FLAG_ONGOING_EVENT;
+        mManager.notify(NOTIFICATION_ID, mMusicNotifi);
     }
 
     public void onUpdataMusicNotifi() {
         Song song = MusicUtil.getNowSong();
         // 设置添加内容
         if (song==null){
-            remoteViews.setTextViewText(R.id.notigication_songName,"未知");
-            remoteViews.setTextViewText(R.id.notigication_singer,"未知");
-            remoteViews.setImageViewResource(R.id.notigication_album,R.drawable.def_album);
+            mRemoteViews.setTextViewText(R.id.notigication_songName,"未知");
+            mRemoteViews.setTextViewText(R.id.notigication_singer,"未知");
+            mRemoteViews.setImageViewResource(R.id.notigication_album,R.drawable.def_album);
         }
         else {
-            remoteViews.setTextViewText(R.id.notigication_songName, song.getSongName());
-            remoteViews.setTextViewText(R.id.notigication_singer, song.getSingerName());
+            mRemoteViews.setTextViewText(R.id.notigication_songName, song.getSongName());
+            mRemoteViews.setTextViewText(R.id.notigication_singer, song.getSingerName());
 
             if(song.isOnline()){
                 if (song.getAlbumUrl() != null) {
                     Picasso.get()
                             .load(song.getAlbumUrl())
                             .error(R.drawable.def_album)
-                            .into(remoteViews, R.id.notigication_album, NOTIFICATION_ID, musicNotifi);
+                            .into(mRemoteViews, R.id.notigication_album, NOTIFICATION_ID, mMusicNotifi);
                 } else {
-                    remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.def_album);
+                    mRemoteViews.setImageViewResource(R.id.notigication_album, R.drawable.def_album);
                 }
             } else {
                 Bitmap bitmap = BitmapUtil.getAlbumArt(song);
                 if (bitmap == null) {
-                    remoteViews.setImageViewResource(R.id.notigication_album, R.drawable.def_album);
+                    mRemoteViews.setImageViewResource(R.id.notigication_album, R.drawable.def_album);
                 } else {
-                    remoteViews.setImageViewBitmap(R.id.notigication_album, bitmap);
+                    mRemoteViews.setImageViewBitmap(R.id.notigication_album, bitmap);
                 }
             }
             if (MusicUtil.isPlayMusic()) {
-                remoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_pause);
+                mRemoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_pause);
             } else {
-                remoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_play);
+                mRemoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_play);
             }
         }
 
@@ -157,9 +157,9 @@ public class MusicNotification extends Notification {
 
     public void onUpdataPlayNotifi() {
         if (MusicUtil.isPlayMusic()) {
-            remoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_pause);
+            mRemoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_pause);
         } else {
-            remoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_play);
+            mRemoteViews.setImageViewResource(R.id.notigication_playorpaues, R.drawable.notigication_play);
         }
         onCreateMusicNotifi(); //每一次改变都要重新创建，所以直接写这里
     }
@@ -169,7 +169,7 @@ public class MusicNotification extends Notification {
      * 取消通知栏
      */
     public void onCancelMusicNotifi(){
-        manager.cancel(NOTIFICATION_ID);
+        mManager.cancel(NOTIFICATION_ID);
     }
 
 

@@ -13,12 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.adapter.RecommendMusicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Follow;
 import com.gin.xjh.shin_music.bean.LikeSong;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.util.ListDataSaveUtil;
 
 import java.util.ArrayList;
@@ -30,10 +30,10 @@ import cn.bmob.v3.listener.FindListener;
 
 public class PersonalMenuActivity extends BaseActivity implements View.OnClickListener {
 
-    private ImageView go_back, User_img, User_Sex, concern;
-    private TextView User_Name, User_QQ, User_Sign, list_hint;
-    private RecyclerView recyclerView;
-    private User user;
+    private ImageView mGoBack, mUserImg, mUserSex, mConcern;
+    private TextView mUserName, mUserQQ, mUserSign, mListHint;
+    private RecyclerView mRecyclerView;
+    private User mUser;
     private List<Song> mSongList = new ArrayList<>();
     private RecommendMusicRecyclerViewAdapter mRecommendmusicRecyclerViewAdapter;
     private boolean isConcern = false;
@@ -42,7 +42,7 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        user = (User) intent.getBundleExtra("user").get("user");
+        mUser = (User) intent.getBundleExtra("user").get("user");
         setContentView(R.layout.personal_menu_activity);
         initView();
         initEvent();
@@ -50,43 +50,43 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initView() {
-        go_back = findViewById(R.id.go_back);
-        User_img = findViewById(R.id.User_img);
-        User_Name = findViewById(R.id.User_Name);
-        User_Sex = findViewById(R.id.User_sex);
-        User_QQ = findViewById(R.id.User_QQ);
-        User_Sign = findViewById(R.id.User_sign);
-        concern = findViewById(R.id.concern);
-        list_hint = findViewById(R.id.list_hint);
-        recyclerView = findViewById(R.id.personal_RecyclerView);
+        mGoBack = findViewById(R.id.go_back);
+        mUserImg = findViewById(R.id.User_img);
+        mUserName = findViewById(R.id.User_Name);
+        mUserSex = findViewById(R.id.User_sex);
+        mUserQQ = findViewById(R.id.User_QQ);
+        mUserSign = findViewById(R.id.User_sign);
+        mConcern = findViewById(R.id.concern);
+        mListHint = findViewById(R.id.list_hint);
+        mRecyclerView = findViewById(R.id.personal_RecyclerView);
     }
 
     private void initEvent() {
-        go_back.setOnClickListener(this);
-        concern.setOnClickListener(this);
+        mGoBack.setOnClickListener(this);
+        mConcern.setOnClickListener(this);
 
-        User_Name.setText(user.getUserName());
-        User_QQ.setText("QQ:" + user.getUserQQ());
-        User_Sign.setText("个人简介：" + user.getPersonal_profile());
-        User_Sex.setVisibility(View.VISIBLE);
-        switch (user.getUserSex()) {
+        mUserName.setText(mUser.getUserName());
+        mUserQQ.setText("QQ:" + mUser.getUserQQ());
+        mUserSign.setText("个人简介：" + mUser.getPersonal_profile());
+        mUserSex.setVisibility(View.VISIBLE);
+        switch (mUser.getUserSex()) {
             case 0:
-                User_Sex.setImageResource(R.drawable.sel_sex_man);
+                mUserSex.setImageResource(R.drawable.sel_sex_man);
                 break;
             case 1:
-                User_Sex.setImageResource(R.drawable.sel_sex_woman);
+                mUserSex.setImageResource(R.drawable.sel_sex_woman);
                 break;
             case 2:
-                User_Sex.setImageResource(R.drawable.sel_sex_alien);
+                mUserSex.setImageResource(R.drawable.sel_sex_alien);
                 break;
         }
         if (UserState.getState()) {
             if (UserState.getConcernList() == null) {
                 updateBmobConcernEvent();
             } else {
-                isConcern = UserState.isConcern(user);
+                isConcern = UserState.isConcern(mUser);
                 if (isConcern) {
-                    concern.setImageResource(R.drawable.btn_concern_red);
+                    mConcern.setImageResource(R.drawable.btn_concern_red);
                 }
             }
         }
@@ -114,17 +114,17 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
     private void toConcern() {
         isConcern = !isConcern;
         if (isConcern) {
-            concern.setImageResource(R.drawable.btn_concern_red);
-            UserState.addConcern(this, concern, user);
+            mConcern.setImageResource(R.drawable.btn_concern_red);
+            UserState.addConcern(this, mConcern, mUser);
         } else {
-            concern.setImageResource(R.drawable.btn_concern_gray);
-            UserState.removeConcern(this, concern, user);
+            mConcern.setImageResource(R.drawable.btn_concern_gray);
+            UserState.removeConcern(this, mConcern, mUser);
         }
     }
 
     private void updateBmobLikeEvent() {
         BmobQuery<LikeSong> query = new BmobQuery<>();
-        query.addWhereEqualTo("UserId", user.getUserId());
+        query.addWhereEqualTo("UserId", mUser.getUserId());
         query.findObjects(new FindListener<LikeSong>() {
             @Override
             public void done(List<LikeSong> list, BmobException e) {
@@ -138,11 +138,11 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
                     }
                     updateUI();
                 } else {
-                    if(user.isPublic_song()){
-                        list_hint.setText("该用户无喜欢歌曲");
+                    if (mUser.isPublic_song()) {
+                        mListHint.setText("该用户无喜欢歌曲");
                     }
                     else{
-                        list_hint.setText("该用户歌单未公开");
+                        mListHint.setText("该用户歌单未公开");
                     }
                 }
             }
@@ -168,9 +168,9 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
                         concernList.add(listuser);
                     }
                     UserState.setConcernList(concernList);
-                    isConcern = UserState.isConcern(user);
+                    isConcern = UserState.isConcern(mUser);
                     if (isConcern) {
-                        concern.setImageResource(R.drawable.btn_concern_red);
+                        mConcern.setImageResource(R.drawable.btn_concern_red);
                     }
                     ListDataSaveUtil.setUserList("concernUser", concernList);
                 } else {
@@ -182,15 +182,15 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void updateUI() {
-        list_hint.setVisibility(View.GONE);
+        mListHint.setVisibility(View.GONE);
         if (mSongList != null && mSongList.size() > 0) {
             mRecommendmusicRecyclerViewAdapter = new RecommendMusicRecyclerViewAdapter(this, mSongList);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setItemAnimator(new DefaultItemAnimator());//默认动画
-            recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-            recyclerView.setAdapter(mRecommendmusicRecyclerViewAdapter);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            mRecyclerView.setItemAnimator(new DefaultItemAnimator());//默认动画
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+            mRecyclerView.setAdapter(mRecommendmusicRecyclerViewAdapter);
         } else {
-            list_hint.setText("无喜欢歌曲，请添加后查看");
+            mListHint.setText("无喜欢歌曲，请添加后查看");
         }
     }
 

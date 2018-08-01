@@ -12,10 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.adapter.ConcernRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Follow;
 import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.util.ListDataSaveUtil;
 
 import java.util.ArrayList;
@@ -27,12 +27,12 @@ import cn.bmob.v3.listener.FindListener;
 
 public class ConcernListActivity extends BaseActivity implements View.OnClickListener, ConcernRecyclerViewAdapter.IonSlidingViewClickListener {
 
-    private ImageView go_back;
-    private RecyclerView concern_rv;
-    private TextView hint;
+    private ImageView mGoBack;
+    private RecyclerView mConcernRv;
+    private TextView mHint;
     private List<User> mDate = new ArrayList<>();
     private ConcernRecyclerViewAdapter mConcernRecyclerViewAdapter;
-    private volatile int index;
+    private volatile int mIndex;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,13 +43,13 @@ public class ConcernListActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initView() {
-        go_back = findViewById(R.id.go_back);
-        concern_rv = findViewById(R.id.concern_rv);
-        hint = findViewById(R.id.hint);
+        mGoBack = findViewById(R.id.go_back);
+        mConcernRv = findViewById(R.id.concern_rv);
+        mHint = findViewById(R.id.hint);
     }
 
     private void initEvent() {
-        go_back.setOnClickListener(this);
+        mGoBack.setOnClickListener(this);
         List<User> users = UserState.getConcernList();
         if (users == null || users.size() == 0) {
             updateBmob();
@@ -96,19 +96,19 @@ public class ConcernListActivity extends BaseActivity implements View.OnClickLis
                 } else {
                     UserState.setConcernList(null);
                     ListDataSaveUtil.setUserList("concernUser", null);
-                    hint.setText("当前未关注其他人");
+                    mHint.setText("当前未关注其他人");
                 }
             }
         });
     }
 
     private void updateUI() {
-        concern_rv.setLayoutManager(new LinearLayoutManager(this));
+        mConcernRv.setLayoutManager(new LinearLayoutManager(this));
         mConcernRecyclerViewAdapter = new ConcernRecyclerViewAdapter(this, mDate);
-        concern_rv.setItemAnimator(new DefaultItemAnimator());//默认动画
-        concern_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        concern_rv.setAdapter(mConcernRecyclerViewAdapter);
-        hint.setVisibility(View.GONE);
+        mConcernRv.setItemAnimator(new DefaultItemAnimator());//默认动画
+        mConcernRv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mConcernRv.setAdapter(mConcernRecyclerViewAdapter);
+        mHint.setVisibility(View.GONE);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class ConcernListActivity extends BaseActivity implements View.OnClickLis
         Bundle bundle = new Bundle();
         bundle.putSerializable("user", UserState.getConcernList().get(position));
         intent.putExtra("user", bundle);
-        index = position;
+        mIndex = position;
         startActivityForResult(intent, 97);
     }
 
@@ -132,14 +132,14 @@ public class ConcernListActivity extends BaseActivity implements View.OnClickLis
         if (requestCode == 97) {
             if (data == null) {
                 if (UserState.getConcernList() == null) {
-                    mConcernRecyclerViewAdapter.removeData(index, false);
-                } else if (!UserState.isConcern(mDate.get(index))) {
-                    mConcernRecyclerViewAdapter.removeData(index, false);
+                    mConcernRecyclerViewAdapter.removeData(mIndex, false);
+                } else if (!UserState.isConcern(mDate.get(mIndex))) {
+                    mConcernRecyclerViewAdapter.removeData(mIndex, false);
                 }
             } else {
                 boolean isConcern = data.getBooleanExtra("concern", true);
                 if (!isConcern) {
-                    mConcernRecyclerViewAdapter.removeData(index, false);
+                    mConcernRecyclerViewAdapter.removeData(mIndex, false);
                 }
             }
         }

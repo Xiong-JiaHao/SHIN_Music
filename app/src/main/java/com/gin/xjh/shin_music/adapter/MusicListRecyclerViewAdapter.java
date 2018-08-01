@@ -22,14 +22,14 @@ import java.util.List;
  */
 
 public class MusicListRecyclerViewAdapter extends RecyclerView.Adapter<MusicListRecyclerViewAdapter.MusicViewHolder> {
-    public List<Song> list;
-    private Context context;
-    private TextView Songnum;
+    public List<Song> mSongList;
+    private Context mContext;
+    private TextView mSongnum;
 
     public MusicListRecyclerViewAdapter(Context context, List<Song> list, TextView Songnum) {
-        this.list = list;
-        this.context = context;
-        this.Songnum = Songnum;
+        this.mSongList = list;
+        this.mContext = context;
+        this.mSongnum = Songnum;
     }
 
     @Override
@@ -45,33 +45,33 @@ public class MusicListRecyclerViewAdapter extends RecyclerView.Adapter<MusicList
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return mSongList.size();
     }
 
     public class MusicViewHolder extends RecyclerView.ViewHolder {
-        private TextView SongName;
-        private ImageView removeSong;
+        private TextView mSongName;
+        private ImageView mRemoveSong;
 
         public MusicViewHolder(View itemView) {
             super(itemView);
-            SongName = itemView.findViewById(R.id.itemSong);
-            removeSong = itemView.findViewById(R.id.removeSong);
+            mSongName = itemView.findViewById(R.id.itemSong);
+            mRemoveSong = itemView.findViewById(R.id.removeSong);
         }
 
         public void init(final int position) {
-            Song song = list.get(position);
-            SongName.setText(song.getSongName() + " - " + song.getSingerName());
-            SongName.setOnClickListener(new View.OnClickListener() {
+            Song song = mSongList.get(position);
+            mSongName.setText(song.getSongName() + " - " + song.getSingerName());
+            mSongName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     MusicUtil.setIndex(position);
-                    Intent startIntent = new Intent(context, MusicService.class);
+                    Intent startIntent = new Intent(mContext, MusicService.class);
                     startIntent.putExtra("action", MusicService.PLAY);
-                    context.startService(startIntent);
+                    mContext.startService(startIntent);
 
                 }
             });
-            removeSong.setOnClickListener(new View.OnClickListener() {
+            mRemoveSong.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     removeData(position);
@@ -83,25 +83,25 @@ public class MusicListRecyclerViewAdapter extends RecyclerView.Adapter<MusicList
     public void removeData(int position) {
         int size = MusicUtil.getListSize() - 1;
         if (size == 0) {
-            list.clear();
+            mSongList.clear();
             MusicUtil.playorpause();
             MusicUtil.removeSong(position);
-            Intent intent = new Intent(context, MainActivity.class);
-            context.startActivity(intent);
+            Intent intent = new Intent(mContext, MainActivity.class);
+            mContext.startActivity(intent);
         } else {
             int num = MusicUtil.getIndex();
             if (position == num) {
                 MusicUtil.removeSong(num);
-                Intent startIntent1 = new Intent(context, MusicService.class);
+                Intent startIntent1 = new Intent(mContext, MusicService.class);
                 startIntent1.putExtra("action", MusicService.AUTONEXTMUSIC);
-                context.startService(startIntent1);
-                list = MusicUtil.getSongList();
+                mContext.startService(startIntent1);
+                mSongList = MusicUtil.getSongList();
                 notifyItemRemoved(position);
             } else {
                 MusicUtil.removeSong(position);
             }
             notifyDataSetChanged();
-            Songnum.setText(size + "");
+            mSongnum.setText(size + "");
         }
     }
 }

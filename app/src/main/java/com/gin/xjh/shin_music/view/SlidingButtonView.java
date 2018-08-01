@@ -11,14 +11,14 @@ import com.gin.xjh.shin_music.R;
 
 public class SlidingButtonView extends HorizontalScrollView {
 
-    private TextView removeConcern;
+    private TextView mRemoveConcern;
 
     private int mScrollWidth;
 
     private IonSlidingButtonListener mIonSlidingButtonListener;
 
     private Boolean isOpen = false;
-    private Boolean once = false;
+    private Boolean isOnce = false;
 
 
     public SlidingButtonView(Context context) {
@@ -39,9 +39,9 @@ public class SlidingButtonView extends HorizontalScrollView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        if(!once){
-            removeConcern = findViewById(R.id.removeConcern);
-            once = true;
+        if(!isOnce){
+            mRemoveConcern = findViewById(R.id.removeConcern);
+            isOnce = true;
         }
 
     }
@@ -52,7 +52,7 @@ public class SlidingButtonView extends HorizontalScrollView {
         if(changed){
             this.scrollTo(0,0);
             //获取水平滚动条可以滑动的范围，即右侧按钮的宽度
-            mScrollWidth = removeConcern.getWidth();
+            mScrollWidth = mRemoveConcern.getWidth();
         }
 
     }

@@ -40,21 +40,21 @@ public class MusicService extends Service {
     public static final String MUSIC_NOTIFICATION_ACTION_NEXT = "musicnotificaion.To.NEXT";
     public static final String MUSIC_NOTIFICATION_ACTION_PRE = "musicnotificaion.To.PRE";
 
-    private PowerManager.WakeLock wakeLock = null;//电源锁
+    private PowerManager.WakeLock mWakeLock = null;//电源锁
 
 
-    private MusicBroadCast musicBroadCast = null;
-    private MusicNotification musicNotifi = null;
+    private MusicBroadCast mMusicBroadCast = null;
+    private MusicNotification mMusicNotifi = null;
 
-    private Intent changeIntent = new Intent(MusicPlayActivity.MUSIC_ACTION_CHANGE);
+    private Intent mChangeIntent = new Intent(MusicPlayActivity.MUSIC_ACTION_CHANGE);
 
     private void acquireWakeLock() {
-        if (null == wakeLock) {
+        if (null == mWakeLock) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getCanonicalName());
-            if (null != wakeLock) {
-                wakeLock.acquire();
-                if (wakeLock.isHeld()) {
+            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getCanonicalName());
+            if (null != mWakeLock) {
+                mWakeLock.acquire();
+                if (mWakeLock.isHeld()) {
 
                 } else {
                     Toast.makeText(this, "申请电源锁失败！", Toast.LENGTH_SHORT).show();
@@ -64,31 +64,31 @@ public class MusicService extends Service {
     }
 
     private void releseWakeLock() {
-        if ((null != wakeLock)) {
-            wakeLock.release();
-            wakeLock = null;
+        if ((null != mWakeLock)) {
+            mWakeLock.release();
+            mWakeLock = null;
         }
     }
 
     @Override
     public void onCreate() {
         // 初始化通知栏
-        musicNotifi = MusicNotification.getMusicNotification(getApplicationContext());
-        musicNotifi.setContext(getBaseContext());
-        musicNotifi.setManager((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
-        musicBroadCast = new MusicBroadCast();
+        mMusicNotifi = MusicNotification.getMusicNotification(getApplicationContext());
+        mMusicNotifi.setContext(getBaseContext());
+        mMusicNotifi.setManager((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
+        mMusicBroadCast = new MusicBroadCast();
         IntentFilter filter = new IntentFilter();
         filter.addAction(MUSIC_NOTIFICATION_ACTION_PLAY);
         filter.addAction(MUSIC_NOTIFICATION_ACTION_NEXT);
         filter.addAction(MUSIC_NOTIFICATION_ACTION_PRE);
-        registerReceiver(musicBroadCast, filter);
+        registerReceiver(mMusicBroadCast, filter);
         super.onCreate();
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        musicNotifi.onCreateMusicNotifi();
+        mMusicNotifi.onCreateMusicNotifi();
         return new MusicBinder();
     }
 
@@ -99,27 +99,27 @@ public class MusicService extends Service {
             switch (intent.getStringExtra("action")) {
                 case AUTONEXTMUSIC:
                     MusicUtil.autonext();
-                    musicNotifi.onUpdataMusicNotifi();
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(changeIntent);
+                    mMusicNotifi.onUpdataMusicNotifi();
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(mChangeIntent);
                     break;
                 case PLAYORPAUSE:
                     MusicUtil.playorpause();
-                    musicNotifi.onUpdataPlayNotifi();
+                    mMusicNotifi.onUpdataPlayNotifi();
                     break;
                 case PREVIOUSMUSIC:
                     MusicUtil.pre();
-                    musicNotifi.onUpdataMusicNotifi();
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(changeIntent);
+                    mMusicNotifi.onUpdataMusicNotifi();
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(mChangeIntent);
                     break;
                 case NEXTMUSIC:
                     MusicUtil.next();
-                    musicNotifi.onUpdataMusicNotifi();
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(changeIntent);
+                    mMusicNotifi.onUpdataMusicNotifi();
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(mChangeIntent);
                     break;
                 case PLAY:
                     MusicUtil.play();
-                    musicNotifi.onUpdataMusicNotifi();
-                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(changeIntent);
+                    mMusicNotifi.onUpdataMusicNotifi();
+                    android.support.v4.content.LocalBroadcastManager.getInstance(this).sendBroadcast(mChangeIntent);
                     break;
             }
         }
@@ -128,7 +128,7 @@ public class MusicService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        musicNotifi.onCancelMusicNotifi();
+        mMusicNotifi.onCancelMusicNotifi();
         return super.onUnbind(intent);
     }
 
@@ -136,13 +136,13 @@ public class MusicService extends Service {
     public void onDestroy() {
         releseWakeLock();
         MusicUtil.clean();
-        unregisterReceiver(musicBroadCast);
-        musicNotifi.onCancelMusicNotifi();
+        unregisterReceiver(mMusicBroadCast);
+        mMusicNotifi.onCancelMusicNotifi();
         super.onDestroy();
     }
 
     public void changNotifi() {
-        musicNotifi.onUpdataMusicNotifi();
+        mMusicNotifi.onUpdataMusicNotifi();
     }
 
 
@@ -160,18 +160,18 @@ public class MusicService extends Service {
                 switch (intent.getAction()) {
                     case MUSIC_NOTIFICATION_ACTION_PLAY:
                         MusicUtil.playorpause();
-                        musicNotifi.onUpdataMusicNotifi();
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(changeIntent);
+                        mMusicNotifi.onUpdataMusicNotifi();
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(mChangeIntent);
                         break;
                     case MUSIC_NOTIFICATION_ACTION_NEXT:
                         MusicUtil.next();
-                        musicNotifi.onUpdataMusicNotifi();
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(changeIntent);
+                        mMusicNotifi.onUpdataMusicNotifi();
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(mChangeIntent);
                         break;
                     case MUSIC_NOTIFICATION_ACTION_PRE:
                         MusicUtil.pre();
-                        musicNotifi.onUpdataMusicNotifi();
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(changeIntent);
+                        mMusicNotifi.onUpdataMusicNotifi();
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(mChangeIntent);
                         break;
                 }
             } else {

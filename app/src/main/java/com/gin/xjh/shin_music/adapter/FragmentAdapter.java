@@ -13,23 +13,21 @@ import java.util.List;
 
 public class FragmentAdapter extends FragmentPagerAdapter {
 
-    private List<Fragment> fragments;
-    private FragmentManager fm;
+    private List<Fragment> mFragments;
 
     public FragmentAdapter(FragmentManager fm, List<Fragment> fragmentList) {
         super(fm);
-        this.fragments = fragmentList;
-        this.fm = fm;
+        this.mFragments = fragmentList;
     }
 
 
     @Override
     public Fragment getItem(int position) {
-        return fragments.get(position);
+        return mFragments.get(position);
     }
 
     @Override
     public int getCount() {
-        return fragments.size();
+        return mFragments.size();
     }
 }

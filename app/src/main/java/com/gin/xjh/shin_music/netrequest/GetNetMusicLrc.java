@@ -25,8 +25,8 @@ import retrofit2.Retrofit;
 public class GetNetMusicLrc {
 
 
-    private TextView hint;
-    private LyricView lyricView;
+    private TextView mHint;
+    private LyricView mLyricView;
 
     private static final int REQUEST_SUCCESS = 204;
 
@@ -47,8 +47,8 @@ public class GetNetMusicLrc {
                         JSONObject jsonObject = new JSONObject(JSONString);
                         String lyric = jsonObject.getString("lyric");
                         MusicUtil.getNowSong().setLyric(lyric);
-                        lyricView.getLyric(lyric);
-                        hint.setVisibility(View.GONE);
+                        mLyricView.getLyric(lyric);
+                        mHint.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -58,8 +58,8 @@ public class GetNetMusicLrc {
     }
 
     public void getJson(LyricView lyricView, TextView hint) {
-        this.lyricView = lyricView;
-        this.hint = hint;
+        this.mLyricView = lyricView;
+        this.mHint = hint;
         obtainMainHandler();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ConstantUtil.URL_BASE)

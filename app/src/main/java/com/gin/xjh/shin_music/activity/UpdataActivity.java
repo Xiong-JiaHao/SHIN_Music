@@ -12,8 +12,8 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.bean.User;
+import com.gin.xjh.shin_music.user.UserState;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
@@ -21,11 +21,11 @@ import cn.bmob.v3.listener.UpdateListener;
 public class UpdataActivity extends BaseActivity implements View.OnClickListener {
 
 
-    private ImageView go_back;
-    private EditText UserName, UserQQ, UserSign;
-    private RadioGroup UserSex;
-    private RadioButton man, woman, alien;
-    private Button submit;
+    private ImageView mGoBack;
+    private EditText mUserName, mUserQQ, mUserSign;
+    private RadioGroup mUserSex;
+    private RadioButton mSexMan, mSexWoman, mSexAlien;
+    private Button mSubmit;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,33 +35,33 @@ public class UpdataActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initView() {
-        go_back = findViewById(R.id.go_back);
-        UserName = findViewById(R.id.UserName);
-        UserQQ = findViewById(R.id.UserQQ);
-        UserSex = findViewById(R.id.UserSex);
-        UserSign = findViewById(R.id.UserSign);
-        submit = findViewById(R.id.submit);
-        man = findViewById(R.id.man);
-        woman = findViewById(R.id.woman);
-        alien = findViewById(R.id.alien);
+        mGoBack = findViewById(R.id.go_back);
+        mUserName = findViewById(R.id.UserName);
+        mUserQQ = findViewById(R.id.UserQQ);
+        mUserSex = findViewById(R.id.UserSex);
+        mUserSign = findViewById(R.id.UserSign);
+        mSubmit = findViewById(R.id.submit);
+        mSexMan = findViewById(R.id.man);
+        mSexWoman = findViewById(R.id.woman);
+        mSexAlien = findViewById(R.id.alien);
     }
 
     private void initEvent() {
-        go_back.setOnClickListener(this);
-        submit.setOnClickListener(this);
+        mGoBack.setOnClickListener(this);
+        mSubmit.setOnClickListener(this);
         User user = UserState.getLoginUser();
-        UserName.setHint(user.getUserName());
-        UserQQ.setHint(user.getUserQQ());
-        UserSign.setHint(user.getPersonal_profile());
+        mUserName.setHint(user.getUserName());
+        mUserQQ.setHint(user.getUserQQ());
+        mUserSign.setHint(user.getPersonal_profile());
         switch (user.getUserSex()) {
             case 0:
-                man.setChecked(true);
+                mSexMan.setChecked(true);
                 break;
             case 1:
-                woman.setChecked(true);
+                mSexWoman.setChecked(true);
                 break;
             case 2:
-                alien.setChecked(true);
+                mSexAlien.setChecked(true);
                 break;
         }
     }
@@ -78,9 +78,9 @@ public class UpdataActivity extends BaseActivity implements View.OnClickListener
             case R.id.submit:
                 boolean flag = false;
                 final User user = new User();
-                final String userName = UserName.getText().toString();
-                String userQQ = UserQQ.getText().toString();
-                String userSign = UserSign.getText().toString();
+                final String userName = mUserName.getText().toString();
+                String userQQ = mUserQQ.getText().toString();
+                String userSign = mUserSign.getText().toString();
                 if (userName.compareTo("") != 0) {
                     flag = true;
                     user.setUserName(userName);
@@ -94,7 +94,7 @@ public class UpdataActivity extends BaseActivity implements View.OnClickListener
                     user.setPersonal_profile(userSign);
                 }
                 int sex = 0;
-                switch (UserSex.getCheckedRadioButtonId()) {
+                switch (mUserSex.getCheckedRadioButtonId()) {
                     case R.id.woman:
                         sex = 1;
                         break;

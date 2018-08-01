@@ -42,12 +42,12 @@ import java.io.IOException;
 
 public class FragmentLyrics extends Fragment implements View.OnClickListener {
 
-    private SeekBar volumeSeekBar;
-    private ImageView albumdetails;
+    private SeekBar mVolumeSeekBar;
+    private ImageView mAlbumDetails;
     private AudioManager mAudioManager;
-    private MyVolumeReceiver myVolumeReceiver;
-    private LyricView lyricView;
-    private TextView hint;
+    private MyVolumeReceiver mMyVolumeReceiver;
+    private LyricView mLyricView;
+    private TextView mHint;
 
     public static final String LYRIC_ACTION_CHANGE = "Lyric.To.Change";
 
@@ -56,25 +56,25 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.lyrics_fragment, null);
         mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
-        myVolumeReceiver = new MyVolumeReceiver();
+        mMyVolumeReceiver = new MyVolumeReceiver();
         IntentFilter intentFilter = new IntentFilter();
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getContext());
         intentFilter.addAction("android.media.VOLUME_CHANGED_ACTION");
         intentFilter.addAction(LYRIC_ACTION_CHANGE);
-        broadcastManager.registerReceiver(myVolumeReceiver, intentFilter);
+        broadcastManager.registerReceiver(mMyVolumeReceiver, intentFilter);
         initView(view);
         initEvent();
         return view;
     }
 
     private void initView(View view) {
-        volumeSeekBar = view.findViewById(R.id.volumeSeekBar);
-        albumdetails = view.findViewById(R.id.albumdetails);
-        lyricView = view.findViewById(R.id.lyricView);
-        hint = view.findViewById(R.id.lyric_hint);
+        mVolumeSeekBar = view.findViewById(R.id.volumeSeekBar);
+        mAlbumDetails = view.findViewById(R.id.albumdetails);
+        mLyricView = view.findViewById(R.id.lyricView);
+        mHint = view.findViewById(R.id.lyric_hint);
 
-        albumdetails.setOnClickListener(this);
-        volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mAlbumDetails.setOnClickListener(this);
+        mVolumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser)
@@ -94,8 +94,8 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
 
         int streamMaxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);//最大音量
         int streamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        volumeSeekBar.setMax(streamMaxVolume);
-        volumeSeekBar.setProgress(streamVolume);
+        mVolumeSeekBar.setMax(streamMaxVolume);
+        mVolumeSeekBar.setProgress(streamVolume);
     }
 
     private void initEvent() {
@@ -104,14 +104,14 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
             String lyric = song.getLyric();
             if (lyric != null) {
                 if (lyric == "") {
-                    hint.setText("未找到歌词");
+                    mHint.setText("未找到歌词");
                 } else {
-                    lyricView.getLyric(lyric);
-                    hint.setVisibility(View.GONE);
+                    mLyricView.getLyric(lyric);
+                    mHint.setVisibility(View.GONE);
                 }
             } else {
                 if (song.isOnline())
-                    new GetNetMusicLrc().getJson(lyricView, hint);
+                    new GetNetMusicLrc().getJson(mLyricView, mHint);
                 else {
                     try {
                         AudioFile audioFile = AudioFileIO.read(new File(song.getUrl()));
@@ -122,8 +122,8 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
                         } else {
                             song.setLyric(lyric);
                         }
-                        lyricView.getLyric(lyric);
-                        hint.setVisibility(View.GONE);
+                        mLyricView.getLyric(lyric);
+                        mHint.setVisibility(View.GONE);
                     } catch (CannotReadException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
@@ -173,23 +173,23 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
                     //如果音量发生变化则更改seekbar的位置
                     if (intent.getAction().equals("android.media.VOLUME_CHANGED_ACTION")) {
                         int currVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);// 当前的媒体音量
-                        volumeSeekBar.setProgress(currVolume);
+                        mVolumeSeekBar.setProgress(currVolume);
                     }
                     break;
                 case LYRIC_ACTION_CHANGE:
-                    hint.setVisibility(View.VISIBLE);
+                    mHint.setVisibility(View.VISIBLE);
                     Song song = MusicUtil.getNowSong();
                     String lyric = song.getLyric();
                     if (lyric != null) {
                         if (lyric == "") {
-                            hint.setText("未找到歌词");
+                            mHint.setText("未找到歌词");
                         } else {
-                            lyricView.getLyric(lyric);
-                            hint.setVisibility(View.GONE);
+                            mLyricView.getLyric(lyric);
+                            mHint.setVisibility(View.GONE);
                         }
                     } else {
                         if (song.isOnline())
-                            new GetNetMusicLrc().getJson(lyricView, hint);
+                            new GetNetMusicLrc().getJson(mLyricView, mHint);
                         else {
                             try {
                                 AudioFile audioFile = AudioFileIO.read(new File(song.getUrl()));
@@ -200,8 +200,8 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
                                 } else {
                                     song.setLyric(lyric);
                                 }
-                                lyricView.getLyric(lyric);
-                                hint.setVisibility(View.GONE);
+                                mLyricView.getLyric(lyric);
+                                mHint.setVisibility(View.GONE);
                             } catch (CannotReadException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
@@ -222,15 +222,15 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(myVolumeReceiver);
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mMyVolumeReceiver);
         super.onDestroy();
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (volumeSeekBar != null) {
+        if (mVolumeSeekBar != null) {
             int currVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);// 当前的媒体音量
-            volumeSeekBar.setProgress(currVolume);
+            mVolumeSeekBar.setProgress(currVolume);
         }
         super.setUserVisibleHint(isVisibleToUser);
     }

@@ -17,8 +17,8 @@ import cn.bmob.push.PushConstants;
 
 public class PushReceiver extends BroadcastReceiver {
 
-    private Notification.Builder builder = null;
-    private Notification notification;
+    private Notification.Builder mBuilder = null;
+    private Notification mNotification;
     private final int NOTIFICATION_ID = 233;
 
     @Override
@@ -30,14 +30,14 @@ public class PushReceiver extends BroadcastReceiver {
                 JSONObject jsonObject = new JSONObject(msg);
                 String title = jsonObject.getString("title");
                 String content = jsonObject.getString("content");
-                builder = new Notification.Builder(context);
-                builder.setContentTitle(title)
+                mBuilder = new Notification.Builder(context);
+                mBuilder.setContentTitle(title)
                         .setContentText(content)
                         .setWhen(System.currentTimeMillis())
                         .setSmallIcon(R.drawable.notification_icon);//设置下拉图标
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder.setCategory(Notification.CATEGORY_PROGRESS)
+                    mBuilder.setCategory(Notification.CATEGORY_PROGRESS)
                             .setVisibility(Notification.VISIBILITY_PUBLIC);
                 }
 
@@ -49,14 +49,14 @@ public class PushReceiver extends BroadcastReceiver {
 
                     manager.createNotificationChannel(channel);
 
-                    builder.setChannelId(channelID);
-                    notification = builder.build();
+                    mBuilder.setChannelId(channelID);
+                    mNotification = mBuilder.build();
                 } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    notification = builder.getNotification();
+                    mNotification = mBuilder.getNotification();
                 } else {
-                    notification = builder.build();
+                    mNotification = mBuilder.build();
                 }
-                manager.notify(NOTIFICATION_ID, notification);
+                manager.notify(NOTIFICATION_ID, mNotification);
             }
         } catch (JSONException e) {
             e.printStackTrace();

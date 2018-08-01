@@ -29,12 +29,12 @@ import cn.bmob.v3.listener.FindListener;
  */
 
 public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecyclerViewAdapter.commentViewHolder> {
-    public List<Comment> list;
-    private Context context;
+    public List<Comment> mList;
+    private Context mContext;
 
     public CommentRecyclerViewAdapter(Context context, List<Comment> list) {
-        this.list = list;
-        this.context = context;
+        this.mList = list;
+        this.mContext = context;
     }
 
     @Override
@@ -45,30 +45,30 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
     //绑定视图
     @Override
     public void onBindViewHolder(CommentRecyclerViewAdapter.commentViewHolder holder, int position) {
-        holder.init(list.get(position), context);
+        holder.init(mList.get(position), mContext);
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return mList.size();
     }
 
     public class commentViewHolder extends RecyclerView.ViewHolder {
-        private TextView itemName, itemComment, itemTimes;
+        private TextView mItemName, mItemComment, mItemTimes;
 
         public commentViewHolder(View itemView) {
             super(itemView);
-            itemName = itemView.findViewById(R.id.comment_name);
-            itemComment = itemView.findViewById(R.id.comment_content);
-            itemTimes = itemView.findViewById(R.id.comment_time);
+            mItemName = itemView.findViewById(R.id.comment_name);
+            mItemComment = itemView.findViewById(R.id.comment_content);
+            mItemTimes = itemView.findViewById(R.id.comment_time);
         }
 
         public void init(final Comment comment, final Context context) {
             try {
                 final AlertDialog[] dia = new AlertDialog[1];
-                itemName.setText(comment.getUserName());
-                itemComment.setText(comment.getMyComment());
-                itemTimes.setText(TimesUtil.longToString(comment.getTimes(), "yyyy-MM-dd HH:mm:ss"));
+                mItemName.setText(comment.getUserName());
+                mItemComment.setText(comment.getMyComment());
+                mItemTimes.setText(TimesUtil.longToString(comment.getTimes(), "yyyy-MM-dd HH:mm:ss"));
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -134,7 +134,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
 
     public void addData(Comment comment) {
 //      在list中添加数据，并通知条目加入一条
-        list.add(0, comment);
+        mList.add(0, comment);
         //添加动画
         notifyItemInserted(0);
     }

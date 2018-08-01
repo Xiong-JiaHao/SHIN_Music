@@ -20,44 +20,44 @@ import cn.bmob.v3.listener.UpdateListener;
 
 public class UserState {
 
-    private static volatile boolean Use_4G = false;
-    private static volatile boolean Login_flag = false;
-    private static volatile User user = null;
-    private static volatile List<Song> likeSongList = null;
-    private static volatile List<User> mConcernList = null;
+    private static volatile boolean sUse4G = false;
+    private static volatile boolean sLoginFlag = false;
+    private static volatile User sUser = null;
+    private static volatile List<Song> sLikeSongList = null;
+    private static volatile List<User> sConcernList = null;
 
 
     public static void setUse_4G(boolean use_4G) {
-        Use_4G = use_4G;
+        sUse4G = use_4G;
     }
 
     public static void Login(User Loginuser) {
         synchronized (UserState.class) {
-            user = Loginuser;
-            Login_flag = true;
+            sUser = Loginuser;
+            sLoginFlag = true;
         }
     }
 
     public static void Logout() {
-        if (Login_flag) {
+        if (sLoginFlag) {
             synchronized (UserState.class) {
-                if (Login_flag) {
-                    Login_flag = false;
-                    user = null;
+                if (sLoginFlag) {
+                    sLoginFlag = false;
+                    sUser = null;
                 }
             }
         }
     }
 
     public static boolean isUse_4G() {
-        return Use_4G;
+        return sUse4G;
     }
 
     public static User getLoginUser() {
-        if (Login_flag) {
+        if (sLoginFlag) {
             synchronized (UserState.class) {
-                if (Login_flag) {
-                    return user;
+                if (sLoginFlag) {
+                    return sUser;
                 }
             }
         }
@@ -66,24 +66,24 @@ public class UserState {
 
     public static boolean getState() {
         synchronized (UserState.class) {
-            return Login_flag;
+            return sLoginFlag;
         }
     }
 
     public static List<Song> getLikeSongList() {
-        return likeSongList;
+        return sLikeSongList;
     }
 
     public static void setLikeSongList(List<Song> likeSongList) {
         synchronized (UserState.class) {
-            UserState.likeSongList = likeSongList;
+            UserState.sLikeSongList = likeSongList;
         }
     }
 
     public static void addLikeSong(final Context context, final ImageView imageView, final Song song) {
         synchronized (UserState.class) {
-            if (likeSongList == null) {
-                likeSongList = new ArrayList<>();
+            if (sLikeSongList == null) {
+                sLikeSongList = new ArrayList<>();
             }
             LikeSong likeSong = new LikeSong(UserState.getLoginUser().getUserId(), song);
             likeSong.save(new SaveListener<String>() {
@@ -92,8 +92,8 @@ public class UserState {
                     if (e == null) {
                         imageView.setImageResource(R.drawable.btn_like_song);
                         song.setObjectId(s);
-                        likeSongList.add(song);
-                        ListDataSaveUtil.setSongList("btn_like_song", likeSongList);
+                        sLikeSongList.add(song);
+                        ListDataSaveUtil.setSongList("btn_like_song", sLikeSongList);
                     } else {
                         Toast.makeText(context, "添加失败，请重试", Toast.LENGTH_SHORT).show();
                     }
@@ -103,10 +103,10 @@ public class UserState {
     }
 
     public static boolean isLikeSong(Song song) {
-        if (likeSongList == null) {
+        if (sLikeSongList == null) {
             return false;
         }
-        for (Song likesong : likeSongList) {
+        for (Song likesong : sLikeSongList) {
             if (likesong.equals(song)) {
                 return true;
             }
@@ -116,13 +116,13 @@ public class UserState {
 
     public static void removeLikeSong(final Context context, final ImageView imageView, final Song song) {
         synchronized (UserState.class) {
-            if (likeSongList == null) {
+            if (sLikeSongList == null) {
                 Toast.makeText(context, "喜欢的音乐中没有该歌曲", Toast.LENGTH_SHORT).show();
                 return;
             }
             LikeSong likeSong = null;
             int index = 0;
-            for (Song likesong : likeSongList) {
+            for (Song likesong : sLikeSongList) {
                 if (likesong.equals(song)) {
                     likeSong = new LikeSong();
                     likeSong.setObjectId(likesong.getObjectId());
@@ -140,8 +140,8 @@ public class UserState {
                 public void done(BmobException e) {
                     if (e == null) {
                         imageView.setImageResource(R.drawable.btn_unlike_song);
-                        likeSongList.remove(finalIndex);
-                        ListDataSaveUtil.setSongList("btn_like_song", likeSongList);
+                        sLikeSongList.remove(finalIndex);
+                        ListDataSaveUtil.setSongList("btn_like_song", sLikeSongList);
                     } else {
                         Toast.makeText(context, "删除失败，请重试", Toast.LENGTH_SHORT).show();
                     }
@@ -151,19 +151,19 @@ public class UserState {
     }
 
     public static List<User> getConcernList() {
-        return mConcernList;
+        return sConcernList;
     }
 
     public static void setConcernList(List<User> concernList) {
         synchronized (UserState.class) {
-            UserState.mConcernList = concernList;
+            UserState.sConcernList = concernList;
         }
     }
 
     public static void addConcern(final Context context, final ImageView imageView, final User user) {
         synchronized (UserState.class) {
-            if (mConcernList == null) {
-                mConcernList = new ArrayList<>();
+            if (sConcernList == null) {
+                sConcernList = new ArrayList<>();
             }
             Follow concernUser = new Follow(UserState.getLoginUser().getUserId(), user);
             concernUser.save(new SaveListener<String>() {
@@ -172,8 +172,8 @@ public class UserState {
                     if (e == null) {
                         imageView.setImageResource(R.drawable.btn_concern_red);
                         user.setObjectId(s);
-                        mConcernList.add(user);
-                        ListDataSaveUtil.setUserList("concernUser", mConcernList);
+                        sConcernList.add(user);
+                        ListDataSaveUtil.setUserList("concernUser", sConcernList);
                     } else {
                         Toast.makeText(context, "添加失败，请重试", Toast.LENGTH_SHORT).show();
                     }
@@ -183,10 +183,10 @@ public class UserState {
     }
 
     public static boolean isConcern(User user) {
-        if (mConcernList == null) {
+        if (sConcernList == null) {
             return false;
         }
-        for (User user1 : mConcernList) {
+        for (User user1 : sConcernList) {
             if (user1.equals(user)) {
                 return true;
             }
@@ -196,13 +196,13 @@ public class UserState {
 
     public static void removeConcern(final Context context, final ImageView imageView, final User user) {
         synchronized (UserState.class) {
-            if (mConcernList == null) {
+            if (sConcernList == null) {
                 Toast.makeText(context, "你没有关注任何人", Toast.LENGTH_SHORT).show();
                 return;
             }
             int index = 0;
             Follow concernUser = null;
-            for (User user1 : mConcernList) {
+            for (User user1 : sConcernList) {
                 if (user1.equals(user)) {
                     concernUser = new Follow();
                     concernUser.setObjectId(user1.getObjectId());
@@ -220,8 +220,8 @@ public class UserState {
                 public void done(BmobException e) {
                     if (e == null) {
                         imageView.setImageResource(R.drawable.btn_concern_gray);
-                        mConcernList.remove(finalIndex);
-                        ListDataSaveUtil.setUserList("concernUser", mConcernList);
+                        sConcernList.remove(finalIndex);
+                        ListDataSaveUtil.setUserList("concernUser", sConcernList);
                     } else {
                         Toast.makeText(context, "删除失败，请重试", Toast.LENGTH_SHORT).show();
                     }
@@ -233,13 +233,13 @@ public class UserState {
     public static void removeConcern(final Context context, final int index) {
         synchronized (UserState.class) {
             Follow concernUser = new Follow();
-            concernUser.setObjectId(mConcernList.get(index).getObjectId());
+            concernUser.setObjectId(sConcernList.get(index).getObjectId());
             concernUser.delete(new UpdateListener() {
                 @Override
                 public void done(BmobException e) {
                     if (e == null) {
-                        mConcernList.remove(index);
-                        ListDataSaveUtil.setUserList("concernUser", mConcernList);
+                        sConcernList.remove(index);
+                        ListDataSaveUtil.setUserList("concernUser", sConcernList);
                     } else {
                         Toast.makeText(context, "删除失败，请重试", Toast.LENGTH_SHORT).show();
                     }
