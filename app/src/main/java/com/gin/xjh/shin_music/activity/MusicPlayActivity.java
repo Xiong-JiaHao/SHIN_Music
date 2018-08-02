@@ -99,6 +99,17 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
             if (msg.what == UPDATEUI && !isChange && MusicUtil.isPlayMusic()) {
                 String timeStr = null;
                 int time = MusicUtil.getPlayTime();
+                if(MusicUtil.getNowSong().isOnline()){
+                    if (NetStateUtil.getNetWorkState(MusicPlayActivity.this) == NetStateUtil.NO_STATE) {
+                        playOrpause();
+                        Toast.makeText(MusicPlayActivity.this, "当前网络无法播放", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else if (NetStateUtil.getNetWorkState(MusicPlayActivity.this) == NetStateUtil.DATA_STATE && UserState.isUse_4G() == false) {
+                        playOrpause();
+                        Toast.makeText(MusicPlayActivity.this, "请允许4G播放后尝试", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
                 if (mLasttime == -1) {
                     mLasttime = 0;
                     Toast.makeText(MusicPlayActivity.this, "\"" + MusicUtil.getNowSong().getSongName() + "\"无版权无法播放", Toast.LENGTH_SHORT).show();
@@ -198,6 +209,15 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {//自动播放完后
+                if(MusicUtil.getNowSong().isOnline()){
+                    if (NetStateUtil.getNetWorkState(MusicPlayActivity.this) == NetStateUtil.NO_STATE) {
+                        Toast.makeText(MusicPlayActivity.this, "当前网络无法播放", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else if (NetStateUtil.getNetWorkState(MusicPlayActivity.this) == NetStateUtil.DATA_STATE && UserState.isUse_4G() == false) {
+                        Toast.makeText(MusicPlayActivity.this, "请允许4G播放后尝试", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
                 if (MusicUtil.isPlayMusic()) {
                     Song song = MusicUtil.getNowSong();
                     if (!(song.getSongName().equals(mLastSongName) && song.getSongId().equals(mLastSongId))) {
@@ -295,7 +315,11 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
             case R.id.ic_comment:
                 if (MusicUtil.getListSize() > 0) {
                     Song song = MusicUtil.getNowSong();
-                    if (song == null || song.isOnline()) {
+                    if (song != null && song.isOnline()) {
+                        if (NetStateUtil.getNetWorkState(MusicPlayActivity.this) == NetStateUtil.DATA_STATE && UserState.isUse_4G() == false) {
+                            Toast.makeText(MusicPlayActivity.this, "请允许4G播放后尝试", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         Bundle bundle = new Bundle();
                         bundle.putSerializable(getString(R.string.SONG), song);
                         Intent ic_comment_intent = new Intent(this, AllCommentActivity.class);

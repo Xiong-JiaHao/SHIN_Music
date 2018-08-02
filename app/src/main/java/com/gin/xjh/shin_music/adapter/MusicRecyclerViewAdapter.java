@@ -73,6 +73,10 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
             icComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (NetStateUtil.getNetWorkState(mContext) == NetStateUtil.NO_STATE) {
+                        Toast.makeText(mContext, "当前无网络...", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     //发消息告知弹出评论
                     if (song.isOnline()) {
                         Bundle bundle = new Bundle();

@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Comment;
 import com.gin.xjh.shin_music.bean.User;
 import com.gin.xjh.shin_music.activity.PersonalMenuActivity;
+import com.gin.xjh.shin_music.util.NetStateUtil;
 import com.gin.xjh.shin_music.util.TimesUtil;
 
 import java.text.ParseException;
@@ -72,6 +74,10 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (NetStateUtil.getNetWorkState(mContext) == NetStateUtil.NO_STATE) {
+                            Toast.makeText(mContext, "当前无网络...", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         final User[] user = new User[1];
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         LayoutInflater inflater = LayoutInflater.from(context);

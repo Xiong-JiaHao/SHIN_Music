@@ -20,6 +20,7 @@ import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.bean.User;
 import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.util.ListDataSaveUtil;
+import com.gin.xjh.shin_music.util.NetStateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +104,10 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.concern:
                 if (UserState.getState()) {
+                    if (NetStateUtil.getNetWorkState(PersonalMenuActivity.this) == NetStateUtil.NO_STATE) {
+                        Toast.makeText(PersonalMenuActivity.this, "当前无网络", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     toConcern();
                 } else {
                     Toast.makeText(this, "当前未登录，请登录后重试", Toast.LENGTH_SHORT).show();

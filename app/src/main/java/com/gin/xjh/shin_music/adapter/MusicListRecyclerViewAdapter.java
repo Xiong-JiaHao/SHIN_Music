@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gin.xjh.shin_music.activity.MainActivity;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.util.NetStateUtil;
 
 import java.util.List;
 
@@ -64,6 +66,10 @@ public class MusicListRecyclerViewAdapter extends RecyclerView.Adapter<MusicList
             mSongName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (NetStateUtil.getNetWorkState(mContext) == NetStateUtil.NO_STATE) {
+                        Toast.makeText(mContext, "当前无网络...", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     MusicUtil.setIndex(position);
                     Intent startIntent = new Intent(mContext, MusicService.class);
                     startIntent.putExtra("action", MusicService.PLAY);

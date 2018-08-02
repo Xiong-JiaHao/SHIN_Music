@@ -63,6 +63,8 @@ public class AllCommentActivity extends BaseActivity implements View.OnClickList
 
     private void initData() {
         BmobQuery<Comment> query = new BmobQuery<>();
+        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_THEN_NETWORK);
+        query.setMaxCacheAge(86400000);//缓存有1天的有效期
         query.addWhereEqualTo(getString(R.string.SONG_ID), mSong.getSongId());
         query.findObjects(new FindListener<Comment>() {
             @Override
