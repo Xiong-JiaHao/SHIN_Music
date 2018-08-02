@@ -127,10 +127,10 @@ public class FragmentLocal extends Fragment {
         mFind.setText("");
         Intent intent = new Intent(getContext(), MusicDetailsActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("songlist", (Serializable) mFindSongList);
-        intent.putExtra("songlist", bundle);
-        intent.putExtra("name", name);
-        intent.putExtra("isOnline", false);
+        bundle.putSerializable(getString(R.string.SONG_LIST), (Serializable) mFindSongList);
+        intent.putExtra(getString(R.string.SONG_LIST), bundle);
+        intent.putExtra(getString(R.string.NAME), name);
+        intent.putExtra(getString(R.string.IS_ONLINE), false);
         startActivity(intent);
     }
 

@@ -50,6 +50,7 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
     private TextView mHint;
 
     public static final String LYRIC_ACTION_CHANGE = "Lyric.To.Change";
+    public static final String VOLUME_CHANGED_ACTION = "android.media.VOLUME_CHANGED_ACTION";
 
     @Nullable
     @Override
@@ -59,7 +60,7 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
         mMyVolumeReceiver = new MyVolumeReceiver();
         IntentFilter intentFilter = new IntentFilter();
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getContext());
-        intentFilter.addAction("android.media.VOLUME_CHANGED_ACTION");
+        intentFilter.addAction(VOLUME_CHANGED_ACTION);
         intentFilter.addAction(LYRIC_ACTION_CHANGE);
         broadcastManager.registerReceiver(mMyVolumeReceiver, intentFilter);
         initView(view);
@@ -150,9 +151,9 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
                     Intent intent = new Intent(getContext(), AlbumDetailsActivity.class);
                     Bundle bundle = new Bundle();
                     Album album = new Album(song.getAlbumName(), song.getAlbumUrl(), song.getAlbumTime(), song.getAlbumId(), song.getSingerName());
-                    bundle.putSerializable("def_album", album);
-                    intent.putExtra("def_album", bundle);
-                    intent.putExtra("isAlbum", true);
+                    bundle.putSerializable(getString(R.string.ALBUM), album);
+                    intent.putExtra(getString(R.string.ALBUM), bundle);
+                    intent.putExtra(getString(R.string.IS_ALBUM), true);
                     startActivity(intent);
                 }
 
@@ -169,9 +170,9 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
-                case "android.media.VOLUME_CHANGED_ACTION":
+                case VOLUME_CHANGED_ACTION:
                     //如果音量发生变化则更改seekbar的位置
-                    if (intent.getAction().equals("android.media.VOLUME_CHANGED_ACTION")) {
+                    if (intent.getAction().equals(VOLUME_CHANGED_ACTION)) {
                         int currVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);// 当前的媒体音量
                         mVolumeSeekBar.setProgress(currVolume);
                     }

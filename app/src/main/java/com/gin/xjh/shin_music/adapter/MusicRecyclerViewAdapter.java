@@ -76,9 +76,9 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
                     //发消息告知弹出评论
                     if (song.isOnline()) {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("song", song);
+                        bundle.putSerializable(mContext.getString(R.string.SONG), song);
                         Intent ic_comment_intent = new Intent(mContext, AllCommentActivity.class);
-                        ic_comment_intent.putExtra("song", bundle);
+                        ic_comment_intent.putExtra(mContext.getString(R.string.SONG), bundle);
                         mContext.startActivity(ic_comment_intent);
                     } else {
                         Toast.makeText(mContext, "该歌曲不支持评论功能", Toast.LENGTH_SHORT).show();
@@ -140,7 +140,7 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
                     }
                     if (isFlag) {
                         MusicUtil.addSong(song, true);
-                        ListDataSaveUtil.setSongList("songlist", MusicUtil.getSongList());
+                        ListDataSaveUtil.setSongList(mContext.getString(R.string.SONG_LIST), MusicUtil.getSongList());
                     } else {
                         Toast.makeText(mContext, "该歌曲已经存在，请勿重复添加", Toast.LENGTH_SHORT).show();
                     }

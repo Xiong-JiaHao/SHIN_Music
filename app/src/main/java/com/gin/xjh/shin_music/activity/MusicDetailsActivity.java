@@ -36,10 +36,10 @@ public class MusicDetailsActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_music_details);
         initView();
         Intent intent = getIntent();
-        isOnline = intent.getBooleanExtra("isOnline", true);
-        mFindNameStr = intent.getStringExtra("name");
+        isOnline = intent.getBooleanExtra(getString(R.string.IS_ONLINE), true);
+        mFindNameStr = intent.getStringExtra(getString(R.string.NAME));
         if (!isOnline) {
-            mSongList = (List<Song>) intent.getBundleExtra("songlist").get("songlist");
+            mSongList = (List<Song>) intent.getBundleExtra(getString(R.string.SONG_LIST)).get(getString(R.string.SONG_LIST));
         }
         initEvent();
     }

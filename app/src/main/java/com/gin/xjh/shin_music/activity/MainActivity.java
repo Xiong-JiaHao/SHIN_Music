@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initBmob() {
 
-        Bmob.initialize(this, "df98b1644c7d3aa94239034059791d40");
+        Bmob.initialize(this, getString(R.string.API_KEY));
 
         BmobInstallationManager.getInstance().initialize(new InstallationListener<BmobInstallation>() {
             @Override
@@ -100,38 +100,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initalize() {
-        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.USER), Context.MODE_PRIVATE);
         ListDataSaveUtil.setPreferences(sharedPreferences);
-        String user_id = sharedPreferences.getString("user_id", null);
-        String user_name = sharedPreferences.getString("user_name", null);
-        String password = sharedPreferences.getString("btn_password", null);
-        String user_qq = sharedPreferences.getString("user_qq", null);
-        int user_sex = sharedPreferences.getInt("user_sex", 0);
-        String personal_profile = sharedPreferences.getString("personal_profile", null);
-        String objId = sharedPreferences.getString("objId", null);
-        Long time = sharedPreferences.getLong("time", -1L);
+        String user_id = sharedPreferences.getString(getString(R.string.USER_ID), null);
+        String user_name = sharedPreferences.getString(getString(R.string.USER_NAME), null);
+        String password = sharedPreferences.getString(getString(R.string.PASSWORD), null);
+        String user_qq = sharedPreferences.getString(getString(R.string.USER_QQ), null);
+        int user_sex = sharedPreferences.getInt(getString(R.string.USER_SEX), 0);
+        String personal_profile = sharedPreferences.getString(getString(R.string.PERSONAL_PROFILE), null);
+        String objId = sharedPreferences.getString(getString(R.string.OBJ_ID), null);
+        Long time = sharedPreferences.getLong(getString(R.string.TIME), -1L);
         Long nowtime = TimesUtil.dateToLong(new Date(System.currentTimeMillis()));
         if (user_id != null && nowtime - time < 432000000) {
             User user = new User(user_id, user_name, password, user_qq, user_sex, personal_profile);
             user.setObjectId(objId);
-            user.setLikeSongListName(sharedPreferences.getString("likesonglistname", null));
-            boolean ispublic = sharedPreferences.getBoolean("public_song", false);
+            user.setLikeSongListName(sharedPreferences.getString(getString(R.string.LIKE_SONGLIST_NAME), null));
+            boolean ispublic = sharedPreferences.getBoolean(getString(R.string.IS_PUBLIC_SONG), false);
             if(ispublic){
                 user.changPublic_song();
             }
             UserState.Login(user);
-            UserState.setLikeSongList(ListDataSaveUtil.getSongList("likesong"));
-            UserState.setConcernList(ListDataSaveUtil.getUserList("concernUser"));
+            UserState.setLikeSongList(ListDataSaveUtil.getSongList(getString(R.string.LIKE_SONG_LIST)));
+            UserState.setConcernList(ListDataSaveUtil.getUserList(getString(R.string.CONCERN_USER)));
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putLong("time", nowtime);
+            editor.putLong(getString(R.string.TIME), nowtime);
             editor.commit();
         }
-        UserState.setUse_4G(sharedPreferences.getBoolean("use4G", false));
-        MusicUtil.setPlay_state(sharedPreferences.getInt("play_state", 0));
-        int index = sharedPreferences.getInt("index", -1);
+        UserState.setUse_4G(sharedPreferences.getBoolean(getString(R.string.USER_4G), false));
+        MusicUtil.setPlay_state(sharedPreferences.getInt(getString(R.string.PLAY_STATE), 0));
+        int index = sharedPreferences.getInt(getString(R.string.INDEX), -1);
         if (index >= 0) {
             MusicUtil.setIndex(index);
-            MusicUtil.changeSongList(ListDataSaveUtil.getSongList("songlist"));
+            MusicUtil.changeSongList(ListDataSaveUtil.getSongList(getString(R.string.SONG_LIST)));
         }
     }
 

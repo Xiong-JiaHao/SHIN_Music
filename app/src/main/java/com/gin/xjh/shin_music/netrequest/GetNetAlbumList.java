@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.netinterface.RequestServicesAlbumList;
 import com.gin.xjh.shin_music.adapter.MusicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
@@ -54,25 +55,25 @@ public class GetNetAlbumList {
                     try {
                         String result = (String) msg.obj;
                         JSONObject AllObject = new JSONObject(result);
-                        String JSONString = AllObject.getString("songs");
+                        String JSONString = AllObject.getString(mContext.getString(R.string.SONGS));
                         JSONArray jsonArray = new JSONArray(JSONString);
-                        String AlbumString = AllObject.getString("album");
+                        String AlbumString = AllObject.getString(mContext.getString(R.string.ALBUM));
                         JSONObject AlbumObject = new JSONObject(AlbumString);
-                        Long time = AlbumObject.getLong("publishTime");
-                        String AlbumName = AlbumObject.getString("name");
-                        String AlbumUri = AlbumObject.getString("blurPicUrl");
-                        Long AlbumId = AlbumObject.getLong("id");
+                        Long time = AlbumObject.getLong(mContext.getString(R.string.PUBLISH_TIME));
+                        String AlbumName = AlbumObject.getString(mContext.getString(R.string.NAME));
+                        String AlbumUri = AlbumObject.getString(mContext.getString(R.string.BLUR_PIC_URL));
+                        Long AlbumId = AlbumObject.getLong(mContext.getString(R.string.ID));
                         int len = Math.min(50, jsonArray.length());
                         for (int i = 0; i < len; i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                             //歌手
-                            String ar = jsonObject.getString("ar");
+                            String ar = jsonObject.getString(mContext.getString(R.string.SINGER_ARRAY));
                             JSONArray arArray = new JSONArray(ar);
                             JSONObject arObject = arArray.getJSONObject(0);
-                            String Singer = arObject.getString("name");
-                            Long SingerId = arObject.getLong("id");
-                            Song song = new Song(jsonObject.getString("name"), jsonObject.getLong("id"), Singer, SingerId, AlbumName, AlbumUri, jsonObject.getInt("dt"));
+                            String Singer = arObject.getString(mContext.getString(R.string.NAME));
+                            Long SingerId = arObject.getLong(mContext.getString(R.string.ID));
+                            Song song = new Song(jsonObject.getString(mContext.getString(R.string.NAME)), jsonObject.getLong(mContext.getString(R.string.ID)), Singer, SingerId, AlbumName, AlbumUri, jsonObject.getInt("dt"));
                             song.setAlbumId(AlbumId);
                             song.setAlbumTime(time);
                             mSongList.add(song);

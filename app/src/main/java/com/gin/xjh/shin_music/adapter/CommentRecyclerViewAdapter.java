@@ -87,7 +87,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
                         User_name.setText(comment.getUserName());
                         comment_content.setText(comment.getMyComment());
                         BmobQuery<User> query = new BmobQuery<>();
-                        query.addWhereEqualTo("UserId", Userid);
+                        query.addWhereEqualTo(context.getString(R.string.USERID), Userid);
                         query.findObjects(new FindListener<User>() {
                             @Override
                             public void done(List<User> list, BmobException e) {
@@ -114,8 +114,8 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
                             public void onClick(View v) {
                                 Intent intent = new Intent(context, PersonalMenuActivity.class);
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable("user", user[0]);
-                                intent.putExtra("user", bundle);
+                                bundle.putSerializable(context.getString(R.string.USER), user[0]);
+                                intent.putExtra(context.getString(R.string.USER), bundle);
                                 context.startActivity(intent);
                                 dia[0].dismiss();
                             }

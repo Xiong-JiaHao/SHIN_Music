@@ -84,9 +84,9 @@ public class FragmentMusic extends Fragment {
                     Intent intent = new Intent(getContext(), AlbumDetailsActivity.class);
                     Bundle bundle = new Bundle();
                     Album album = new Album(song.getAlbumName(), song.getAlbumUrl(), song.getAlbumTime(), song.getAlbumId(), song.getSingerName());
-                    bundle.putSerializable("def_album", album);
-                    intent.putExtra("def_album", bundle);
-                    intent.putExtra("isAlbum", true);
+                    bundle.putSerializable(getString(R.string.ALBUM), album);
+                    intent.putExtra(getString(R.string.ALBUM), bundle);
+                    intent.putExtra(getString(R.string.IS_ALBUM), true);
                     startActivity(intent);
                 }
             }

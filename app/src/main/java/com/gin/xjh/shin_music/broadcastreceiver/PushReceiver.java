@@ -26,10 +26,10 @@ public class PushReceiver extends BroadcastReceiver {
 
         try {
             if (intent.getAction().equals(PushConstants.ACTION_MESSAGE)) {
-                String msg = intent.getStringExtra("msg");
+                String msg = intent.getStringExtra(context.getString(R.string.MESSAGE));
                 JSONObject jsonObject = new JSONObject(msg);
-                String title = jsonObject.getString("title");
-                String content = jsonObject.getString("content");
+                String title = jsonObject.getString(context.getString(R.string.TITLE));
+                String content = jsonObject.getString(context.getString(R.string.CONTENT));
                 mBuilder = new Notification.Builder(context);
                 mBuilder.setContentTitle(title)
                         .setContentText(content)
@@ -43,8 +43,8 @@ public class PushReceiver extends BroadcastReceiver {
 
                 NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    String channelID = "update";
-                    String channelName = "SHIN_Music_Update";
+                    String channelID = context.getString(R.string.UPDATE);
+                    String channelName = context.getString(R.string.SHIN_MUSIC_UPDATE);
                     NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
 
                     manager.createNotificationChannel(channel);

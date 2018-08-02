@@ -297,9 +297,9 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
                     Song song = MusicUtil.getNowSong();
                     if (song == null || song.isOnline()) {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("song", song);
+                        bundle.putSerializable(getString(R.string.SONG), song);
                         Intent ic_comment_intent = new Intent(this, AllCommentActivity.class);
-                        ic_comment_intent.putExtra("song", bundle);
+                        ic_comment_intent.putExtra(getString(R.string.SONG), bundle);
                         startActivity(ic_comment_intent);
                     } else {
                         Toast.makeText(MusicPlayActivity.this, "该歌曲不支持评论功能", Toast.LENGTH_SHORT).show();
@@ -322,9 +322,9 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
                     mCycleStyle.setImageResource(R.drawable.btn_disorderly_cycle);
                     Toast.makeText(this, "随机播放", Toast.LENGTH_SHORT).show();
                 }
-                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.USER), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("play_state",MusicUtil.getPlay_state());
+                editor.putInt(getString(R.string.PLAY_STATE),MusicUtil.getPlay_state());
                 editor.commit();
                 break;
             case R.id.leftto:
@@ -450,9 +450,9 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
         final TextView like = contentView.findViewById(R.id.like);
         final Song song = MusicUtil.getNowSong();
         if (islike) {
-            like.setText(R.string.like);
+            like.setText(R.string.LIKE);
         } else {
-            like.setText(R.string.unlike);
+            like.setText(R.string.UNLIKE);
         }
         like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -465,11 +465,11 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
                     if (islike) {
                         islike = false;
                         UserState.removeLikeSong(MusicPlayActivity.this, mLike, song);
-                        like.setText(R.string.unlike);
+                        like.setText(R.string.UNLIKE);
                     } else {
                         islike = true;
                         UserState.addLikeSong(MusicPlayActivity.this, mLike, song);
-                        like.setText(R.string.like);
+                        like.setText(R.string.LIKE);
                     }
                 } else if (song == null || !song.isOnline()) {
                     Toast.makeText(MusicPlayActivity.this, "当前歌曲未拥有此功能", Toast.LENGTH_SHORT).show();
@@ -486,9 +486,9 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
                 //发消息告知弹出评论
                 if (song != null && song.isOnline()) {
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("song", song);
+                    bundle.putSerializable(getString(R.string.SONG), song);
                     Intent ic_comment_intent = new Intent(MusicPlayActivity.this, AllCommentActivity.class);
-                    ic_comment_intent.putExtra("song", bundle);
+                    ic_comment_intent.putExtra(getString(R.string.SONG), bundle);
                     startActivity(ic_comment_intent);
                 } else {
                     Toast.makeText(MusicPlayActivity.this, "该歌曲不支持评论功能", Toast.LENGTH_SHORT).show();
@@ -589,9 +589,9 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
                     Toast.makeText(MusicPlayActivity.this, "随机播放", Toast.LENGTH_SHORT).show();
                 }
 
-                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.USER), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("play_state",MusicUtil.getPlay_state());
+                editor.putInt(getString(R.string.PLAY_STATE),MusicUtil.getPlay_state());
                 editor.commit();
             }
         });

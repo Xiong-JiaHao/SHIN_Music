@@ -47,8 +47,8 @@ public class AllCommentActivity extends BaseActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_comment);
         Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("song");
-        mSong = (Song) bundle.get("song");
+        Bundle bundle = intent.getBundleExtra(getString(R.string.SONG));
+        mSong = (Song) bundle.get(getString(R.string.SONG));
         initView();
         initData();
     }
@@ -63,7 +63,7 @@ public class AllCommentActivity extends BaseActivity implements View.OnClickList
 
     private void initData() {
         BmobQuery<Comment> query = new BmobQuery<>();
-        query.addWhereEqualTo("SongId", mSong.getSongId());
+        query.addWhereEqualTo(getString(R.string.SONG_ID), mSong.getSongId());
         query.findObjects(new FindListener<Comment>() {
             @Override
             public void done(List<Comment> list, BmobException e) {

@@ -105,9 +105,9 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
                     }
                 }
                 UserState.setUse_4G(isChecked);
-                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.USER), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("use4G", isChecked);
+                editor.putBoolean(getString(R.string.USER_4G), isChecked);
                 editor.commit();
                 if (isChecked) {
                     Toast.makeText(LoginMenuActivity.this, "允许4G播放", Toast.LENGTH_SHORT).show();
@@ -145,7 +145,7 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
                             final String id = UserId.getText().toString();
                             final String password = UserPassword.getText().toString();
                             BmobQuery<User> query = new BmobQuery<>();
-                            query.addWhereEqualTo("UserId", id);
+                            query.addWhereEqualTo(getString(R.string.USERID), id);
                             query.findObjects(new FindListener<User>() {
                                 @Override
                                 public void done(List<User> list, BmobException e) {
@@ -258,7 +258,7 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            String str = data.getStringExtra("User");
+            String str = data.getStringExtra(getString(R.string.IS_USER_OK));
             if (str.compareTo("yes") == 0) {
                 updataLogin();
             }
@@ -283,18 +283,18 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
                 break;
         }
 
-        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.USER), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("user_id", user.getUserId());
-        editor.putString("user_name", user.getUserName());
-        editor.putString("btn_password", user.getPassWord());
-        editor.putString("user_qq", user.getUserQQ());
-        editor.putInt("user_sex", user.getUserSex());
-        editor.putString("personal_profile", user.getPersonal_profile());
-        editor.putString("objId", user.getObjectId());
-        editor.putLong("time", TimesUtil.dateToLong(new Date(System.currentTimeMillis())));
-        editor.putString("likesonglistname", user.getLikeSongListName());
-        editor.putBoolean("public_song",user.isPublic_song());
+        editor.putString(getString(R.string.USER_ID), user.getUserId());
+        editor.putString(getString(R.string.USER_NAME), user.getUserName());
+        editor.putString(getString(R.string.PASSWORD), user.getPassWord());
+        editor.putString(getString(R.string.USER_QQ), user.getUserQQ());
+        editor.putInt(getString(R.string.USER_SEX), user.getUserSex());
+        editor.putString(getString(R.string.PERSONAL_PROFILE), user.getPersonal_profile());
+        editor.putString(getString(R.string.OBJ_ID), user.getObjectId());
+        editor.putLong(getString(R.string.TIME), TimesUtil.dateToLong(new Date(System.currentTimeMillis())));
+        editor.putString(getString(R.string.LIKE_SONGLIST_NAME), user.getLikeSongListName());
+        editor.putBoolean(getString(R.string.IS_PUBLIC_SONG),user.isPublic_song());
         editor.commit();
         updateBmobLikeEvent();
         updateBmobConcernEvent();
@@ -308,20 +308,20 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
         mUserSign.setText("");
         mUserSex.setVisibility(View.GONE);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.USER), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("user_id", null);
-        editor.putString("user_name", null);
-        editor.putString("btn_password", null);
-        editor.putString("user_qq", null);
-        editor.putInt("user_sex", 0);
-        editor.putString("personal_profile", null);
-        editor.putString("objId", null);
-        editor.putLong("time", -1L);
-        editor.putString("btn_like_song", null);
-        editor.putString("likesonglistname",null);
-        editor.putString("concernUser",null);
-        editor.putBoolean("public_song",false);
+        editor.putString(getString(R.string.USER_ID), null);
+        editor.putString(getString(R.string.USER_NAME), null);
+        editor.putString(getString(R.string.PASSWORD), null);
+        editor.putString(getString(R.string.USER_QQ), null);
+        editor.putInt(getString(R.string.USER_SEX), 0);
+        editor.putString(getString(R.string.PERSONAL_PROFILE), null);
+        editor.putString(getString(R.string.OBJ_ID), null);
+        editor.putLong(getString(R.string.TIME), -1L);
+        editor.putString(getString(R.string.LIKE_SONG_LIST), null);
+        editor.putString(getString(R.string.LIKE_SONGLIST_NAME),null);
+        editor.putString(getString(R.string.CONCERN_USER),null);
+        editor.putBoolean(getString(R.string.IS_PUBLIC_SONG),false);
         editor.commit();
         UserState.setLikeSongList(null);
         UserState.setConcernList(null);
@@ -331,7 +331,7 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
 
     private void updateBmobLikeEvent() {
         BmobQuery<LikeSong> query = new BmobQuery<>();
-        query.addWhereEqualTo("UserId", UserState.getLoginUser().getUserId());//按当前登录的ID进行查找
+        query.addWhereEqualTo(getString(R.string.USERID), UserState.getLoginUser().getUserId());//按当前登录的ID进行查找
         query.findObjects(new FindListener<LikeSong>() {
             @Override
             public void done(List<LikeSong> list, BmobException e) {
@@ -346,10 +346,10 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
                         mSong.add(song);
                     }
                     UserState.setLikeSongList(mSong);
-                    ListDataSaveUtil.setSongList("btn_like_song", mSong);
+                    ListDataSaveUtil.setSongList(getString(R.string.LIKE_SONG_LIST), mSong);
                 } else {
                     UserState.setLikeSongList(null);
-                    ListDataSaveUtil.setSongList("btn_like_song", null);
+                    ListDataSaveUtil.setSongList(getString(R.string.LIKE_SONG_LIST), null);
                 }
             }
         });
@@ -358,8 +358,8 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
 
     private void updateBmobConcernEvent() {
         BmobQuery<Follow> query = new BmobQuery<>();
-        query.addWhereEqualTo("UserId", UserState.getLoginUser().getUserId());//按当前登录的ID进行查找
-        query.include("FollowUser");
+        query.addWhereEqualTo(getString(R.string.USERID), UserState.getLoginUser().getUserId());//按当前登录的ID进行查找
+        query.include(getString(R.string.FOLLOW_USER));
         query.findObjects(new FindListener<Follow>() {
             @Override
             public void done(List<Follow> list, BmobException e) {
@@ -374,10 +374,10 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
                         concernList.add(user);
                     }
                     UserState.setConcernList(concernList);
-                    ListDataSaveUtil.setUserList("concernUser", concernList);
+                    ListDataSaveUtil.setUserList(getString(R.string.CONCERN_USER), concernList);
                 } else {
                     UserState.setConcernList(null);
-                    ListDataSaveUtil.setUserList("concernUser", null);
+                    ListDataSaveUtil.setUserList(getString(R.string.CONCERN_USER), null);
                 }
             }
         });

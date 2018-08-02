@@ -66,13 +66,13 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_details);
         Intent intent = getIntent();
-        isAlbum = intent.getBooleanExtra("isAlbum", true);
+        isAlbum = intent.getBooleanExtra(getString(R.string.IS_ALBUM), true);
         if (isAlbum) {
-            mAlbum = (Album) intent.getBundleExtra("def_album").get("def_album");
+            mAlbum = (Album) intent.getBundleExtra(getString(R.string.ALBUM)).get(getString(R.string.ALBUM));
         } else {
-            mID = intent.getIntExtra("id", 0);
-            mName = intent.getStringExtra("name");
-            mUrl = intent.getStringExtra("url");
+            mID = intent.getIntExtra(getString(R.string.ID), 0);
+            mName = intent.getStringExtra(getString(R.string.NAME));
+            mUrl = intent.getStringExtra(getString(R.string.URL));
         }
         initView();
         initEvent();
@@ -172,10 +172,10 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
                             @Override
                             public void done(BmobException e) {
                                 if (e == null) {
-                                    SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.USER), Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
                                     UserState.getLoginUser().changPublic_song();
-                                    editor.putBoolean("public_song", ispublic);
+                                    editor.putBoolean(getString(R.string.IS_PUBLIC_SONG), ispublic);
                                     editor.commit();
                                 } else {
                                     Toast.makeText(AlbumDetailsActivity.this, "保存失败，请重试", Toast.LENGTH_SHORT).show();
@@ -194,14 +194,14 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
                         @Override
                         public void done(BmobException e) {
                             if (e == null) {
-                                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.USER), Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 if (ispublic != UserState.getLoginUser().isPublic_song()) {
                                     UserState.getLoginUser().changPublic_song();
-                                    editor.putBoolean("public_song", ispublic);
+                                    editor.putBoolean(getString(R.string.IS_PUBLIC_SONG), ispublic);
                                 }
                                 UserState.getLoginUser().setLikeSongListName(name);
-                                editor.putString("likesonglistname", name);
+                                editor.putString(getString(R.string.LIKE_SONGLIST_NAME), name);
                                 editor.commit();
                                 mAlbumName.setText(name);
                             } else {
@@ -224,7 +224,8 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
     private void updateBmobLikeEvent() {
         BmobQuery<LikeSong> query = new BmobQuery<>();
         query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
-        query.setMaxCacheAge(86400000);//缓存有1天的有效期        query.addWhereEqualTo("UserId", UserState.getLoginUser().getUserId());//按当前登录的ID进行查找
+        query.setMaxCacheAge(86400000);//缓存有1天的有效期
+        query.addWhereEqualTo(getString(R.string.USERID), UserState.getLoginUser().getUserId());//按当前登录的ID进行查找
         query.findObjects(new FindListener<LikeSong>() {
             @Override
             public void done(List<LikeSong> list, BmobException e) {
@@ -237,10 +238,10 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
                         song.setObjectId(likeSong.getObjectId());
                         mSongList.add(song);
                     }
-                    ListDataSaveUtil.setSongList("likesong", mSongList);
+                    ListDataSaveUtil.setSongList(getString(R.string.LIKE_SONG_LIST), mSongList);
                     updateUI();
                 } else {
-                    mAlbumHint.setText("无喜欢歌曲，请添加后查看");
+                    mAlbumHint.setText(R.string.NO_LIKE_SONG);
                 }
             }
         });
@@ -249,7 +250,7 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private void updateBmobEvent() {
         BmobQuery<Song> query = new BmobQuery<>();
-        query.addWhereEqualTo("AlbumName", mAlbum.getAlbumName());
+        query.addWhereEqualTo(getString(R.string.ALBUM_NAME), mAlbum.getAlbumName());
         query.findObjects(new FindListener<Song>() {
             @Override
             public void done(List<Song> list, BmobException e) {
@@ -319,7 +320,7 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
                     MusicUtil.addSong(song, false);
                 }
             }
-            ListDataSaveUtil.setSongList("songlist", MusicUtil.getSongList());
+            ListDataSaveUtil.setSongList(getString(R.string.SONG_LIST), MusicUtil.getSongList());
         }
         if (flag) {
             Toast.makeText(mContext, "添加完成", Toast.LENGTH_SHORT).show();
@@ -335,7 +336,7 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
             mAlbumRv.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
             mAlbumRv.setAdapter(mMusicRecyclerViewAdapter);
         } else {
-            mAlbumHint.setText("无喜欢歌曲，请添加后查看");
+            mAlbumHint.setText(R.string.NO_LIKE_SONG);
         }
     }
 }

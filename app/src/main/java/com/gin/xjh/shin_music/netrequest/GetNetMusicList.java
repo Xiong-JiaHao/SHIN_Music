@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.netinterface.RequestServicesMusicList;
 import com.gin.xjh.shin_music.adapter.MusicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
@@ -53,29 +54,29 @@ public class GetNetMusicList {
                     try {
                         String result = (String) msg.obj;
                         JSONObject AllObject = new JSONObject(result);
-                        String ListString = AllObject.getString("playlist");
+                        String ListString = AllObject.getString(mContext.getString(R.string.PLAYLIST));
                         JSONObject ListObject = new JSONObject(ListString);
-                        String JSONString = ListObject.getString("tracks");
+                        String JSONString = ListObject.getString(mContext.getString(R.string.TRACKS));
                         JSONArray jsonArray = new JSONArray(JSONString);
                         int len = Math.min(50,jsonArray.length());
                         for (int i = 0; i < len; i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                             //歌手
-                            String ar = jsonObject.getString("ar");
+                            String ar = jsonObject.getString(mContext.getString(R.string.SINGER_ARRAY));
                             JSONArray arArray = new JSONArray(ar);
                             JSONObject arObject = arArray.getJSONObject(0);
-                            String Singer = arObject.getString("name");
-                            Long SingerId = arObject.getLong("id");
+                            String Singer = arObject.getString(mContext.getString(R.string.NAME));
+                            Long SingerId = arObject.getLong(mContext.getString(R.string.ID));
                             //专辑
-                            String al = jsonObject.getString("al");
+                            String al = jsonObject.getString(mContext.getString(R.string.URL_STR));
                             JSONObject alObject = new JSONObject(al);
-                            String AlbumName = alObject.getString("name");
-                            String AlbumUri = alObject.getString("picUrl");
-                            Long AlbumId = alObject.getLong("id");
-                            Song song = new Song(jsonObject.getString("name"), jsonObject.getLong("id"), Singer, SingerId, AlbumName, AlbumUri, jsonObject.getInt("dt"));
+                            String AlbumName = alObject.getString(mContext.getString(R.string.NAME));
+                            String AlbumUri = alObject.getString(mContext.getString(R.string.PICURL));
+                            Long AlbumId = alObject.getLong(mContext.getString(R.string.ID));
+                            Song song = new Song(jsonObject.getString(mContext.getString(R.string.NAME)), jsonObject.getLong(mContext.getString(R.string.NAME)), Singer, SingerId, AlbumName, AlbumUri, jsonObject.getInt("dt"));
                             song.setAlbumId(AlbumId);
-                            song.setAlbumTime(jsonObject.getLong("publishTime"));
+                            song.setAlbumTime(jsonObject.getLong(mContext.getString(R.string.PUBLISH_TIME)));
                             mSongList.add(song);
                         }
 

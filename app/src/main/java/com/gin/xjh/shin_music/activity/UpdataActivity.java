@@ -71,7 +71,7 @@ public class UpdataActivity extends BaseActivity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.go_back:
                 Intent intent = new Intent();
-                intent.putExtra("User", "no");
+                intent.putExtra(getString(R.string.IS_USER_OK), "no");
                 setResult(RESULT_OK, intent);
                 finish();
                 break;
@@ -125,7 +125,7 @@ public class UpdataActivity extends BaseActivity implements View.OnClickListener
                                     upuser.setPersonal_profile(user.getPersonal_profile());
                                 }
                                 Intent intent = new Intent();
-                                intent.putExtra("User", "yes");
+                                intent.putExtra(getString(R.string.IS_USER_OK), "yes");
                                 setResult(RESULT_OK, intent);
                                 Toast.makeText(UpdataActivity.this, "更新完成", Toast.LENGTH_SHORT).show();
                                 finish();

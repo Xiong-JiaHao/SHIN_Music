@@ -78,9 +78,9 @@ public class AlbumItemAdapter extends BaseAdapter {
                 if (UserState.getState() || position != 0) {
                     Intent intent = new Intent(mContext, AlbumDetailsActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("def_album", mList.get(position));
-                    intent.putExtra("def_album", bundle);
-                    intent.putExtra("isAlbum", true);
+                    bundle.putSerializable(mContext.getString(R.string.ALBUM), mList.get(position));
+                    intent.putExtra(mContext.getString(R.string.ALBUM), bundle);
+                    intent.putExtra(mContext.getString(R.string.IS_ALBUM), true);
                     mContext.startActivity(intent);
                 } else {
                     Toast.makeText(mContext, "当前未登录，无法享受该功能", Toast.LENGTH_SHORT).show();

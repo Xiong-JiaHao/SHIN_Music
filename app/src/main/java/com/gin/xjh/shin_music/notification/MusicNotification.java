@@ -97,8 +97,8 @@ public class MusicNotification extends Notification {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelID = "ginshin";
-            String channelName = "SHIN_Music";
+            String channelID = mContext.getString(R.string.GINSHIN);
+            String channelName = mContext.getString(R.string.SHIN_MUSIC);
             NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_DEFAULT);//取消提示
             channel.setSound(null, null);//取消提示音
             NotificationManager manager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);

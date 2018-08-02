@@ -93,7 +93,7 @@ public class UserState {
                         imageView.setImageResource(R.drawable.btn_like_song);
                         song.setObjectId(s);
                         sLikeSongList.add(song);
-                        ListDataSaveUtil.setSongList("btn_like_song", sLikeSongList);
+                        ListDataSaveUtil.setSongList(context.getString(R.string.LIKE_SONG_LIST), sLikeSongList);
                     } else {
                         Toast.makeText(context, "添加失败，请重试", Toast.LENGTH_SHORT).show();
                     }
@@ -141,7 +141,7 @@ public class UserState {
                     if (e == null) {
                         imageView.setImageResource(R.drawable.btn_unlike_song);
                         sLikeSongList.remove(finalIndex);
-                        ListDataSaveUtil.setSongList("btn_like_song", sLikeSongList);
+                        ListDataSaveUtil.setSongList(context.getString(R.string.LIKE_SONG_LIST), sLikeSongList);
                     } else {
                         Toast.makeText(context, "删除失败，请重试", Toast.LENGTH_SHORT).show();
                     }
@@ -173,7 +173,7 @@ public class UserState {
                         imageView.setImageResource(R.drawable.btn_concern_red);
                         user.setObjectId(s);
                         sConcernList.add(user);
-                        ListDataSaveUtil.setUserList("concernUser", sConcernList);
+                        ListDataSaveUtil.setUserList(context.getString(R.string.CONCERN_USER), sConcernList);
                     } else {
                         Toast.makeText(context, "添加失败，请重试", Toast.LENGTH_SHORT).show();
                     }
@@ -221,7 +221,7 @@ public class UserState {
                     if (e == null) {
                         imageView.setImageResource(R.drawable.btn_concern_gray);
                         sConcernList.remove(finalIndex);
-                        ListDataSaveUtil.setUserList("concernUser", sConcernList);
+                        ListDataSaveUtil.setUserList(context.getString(R.string.CONCERN_USER), sConcernList);
                     } else {
                         Toast.makeText(context, "删除失败，请重试", Toast.LENGTH_SHORT).show();
                     }
@@ -239,7 +239,7 @@ public class UserState {
                 public void done(BmobException e) {
                     if (e == null) {
                         sConcernList.remove(index);
-                        ListDataSaveUtil.setUserList("concernUser", sConcernList);
+                        ListDataSaveUtil.setUserList(context.getString(R.string.CONCERN_USER), sConcernList);
                     } else {
                         Toast.makeText(context, "删除失败，请重试", Toast.LENGTH_SHORT).show();
                     }

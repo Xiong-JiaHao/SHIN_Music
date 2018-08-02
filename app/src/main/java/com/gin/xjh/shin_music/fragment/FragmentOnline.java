@@ -68,8 +68,8 @@ public class FragmentOnline extends Fragment {
         mDataList = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             Map<String, Object> map = new HashMap<>();
-            map.put("img", mBitmapIds[i]);
-            map.put("text", mBitmapName[i]);
+            map.put(getString(R.string.IMG), mBitmapIds[i]);
+            map.put(getString(R.string.TEXT), mBitmapName[i]);
             mDataList.add(map);
         }
 
@@ -78,7 +78,7 @@ public class FragmentOnline extends Fragment {
     private void initEvent(View view) {
 
         //GridView
-        String[] from = {"img", "text"};
+        String[] from = {getString(R.string.IMG), getString(R.string.TEXT)};
         int[] to = {R.id.music_img, R.id.music_text};
         mAdapter = new SimpleAdapter(getContext(), mDataList, R.layout.listitem_online_music, from, to);
 
@@ -93,10 +93,10 @@ public class FragmentOnline extends Fragment {
                 }
 
                 Intent intent = new Intent(getContext(), AlbumDetailsActivity.class);
-                intent.putExtra("isAlbum", false);
-                intent.putExtra("name", mBitmapName[arg2]);
-                intent.putExtra("id", mIds[arg2]);
-                intent.putExtra("url", mBitmapUrl[arg2]);
+                intent.putExtra(getString(R.string.IS_ALBUM), false);
+                intent.putExtra(getString(R.string.NAME), mBitmapName[arg2]);
+                intent.putExtra(getString(R.string.ID), mIds[arg2]);
+                intent.putExtra(getString(R.string.URL), mBitmapUrl[arg2]);
                 startActivity(intent);
             }
         });
@@ -130,8 +130,8 @@ public class FragmentOnline extends Fragment {
         }
         mFind.setText("");
         Intent intent = new Intent(getContext(), MusicDetailsActivity.class);
-        intent.putExtra("name", name);
-        intent.putExtra("isOnline", true);
+        intent.putExtra(getString(R.string.NAME), name);
+        intent.putExtra(getString(R.string.IS_ONLINE), true);
         startActivity(intent);
     }
 

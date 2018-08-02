@@ -95,7 +95,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             mCheckagAinPassword.setImageResource(R.drawable.sel_fork);
         }
         BmobQuery<User> query = new BmobQuery<>();
-        query.addWhereEqualTo("UserId", mUserIdStr);
+        query.addWhereEqualTo(getString(R.string.USERID), mUserIdStr);
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
@@ -155,7 +155,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     user.setObjectId(s);
                     UserState.Login(user);
                     Intent intent = new Intent();
-                    intent.putExtra("User", "yes");
+                    intent.putExtra(getString(R.string.IS_USER_OK), "yes");
                     Toast.makeText(RegisterActivity.this, "注册成功，正在登录...", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK, intent);
                     finish();

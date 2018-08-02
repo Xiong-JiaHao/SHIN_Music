@@ -42,7 +42,7 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        mUser = (User) intent.getBundleExtra("user").get("user");
+        mUser = (User) intent.getBundleExtra(getString(R.string.USER)).get(getString(R.string.USER));
         setContentView(R.layout.activity_personal_menu);
         initView();
         initEvent();
@@ -97,7 +97,7 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
         switch (v.getId()){
             case R.id.go_back:
                 Intent intent = new Intent();
-                intent.putExtra("btn_about", isConcern);
+                intent.putExtra(getString(R.string.ABOUT), isConcern);
                 setResult(97, intent);
                 finish();
                 break;
@@ -124,7 +124,7 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
 
     private void updateBmobLikeEvent() {
         BmobQuery<LikeSong> query = new BmobQuery<>();
-        query.addWhereEqualTo("UserId", mUser.getUserId());
+        query.addWhereEqualTo(getString(R.string.USERID), mUser.getUserId());
         query.findObjects(new FindListener<LikeSong>() {
             @Override
             public void done(List<LikeSong> list, BmobException e) {
@@ -152,8 +152,8 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
 
     private void updateBmobConcernEvent() {
         BmobQuery<Follow> query = new BmobQuery<>();
-        query.addWhereEqualTo("UserId", UserState.getLoginUser().getUserId());//按当前登录的ID进行查找
-        query.include("FollowUser");
+        query.addWhereEqualTo(getString(R.string.USERID), UserState.getLoginUser().getUserId());//按当前登录的ID进行查找
+        query.include(getString(R.string.FOLLOW_USER));
         query.findObjects(new FindListener<Follow>() {
             @Override
             public void done(List<Follow> list, BmobException e) {
@@ -172,10 +172,10 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
                     if (isConcern) {
                         mConcern.setImageResource(R.drawable.btn_concern_red);
                     }
-                    ListDataSaveUtil.setUserList("concernUser", concernList);
+                    ListDataSaveUtil.setUserList(getString(R.string.CONCERN_USER), concernList);
                 } else {
                     UserState.setConcernList(null);
-                    ListDataSaveUtil.setUserList("concernUser", null);
+                    ListDataSaveUtil.setUserList(getString(R.string.CONCERN_USER), null);
                 }
             }
         });
@@ -198,7 +198,7 @@ public class PersonalMenuActivity extends BaseActivity implements View.OnClickLi
     protected void onDestroy() {
         super.onDestroy();
         Intent intent = new Intent();
-        intent.putExtra("btn_about", isConcern);
+        intent.putExtra(getString(R.string.ABOUT), isConcern);
         setResult(97, intent);
     }
 }

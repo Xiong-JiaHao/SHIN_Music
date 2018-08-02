@@ -72,8 +72,8 @@ public class ConcernListActivity extends BaseActivity implements View.OnClickLis
 
     private void updateBmob() {
         BmobQuery<Follow> query = new BmobQuery<>();
-        query.addWhereEqualTo("UserId", UserState.getLoginUser().getUserId());//按当前登录的ID进行查找
-        query.include("FollowUser");
+        query.addWhereEqualTo(getString(R.string.USERID), UserState.getLoginUser().getUserId());//按当前登录的ID进行查找
+        query.include(getString(R.string.FOLLOW_USER));
         query.findObjects(new FindListener<Follow>() {
             @Override
             public void done(List<Follow> list, BmobException e) {
@@ -88,14 +88,14 @@ public class ConcernListActivity extends BaseActivity implements View.OnClickLis
                         concernList.add(user);
                     }
                     UserState.setConcernList(concernList);
-                    ListDataSaveUtil.setUserList("concernUser", concernList);
+                    ListDataSaveUtil.setUserList(getString(R.string.CONCERN_USER), concernList);
                     for (int i = 0; i < concernList.size(); i++) {
                         mDate.add(concernList.get(i));
                     }
                     updateUI();
                 } else {
                     UserState.setConcernList(null);
-                    ListDataSaveUtil.setUserList("concernUser", null);
+                    ListDataSaveUtil.setUserList(getString(R.string.CONCERN_USER), null);
                     mHint.setText("当前未关注其他人");
                 }
             }
@@ -115,8 +115,8 @@ public class ConcernListActivity extends BaseActivity implements View.OnClickLis
     public void onItemClick(View view, int position) {
         Intent intent = new Intent(this, PersonalMenuActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("user", UserState.getConcernList().get(position));
-        intent.putExtra("user", bundle);
+        bundle.putSerializable(getString(R.string.USER), UserState.getConcernList().get(position));
+        intent.putExtra(getString(R.string.USER), bundle);
         mIndex = position;
         startActivityForResult(intent, 97);
     }
@@ -137,7 +137,7 @@ public class ConcernListActivity extends BaseActivity implements View.OnClickLis
                     mConcernRecyclerViewAdapter.removeData(mIndex, false);
                 }
             } else {
-                boolean isConcern = data.getBooleanExtra("concern", true);
+                boolean isConcern = data.getBooleanExtra(getString(R.string.ABOUT), true);
                 if (!isConcern) {
                     mConcernRecyclerViewAdapter.removeData(mIndex, false);
                 }

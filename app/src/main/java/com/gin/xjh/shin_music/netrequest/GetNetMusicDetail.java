@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
+import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.netinterface.RequestServicesMusicDetail;
 import com.gin.xjh.shin_music.activity.MusicPlayActivity;
 import com.gin.xjh.shin_music.notification.MusicNotification;
@@ -43,13 +44,13 @@ public class GetNetMusicDetail {
                     try {
                         String result = (String) msg.obj;
                         JSONObject AllObject = new JSONObject(result);
-                        String JSONString = AllObject.getString("songs");
+                        String JSONString = AllObject.getString(mContext.getString(R.string.SONGS));
                         JSONArray jsonArray = new JSONArray(JSONString);
                         JSONObject jsonObject = jsonArray.getJSONObject(0);
-                        int time = jsonObject.getInt("dt");
-                        String urlString = jsonObject.getString("al");
+                        int time = jsonObject.getInt(mContext.getString(R.string.SONG_TIME));
+                        String urlString = jsonObject.getString(mContext.getString(R.string.URL_STR));
                         JSONObject urlObject = new JSONObject(urlString);
-                        String url = urlObject.getString("picUrl");
+                        String url = urlObject.getString(mContext.getString(R.string.PICURL));
                         MusicUtil.getSongList().get(MusicUtil.getIndex()).setSongTime(time);
                         MusicUtil.getSongList().get(MusicUtil.getIndex()).setAlbumUrl(url);
                         Intent intent = new Intent(MusicPlayActivity.MUSIC_ACTION_CHANGE);
