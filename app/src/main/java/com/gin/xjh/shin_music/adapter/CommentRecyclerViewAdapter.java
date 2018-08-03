@@ -15,9 +15,9 @@ import android.widget.Toast;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Comment;
 import com.gin.xjh.shin_music.bean.User;
-import com.gin.xjh.shin_music.activity.PersonalMenuActivity;
-import com.gin.xjh.shin_music.util.NetStateUtil;
-import com.gin.xjh.shin_music.util.TimesUtil;
+import com.gin.xjh.shin_music.activities.PersonalMenuActivity;
+import com.gin.xjh.shin_music.utils.NetStateUtil;
+import com.gin.xjh.shin_music.utils.TimesUtil;
 
 import java.text.ParseException;
 import java.util.List;

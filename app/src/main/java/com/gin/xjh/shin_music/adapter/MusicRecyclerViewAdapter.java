@@ -16,15 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.activity.AllCommentActivity;
-import com.gin.xjh.shin_music.activity.MusicPlayActivity;
+import com.gin.xjh.shin_music.activities.AllCommentActivity;
+import com.gin.xjh.shin_music.activities.MusicPlayActivity;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.user.UserState;
-import com.gin.xjh.shin_music.util.DensityUtil;
-import com.gin.xjh.shin_music.util.ListDataSaveUtil;
-import com.gin.xjh.shin_music.util.MusicUtil;
-import com.gin.xjh.shin_music.util.NetStateUtil;
+import com.gin.xjh.shin_music.utils.DensityUtil;
+import com.gin.xjh.shin_music.utils.ListDataSaveUtil;
+import com.gin.xjh.shin_music.utils.MusicUtil;
+import com.gin.xjh.shin_music.utils.NetStateUtil;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.user.UserState;
 import com.gin.xjh.shin_music.bean.User;
-import com.gin.xjh.shin_music.util.DensityUtil;
+import com.gin.xjh.shin_music.utils.DensityUtil;
 import com.gin.xjh.shin_music.view.SlidingButtonView;
 
 import java.util.List;

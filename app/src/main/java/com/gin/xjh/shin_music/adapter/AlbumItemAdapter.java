@@ -13,9 +13,9 @@ import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.user.UserState;
-import com.gin.xjh.shin_music.activity.AlbumDetailsActivity;
+import com.gin.xjh.shin_music.activities.AlbumDetailsActivity;
 import com.gin.xjh.shin_music.bean.Album;
-import com.gin.xjh.shin_music.util.NetStateUtil;
+import com.gin.xjh.shin_music.utils.NetStateUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

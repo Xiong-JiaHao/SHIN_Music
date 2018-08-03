@@ -9,7 +9,7 @@ import com.gin.xjh.shin_music.bean.Follow;
 import com.gin.xjh.shin_music.bean.LikeSong;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.bean.User;
-import com.gin.xjh.shin_music.util.ListDataSaveUtil;
+import com.gin.xjh.shin_music.utils.ListDataSaveUtil;
 
 import java.util.ArrayList;
 import java.util.List;

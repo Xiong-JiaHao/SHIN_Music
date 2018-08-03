@@ -11,11 +11,11 @@ import android.os.Build;
 import android.widget.RemoteViews;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.activity.MusicPlayActivity;
+import com.gin.xjh.shin_music.activities.MusicPlayActivity;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.service.MusicService;
-import com.gin.xjh.shin_music.util.BitmapUtil;
-import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.utils.BitmapUtil;
+import com.gin.xjh.shin_music.utils.MusicUtil;
 import com.squareup.picasso.Picasso;
 
 

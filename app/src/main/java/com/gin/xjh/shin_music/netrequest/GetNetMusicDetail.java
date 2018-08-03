@@ -8,11 +8,11 @@ import android.os.Message;
 import android.util.Log;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.netinterface.RequestServicesMusicDetail;
-import com.gin.xjh.shin_music.activity.MusicPlayActivity;
+import com.gin.xjh.shin_music.interfaces.RequestServicesMusicDetailInter;
+import com.gin.xjh.shin_music.activities.MusicPlayActivity;
 import com.gin.xjh.shin_music.notification.MusicNotification;
-import com.gin.xjh.shin_music.util.ConstantUtil;
-import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.utils.ConstantUtil;
+import com.gin.xjh.shin_music.utils.MusicUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,7 +70,7 @@ public class GetNetMusicDetail {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ConstantUtil.URL_BASE)
                 .build();
-        RequestServicesMusicDetail requestServices = retrofit.create(RequestServicesMusicDetail.class);
+        RequestServicesMusicDetailInter requestServices = retrofit.create(RequestServicesMusicDetailInter.class);
         retrofit2.Call<ResponseBody> call = requestServices.getString(MusicUtil.getNowSong().getSongId());
         call.enqueue(new Callback<ResponseBody>() {
             @Override

@@ -13,10 +13,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.netinterface.RequestServicesAlbumList;
+import com.gin.xjh.shin_music.interfaces.RequestServicesAlbumListInter;
 import com.gin.xjh.shin_music.adapter.MusicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
-import com.gin.xjh.shin_music.util.ConstantUtil;
+import com.gin.xjh.shin_music.utils.ConstantUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -105,7 +105,7 @@ public class GetNetAlbumList {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ConstantUtil.URL_BASE)
                 .build();
-        RequestServicesAlbumList requestServices = retrofit.create(RequestServicesAlbumList.class);
+        RequestServicesAlbumListInter requestServices = retrofit.create(RequestServicesAlbumListInter.class);
         retrofit2.Call<ResponseBody> call = requestServices.getString(id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override

@@ -41,7 +41,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="android:icon, android:label,android:theme">
-        <activity android:name=".activity.MainActivity"
+        <activity android:name=".activities.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -50,22 +50,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MusicPlayActivity"
+        <activity android:name=".activities.MusicPlayActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.LoginMenuActivity"/>
-        <activity android:name=".activity.AlbumDetailsActivity"/>
-        <activity android:name=".activity.AddQuestionActivity"/>
-        <activity android:name=".activity.RegisterActivity"/>
-        <activity android:name=".activity.UpdataActivity"/>
-        <activity android:name=".activity.UpdataPasswordActivity"/>
-        <activity android:name=".activity.MusicDetailsActivity"/>
-        <activity android:name=".activity.AllCommentActivity"
+        <activity android:name=".activities.LoginMenuActivity"/>
+        <activity android:name=".activities.AlbumDetailsActivity"/>
+        <activity android:name=".activities.AddQuestionActivity"/>
+        <activity android:name=".activities.RegisterActivity"/>
+        <activity android:name=".activities.UpdataActivity"/>
+        <activity android:name=".activities.UpdataPasswordActivity"/>
+        <activity android:name=".activities.MusicDetailsActivity"/>
+        <activity android:name=".activities.AllCommentActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <service android:name=".service.MusicService"/>
-        <activity android:name=".activity.PersonalMenuActivity"/>
-        <activity android:name=".activity.ConcernListActivity"/>
+        <activity android:name=".activities.PersonalMenuActivity"/>
+        <activity android:name=".activities.ConcernListActivity"/>
         <!--TODO 集成：1.2、添加推送所需要的服务和广播-->
         <service
             android:name="cn.bmob.push.lib.service.PushService"
@@ -91,7 +91,7 @@
             </intent-filter>
         </receiver>
         <!-- 第3步中创建的消息接收器，在这里进行注册 -->
-        <receiver android:name="com.gin.xjh.shin_music.broadcastreceiver.PushReceiver">
+        <receiver android:name="com.gin.xjh.shin_music.broadcast.PushReceiverBroReceiver">
             <intent-filter>
                 <action android:name="cn.bmob.push.action.MESSAGE" />
             </intent-filter>

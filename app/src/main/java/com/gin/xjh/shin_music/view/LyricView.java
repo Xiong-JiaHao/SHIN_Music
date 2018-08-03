@@ -14,9 +14,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 
 import com.gin.xjh.shin_music.bean.Lyric;
-import com.gin.xjh.shin_music.util.DisplayUtils;
-import com.gin.xjh.shin_music.util.LrcUtils;
-import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.utils.DisplayUtils;
+import com.gin.xjh.shin_music.utils.LrcUtils;
+import com.gin.xjh.shin_music.utils.MusicUtil;
 
 import java.util.List;
 

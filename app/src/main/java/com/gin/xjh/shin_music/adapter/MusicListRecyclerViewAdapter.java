@@ -10,12 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gin.xjh.shin_music.activity.MainActivity;
+import com.gin.xjh.shin_music.activities.MainActivity;
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.service.MusicService;
-import com.gin.xjh.shin_music.util.MusicUtil;
-import com.gin.xjh.shin_music.util.NetStateUtil;
+import com.gin.xjh.shin_music.utils.MusicUtil;
+import com.gin.xjh.shin_music.utils.NetStateUtil;
 
 import java.util.List;
 

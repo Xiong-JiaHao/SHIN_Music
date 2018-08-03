@@ -13,10 +13,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.gin.xjh.shin_music.R;
-import com.gin.xjh.shin_music.netinterface.RequestServicesFindMusic;
+import com.gin.xjh.shin_music.interfaces.RequestServicesFindMusicInter;
 import com.gin.xjh.shin_music.adapter.MusicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
-import com.gin.xjh.shin_music.util.ConstantUtil;
+import com.gin.xjh.shin_music.utils.ConstantUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -107,7 +107,7 @@ public class FindNetMusic {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ConstantUtil.URL_BASE)
                 .build();
-        RequestServicesFindMusic requestServices = retrofit.create(RequestServicesFindMusic.class);
+        RequestServicesFindMusicInter requestServices = retrofit.create(RequestServicesFindMusicInter.class);
         retrofit2.Call<ResponseBody> call = requestServices.getString(name, 1);
         call.enqueue(new Callback<ResponseBody>() {
             @Override

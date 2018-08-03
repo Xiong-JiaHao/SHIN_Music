@@ -7,9 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.gin.xjh.shin_music.netinterface.RequestServicesMusicLrc;
-import com.gin.xjh.shin_music.util.ConstantUtil;
-import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.interfaces.RequestServicesMusicLrcInter;
+import com.gin.xjh.shin_music.utils.ConstantUtil;
+import com.gin.xjh.shin_music.utils.MusicUtil;
 import com.gin.xjh.shin_music.view.LyricView;
 
 import org.json.JSONException;
@@ -64,7 +64,7 @@ public class GetNetMusicLrc {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ConstantUtil.URL_BASE)
                 .build();
-        RequestServicesMusicLrc requestServices = retrofit.create(RequestServicesMusicLrc.class);
+        RequestServicesMusicLrcInter requestServices = retrofit.create(RequestServicesMusicLrcInter.class);
         retrofit2.Call<ResponseBody> call = requestServices.getString(MusicUtil.getNowSong().getSongId());
         call.enqueue(new Callback<ResponseBody>() {
             @Override

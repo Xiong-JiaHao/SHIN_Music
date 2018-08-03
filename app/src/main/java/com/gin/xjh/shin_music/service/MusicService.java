@@ -13,9 +13,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
-import com.gin.xjh.shin_music.activity.MusicPlayActivity;
+import com.gin.xjh.shin_music.activities.MusicPlayActivity;
 import com.gin.xjh.shin_music.notification.MusicNotification;
-import com.gin.xjh.shin_music.util.MusicUtil;
+import com.gin.xjh.shin_music.utils.MusicUtil;
 
 public class MusicService extends Service {
 
