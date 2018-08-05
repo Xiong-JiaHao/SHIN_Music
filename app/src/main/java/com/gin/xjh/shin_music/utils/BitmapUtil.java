@@ -22,7 +22,7 @@ public class BitmapUtil {
     public static Bitmap getAlbumArt(Song song) {
         byte[] imageData = null;
         try {
-            //https://github.com/maxbruecken/jaudiotagger-android
+            //https://github.com/hexise/jaudiotagger-android
             MP3File mp3file = new MP3File(new File(song.getUrl()));
             AbstractID3v2Tag tag = mp3file.getID3v2Tag();
             AbstractID3v2Frame frame = (AbstractID3v2Frame) tag.getFrame("APIC");

@@ -20,9 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
+import com.gin.xjh.shin_music.activities.MusicDetailsActivity;
 import com.gin.xjh.shin_music.adapter.MusicRecyclerViewAdapter;
 import com.gin.xjh.shin_music.bean.Song;
-import com.gin.xjh.shin_music.activities.MusicDetailsActivity;
+import com.gin.xjh.shin_music.db.BaseSQLiteDBHelper;
 import com.gin.xjh.shin_music.utils.MusicUtil;
 import com.zhy.m.permission.MPermissions;
 
@@ -78,10 +79,15 @@ public class FragmentLocal extends Fragment {
     }
 
     private void initData() {
+        final BaseSQLiteDBHelper mBaseSQLiteDBHelper = new BaseSQLiteDBHelper(getContext());
+        if (!mBaseSQLiteDBHelper.tabbleIsExist()) {
+            Toast.makeText(getContext(), "首次更新耗时可能较长，请稍等", Toast.LENGTH_SHORT).show();
+            mBaseSQLiteDBHelper.createTable();
+        }
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mSongList = MusicUtil.getLocalMusic(getContext());
+                mSongList = MusicUtil.getLocalMusic(getContext(), mBaseSQLiteDBHelper);
                 Message msg = new Message();
                 mMainHandler.sendMessage(msg);
             }
