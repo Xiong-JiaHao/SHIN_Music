@@ -32,7 +32,6 @@
     <string name="TIME">time</string>
     <string name="LIKE_SONGLIST_NAME">likesonglistname</string>
     <string name="USERID">UserId</string>
-    <string name="API_KEY">df98b1644c7d3aa94239034059791d40</string>
     <string name="PLAY_STATE">play_state</string>
     <string name="INDEX">index</string>
     <string name="IS_ONLINE">isOnline</string>

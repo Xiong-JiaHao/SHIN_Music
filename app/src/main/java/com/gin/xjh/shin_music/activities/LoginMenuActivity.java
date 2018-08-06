@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -237,6 +238,8 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
                 AlertDialog.Builder builder3 = new AlertDialog.Builder(LoginMenuActivity.this);
                 LayoutInflater inflater3 = LayoutInflater.from(LoginMenuActivity.this);
                 View viewDialog3 = inflater3.inflate(R.layout.dialog_about_me, null);
+                TextView textView = viewDialog3.findViewById(R.id.version);
+                textView.setText("V " + getVersionName());
                 builder3.setView(viewDialog3);
                 builder3.create();
                 builder3.show();
@@ -383,4 +386,12 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
+    private String getVersionName() {
+        try {
+            return this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "1.0";
+    }
 }

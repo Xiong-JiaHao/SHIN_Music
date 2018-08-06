@@ -27,9 +27,11 @@ import com.gin.xjh.shin_music.fragments.FragmentOnline;
 import com.gin.xjh.shin_music.fragments.FragmentShin;
 import com.gin.xjh.shin_music.service.MusicService;
 import com.gin.xjh.shin_music.user.UserState;
+import com.gin.xjh.shin_music.utils.ConstantUtil;
 import com.gin.xjh.shin_music.utils.ListDataSaveUtil;
 import com.gin.xjh.shin_music.utils.MusicUtil;
 import com.gin.xjh.shin_music.utils.TimesUtil;
+import com.tencent.bugly.Bugly;
 import com.zhy.m.permission.MPermissions;
 import com.zhy.m.permission.PermissionDenied;
 import com.zhy.m.permission.PermissionGrant;
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initBmob();
+        initBugly();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -84,9 +87,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bindService(startIntent, connection, BIND_AUTO_CREATE);
     }
 
+    private void initBugly() {
+        /* Bugly SDK初始化
+         * 参数1：上下文对象
+         * 参数2：APPID，平台注册时得到,注意替换成你的appId
+         * 参数3：是否开启调试模式，调试模式下会输出'CrashReport'tag的日志
+         */
+        Bugly.init(getApplicationContext(), ConstantUtil.BUGLY_APP_ID, true);
+    }
+
     private void initBmob() {
 
-        Bmob.initialize(this, getString(R.string.API_KEY));
+        Bmob.initialize(this, ConstantUtil.BMOB_API_KEY);
 
         BmobInstallationManager.getInstance().initialize(new InstallationListener<BmobInstallation>() {
             @Override

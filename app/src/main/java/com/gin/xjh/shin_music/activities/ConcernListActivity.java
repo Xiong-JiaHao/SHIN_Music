@@ -63,7 +63,7 @@ public class ConcernListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.go_back:
                 finish();
                 break;
