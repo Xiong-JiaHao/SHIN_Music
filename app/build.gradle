@@ -1,13 +1,44 @@
 apply plugin: 'com.android.application'
 
+//设置发布的显示的版本名
+def getVersionName() {
+    def versionFile = file('version.properties')// 读取第一步新建的文件
+    if (versionFile.canRead()) {// 判断文件读取异常
+        Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionFile))
+        def versionCode = versionProps['CODE'].toInteger()// 读取文件里面的版本号
+        def runTasks = gradle.startParameter.taskNames
+        if ('assembleRelease' in runTasks) {//仅在assembleRelease任务是增加版本号,其他渠道包在此分别配置
+            // 版本号自增之后再写入文件（此处是关键，版本号自增+1）
+            versionProps['VERSION_CODE'] = (++versionCode).toString()
+            versionProps.store(versionFile.newWriter(), null)
+        }
+        def first = ((versionCode - (versionCode % 1000)) / 1000) + 1
+        versionCode = versionCode % 1000
+        def second = versionCode / 100
+        return first + "." + second // 返回自增之后的版本号
+    } else {
+        throw new GradleException("Could not find version.properties!")
+    }
+}
+
+//设置发布的显示的版本号
+def getVersionCode() {
+    return new Date().format("yyyyMMddHH").toInteger()
+}
+
 android {
     compileSdkVersion 26
+
+    def currentVersionCode = getVersionCode()
+    def currentVersionName = getVersionName()
+
     defaultConfig {
         applicationId "com.gin.xjh.shin_music"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode currentVersionCode
+        versionName currentVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
