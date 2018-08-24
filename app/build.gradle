@@ -7,16 +7,13 @@ def getVersionName() {
         Properties versionProps = new Properties()
         versionProps.load(new FileInputStream(versionFile))
         def versionCode = versionProps['CODE'].toInteger()// 读取文件里面的版本号
-        def runTasks = gradle.startParameter.taskNames
-        if ('assembleRelease' in runTasks) {//仅在assembleRelease任务是增加版本号,其他渠道包在此分别配置
-            // 版本号自增之后再写入文件（此处是关键，版本号自增+1）
-            versionProps['VERSION_CODE'] = (++versionCode).toString()
-            versionProps.store(versionFile.newWriter(), null)
-        }
-        def first = ((versionCode - (versionCode % 1000)) / 1000) + 1
-        versionCode = versionCode % 1000
-        def second = versionCode / 100
-        return first + "." + second // 返回自增之后的版本号
+        versionProps['CODE'] = (++versionCode).toString()
+        versionProps.store(versionFile.newWriter(), null)
+        def first = ((versionCode - (versionCode % 10000)) / 10000) + 1
+        versionCode = versionCode % 10000
+        def thrid = versionCode % 1000
+        def second = (versionCode - thrid) / 10
+        return first + "." + second + "." + thrid // 返回自增之后的版本号
     } else {
         throw new GradleException("Could not find version.properties!")
     }

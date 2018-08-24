@@ -239,7 +239,7 @@ public class LoginMenuActivity extends BaseActivity implements View.OnClickListe
                 LayoutInflater inflater3 = LayoutInflater.from(LoginMenuActivity.this);
                 View viewDialog3 = inflater3.inflate(R.layout.dialog_about_me, null);
                 TextView textView = viewDialog3.findViewById(R.id.version);
-                textView.setText("V " + getVersionName());
+                textView.setText("v " + getVersionName());
                 builder3.setView(viewDialog3);
                 builder3.create();
                 builder3.show();

@@ -69,6 +69,16 @@ public class FragmentLocal extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        BaseSQLiteDBHelper mBaseSQLiteDBHelper = new BaseSQLiteDBHelper(getContext());
+        if (!mBaseSQLiteDBHelper.tabbleIsExist()) {
+            Toast.makeText(getContext(), "首次更新耗时可能较长，请稍等", Toast.LENGTH_SHORT).show();
+            mBaseSQLiteDBHelper.createTable();
+        }
+    }
+
     private void initView(View view) {
         mRecyclerView = view.findViewById(R.id.fragment_local_music_list);
         mFind = view.findViewById(R.id.find_local_name);
@@ -80,10 +90,6 @@ public class FragmentLocal extends Fragment {
 
     private void initData() {
         final BaseSQLiteDBHelper mBaseSQLiteDBHelper = new BaseSQLiteDBHelper(getContext());
-        if (!mBaseSQLiteDBHelper.tabbleIsExist()) {
-            Toast.makeText(getContext(), "首次更新耗时可能较长，请稍等", Toast.LENGTH_SHORT).show();
-            mBaseSQLiteDBHelper.createTable();
-        }
         new Thread(new Runnable() {
             @Override
             public void run() {
