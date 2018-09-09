@@ -130,7 +130,7 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
             canvas.drawText("未找到歌词", getWidth() / 2,
                     getHeight() / 2, mOtherPaint);
         }
-        super.onDraw(canvas);
+
     }
 
     public class LyricBroadCast extends BroadcastReceiver {
