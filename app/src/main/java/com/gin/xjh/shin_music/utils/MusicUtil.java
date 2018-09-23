@@ -8,7 +8,6 @@ import android.provider.MediaStore;
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.db.BaseSQLiteDBHelper;
 
-import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.mp3.MP3File;
@@ -216,11 +215,11 @@ public class MusicUtil {
                             song = mBaseSQLiteDBHelper.getSong(songid);
                             if (song == null) {
                                 file = new MP3File(new File(url));
-                                if (file.hasID3v2Tag()) {
-                                    tag = file.getID3v2Tag();
-                                    String songname = tag.frameMap.get("TIT2").toString();
-                                    String singername = tag.frameMap.get("TPE1").toString();
-                                    String albumname = tag.frameMap.get("TALB").toString();
+                                tag = file.getID3v2Tag();
+                                if (tag != null) {
+                                    String songname=new String(tag.frameMap.get("TIT2").toString().getBytes("ISO-8859-1"),"GB2312");
+                                    String singername=new String(tag.frameMap.get("TPE1").toString().getBytes("ISO-8859-1"),"GB2312");
+                                    String albumname=new String(tag.frameMap.get("TALB").toString().getBytes("ISO-8859-1"),"GB2312");
                                     songname = songname.substring(6, songname.length() - 3);
                                     singername = singername.substring(6, singername.length() - 3);
                                     albumname = albumname.substring(6, albumname.length() - 3);
@@ -244,7 +243,7 @@ public class MusicUtil {
                                 }
                             }
                         }
-                    } catch (IOException | TagException | ReadOnlyFileException | CannotReadException | InvalidAudioFrameException e) {
+                    } catch (IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException e) {
                         e.printStackTrace();
                         throw new RuntimeException("获取Mp3 tag信息出错！");
                     }
