@@ -405,14 +405,14 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void preSong() {
-        mLastSongName = MusicUtil.getNowSong().getSongName();
-        mLastSongId = MusicUtil.getNowSong().getSongId();
         if (MusicUtil.getListSize() == 0) {
             Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
             return;
         } else if (!MusicUtil.isPlayMusic()) {
             mMusicPlay.setImageResource(R.drawable.btn_music_pause);
         }
+        mLastSongName = MusicUtil.getNowSong().getSongName();
+        mLastSongId = MusicUtil.getNowSong().getSongId();
         Intent startIntent2 = new Intent(this, MusicService.class);
         startIntent2.putExtra("action", MusicService.PREVIOUSMUSIC);
         startService(startIntent2);
@@ -447,14 +447,14 @@ public class MusicPlayActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void nextSong(boolean flag) {
-        mLastSongName = MusicUtil.getNowSong().getSongName();
-        mLastSongId = MusicUtil.getNowSong().getSongId();
         if (MusicUtil.getListSize() == 0) {
             Toast.makeText(this, "当前列表不存在歌曲，无法播放", Toast.LENGTH_SHORT).show();
             return;
         } else if (!MusicUtil.isPlayMusic()) {
             mMusicPlay.setImageResource(R.drawable.btn_music_pause);
         }
+        mLastSongName = MusicUtil.getNowSong().getSongName();
+        mLastSongId = MusicUtil.getNowSong().getSongId();
         mLasttime = 0;
         Intent startIntent3 = new Intent(this, MusicService.class);
         if (flag) {
