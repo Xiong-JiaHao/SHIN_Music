@@ -75,8 +75,8 @@ public class FragmentLocal extends Fragment {
         BaseSQLiteDBHelper mBaseSQLiteDBHelper = new BaseSQLiteDBHelper(getContext());
         if (!mBaseSQLiteDBHelper.tabbleIsExist()) {
             Toast.makeText(getContext(), "首次更新耗时可能较长，请稍等", Toast.LENGTH_SHORT).show();
-            mBaseSQLiteDBHelper.createTable();
         }
+        mBaseSQLiteDBHelper.createTable();
     }
 
     private void initView(View view) {

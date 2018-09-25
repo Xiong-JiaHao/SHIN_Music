@@ -45,10 +45,7 @@ public class BaseSQLiteDBHelper extends SQLiteOpenHelper {
             String sql = "select count(*) as c from Sqlite_master where type ='table' and name ='" + TABLE.trim() + "' ";
             cursor = db.rawQuery(sql, null);
             if (cursor.moveToNext()) {
-                int count = cursor.getInt(0);
-                if (count > 0) {
-                    result = true;
-                }
+                result = true;
                 cursor.close();
             }
 
