@@ -24,18 +24,6 @@ import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.utils.MusicUtil;
 import com.gin.xjh.shin_music.view.LyricView;
 
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagException;
-
-import java.io.File;
-import java.io.IOException;
-
 /**
  * Created by Gin on 2018/4/23.
  */
@@ -114,28 +102,8 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
                 if (song.isOnline())
                     new GetNetMusicLrc().getJson(mLyricView, mHint);
                 else {
-                    try {
-                        AudioFile audioFile = AudioFileIO.read(new File(song.getUrl()));
-                        Tag tag = audioFile.getTag();
-                        lyric = tag.getFirst(FieldKey.LYRICS);
-                        if (lyric == null) {
-                            song.setLyric("");
-                        } else {
-                            song.setLyric(lyric);
-                        }
-                        mLyricView.getLyric(lyric);
-                        mHint.setVisibility(View.GONE);
-                    } catch (CannotReadException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (TagException e) {
-                        e.printStackTrace();
-                    } catch (ReadOnlyFileException e) {
-                        e.printStackTrace();
-                    } catch (InvalidAudioFrameException e) {
-                        e.printStackTrace();
-                    }
+                    song.setLyric("");
+                    mHint.setText("未找到歌词");
                 }
             }
         }
@@ -192,28 +160,8 @@ public class FragmentLyrics extends Fragment implements View.OnClickListener {
                         if (song.isOnline())
                             new GetNetMusicLrc().getJson(mLyricView, mHint);
                         else {
-                            try {
-                                AudioFile audioFile = AudioFileIO.read(new File(song.getUrl()));
-                                Tag tag = audioFile.getTag();
-                                lyric = tag.getFirst(FieldKey.LYRICS);
-                                if (lyric == null) {
-                                    song.setLyric("");
-                                } else {
-                                    song.setLyric(lyric);
-                                }
-                                mLyricView.getLyric(lyric);
-                                mHint.setVisibility(View.GONE);
-                            } catch (CannotReadException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (TagException e) {
-                                e.printStackTrace();
-                            } catch (ReadOnlyFileException e) {
-                                e.printStackTrace();
-                            } catch (InvalidAudioFrameException e) {
-                                e.printStackTrace();
-                            }
+                            song.setLyric("");
+                            mHint.setText("未找到歌词");
                         }
                     }
                     break;

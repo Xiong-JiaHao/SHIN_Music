@@ -7,15 +7,6 @@ import android.provider.MediaStore;
 
 import com.gin.xjh.shin_music.bean.Song;
 import com.gin.xjh.shin_music.db.BaseSQLiteDBHelper;
-
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -201,52 +192,23 @@ public class MusicUtil {
     }
 
     public static List<Song> getLocalMusic(Context context, BaseSQLiteDBHelper mBaseSQLiteDBHelper) {
-        MP3File file;
         Song song;
-        AbstractID3v2Tag tag;
         List <Song> mSongList = new ArrayList<>();
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Audio.AudioColumns.IS_MUSIC);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
-                    try {
-                        if (cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)) >= 800000) {
-                            String url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                            Long songid = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
-                            song = mBaseSQLiteDBHelper.getSong(songid);
-                            if (song == null) {
-                                file = new MP3File(new File(url));
-                                if (file.hasID3v2Tag()) {
-                                    tag = file.getID3v2Tag();
-                                    String songname = tag.frameMap.get("TIT2").toString();
-                                    String singername = tag.frameMap.get("TPE1").toString();
-                                    String albumname = tag.frameMap.get("TALB").toString();
-                                    songname = songname.substring(6, songname.length() - 3);
-                                    singername = singername.substring(6, singername.length() - 3);
-                                    albumname = albumname.substring(6, albumname.length() - 3);
-                                    song = new Song(songname, singername, albumname, url);
-                                } else {
-                                    String songname = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                                    String singername = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                                    String albumname = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                                    song = new Song(songname, singername, albumname, url);
-                                }
-                                song.setSongId(songid);
-                                song.setSongTime(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-                                if (new File(song.getUrl()).exists()) {
-                                    mBaseSQLiteDBHelper.insertSong(song);
-                                    mSongList.add(song);
-                                }
-                            } else {
-                                song.setUrl(url);
-                                if (new File(song.getUrl()).exists()) {
-                                    mSongList.add(song);
-                                }
-                            }
-                        }
-                    } catch (IOException | TagException | ReadOnlyFileException | CannotReadException | InvalidAudioFrameException e) {
-                        e.printStackTrace();
-                        throw new RuntimeException("获取Mp3 tag信息出错！");
+                    if (cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)) >= 800000) {
+                        String url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                        Long songid = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
+                        String songname = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                        String singername = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                        String albumname = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                        song = new Song(songname, singername, albumname, url);
+                        song.setSongId(songid);
+                        song.setAlbumId(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_ID)));
+                        song.setSongTime(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+                        mSongList.add(song);
                     }
                 } while (cursor.moveToNext());
             }

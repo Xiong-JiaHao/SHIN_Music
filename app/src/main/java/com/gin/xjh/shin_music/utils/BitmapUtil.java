@@ -1,16 +1,18 @@
 package com.gin.xjh.shin_music.utils;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 
 import com.gin.xjh.shin_music.bean.Song;
 
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
-import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
-import java.io.File;
 
 public class BitmapUtil {
     /**
@@ -19,26 +21,18 @@ public class BitmapUtil {
      * @param song 歌曲
      * @return
      */
-    public static Bitmap getAlbumArt(Song song) {
-        byte[] imageData = null;
+    public static Bitmap getAlbumArt(Context context, Song song) {
+        ContentResolver resolver = context.getContentResolver();
+        Uri uri = ContentUris.withAppendedId(ConstantUtil.ARTWORK_URI, song.getAlbumId());
+        InputStream is;
         try {
-            //https://github.com/hexise/jaudiotagger-android
-            MP3File mp3file = new MP3File(new File(song.getUrl()));
-            AbstractID3v2Tag tag = mp3file.getID3v2Tag();
-            AbstractID3v2Frame frame = (AbstractID3v2Frame) tag.getFrame("APIC");
-            FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
-            imageData = body.getImageData();
-        } catch (Exception e) {
-            e.printStackTrace();
+            is = resolver.openInputStream(uri);
+        } catch (FileNotFoundException ignored) {
+            return null;
         }
-        if (imageData != null) {
-            return BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
-        }
-        return null;
-//        MediaMetadataRetriever mediaMetadataRetriever=new MediaMetadataRetriever();
-//        mediaMetadataRetriever.setDataSource(song.getUrl());
-//        byte[] picture = mediaMetadataRetriever.getEmbeddedPicture();
-//        if(picture==null)return null;
-//        return BitmapFactory.decodeByteArray(picture,0,picture.length);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        return BitmapFactory.decodeStream(is, null, options);
     }
 }
