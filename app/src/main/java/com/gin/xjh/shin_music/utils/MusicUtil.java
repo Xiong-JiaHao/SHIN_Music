@@ -3,6 +3,7 @@ package com.gin.xjh.shin_music.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.media.MediaPlayer;
+import android.provider.BaseColumns;
 import android.provider.MediaStore;
 
 import com.gin.xjh.shin_music.bean.Song;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.prefs.Preferences;
 
 public class MusicUtil {
 
@@ -194,22 +196,36 @@ public class MusicUtil {
     public static List<Song> getLocalMusic(Context context, BaseSQLiteDBHelper mBaseSQLiteDBHelper) {
         Song song;
         List <Song> mSongList = new ArrayList<>();
-        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Audio.AudioColumns.IS_MUSIC);
+        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[]{
+                        BaseColumns._ID,
+                        MediaStore.Audio.AudioColumns.IS_MUSIC,
+                        MediaStore.Audio.AudioColumns.TITLE,
+                        MediaStore.Audio.AudioColumns.ARTIST,
+                        MediaStore.Audio.AudioColumns.ALBUM,
+                        MediaStore.Audio.AudioColumns.ALBUM_ID,
+                        MediaStore.Audio.AudioColumns.DATA,
+                        MediaStore.Audio.AudioColumns.SIZE,
+                        MediaStore.Audio.AudioColumns.DURATION
+                },
+                MediaStore.Audio.AudioColumns.SIZE + " >= ? AND " + MediaStore.Audio.AudioColumns.DURATION + " >= ?",
+                new String[]{
+                        String.valueOf(800000),
+                        String.valueOf(60061)
+                },
+                MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
-                    if (cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)) >= 800000) {
-                        String url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                        Long songid = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
-                        String songname = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                        String singername = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                        String albumname = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                        song = new Song(songname, singername, albumname, url);
-                        song.setSongId(songid);
-                        song.setAlbumId(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_ID)));
-                        song.setSongTime(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-                        mSongList.add(song);
-                    }
+                    String url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                    Long songid = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
+                    String songname = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                    String singername = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                    String albumname = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                    song = new Song(songname, singername, albumname, url);
+                    song.setSongId(songid);
+                    song.setAlbumId(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_ID)));
+                    song.setSongTime(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+                    mSongList.add(song);
                 } while (cursor.moveToNext());
             }
             cursor.close();

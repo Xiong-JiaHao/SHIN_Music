@@ -127,6 +127,7 @@ public class AlbumDetailsActivity extends BaseActivity implements View.OnClickLi
             }
             Picasso.get().load(mAlbum.getAlbumUrl())
                     .placeholder(R.drawable.def_album)
+                    .resize(300,300)
                     .error(R.drawable.def_album)
                     .into(mAlbumImg);
         } else {
