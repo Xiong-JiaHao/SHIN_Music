@@ -33,7 +33,7 @@
 可以查看别人的评论，有兴趣可以关注对方的歌单
 
 ## 关注列表
-![关注列表](https://github.com/ginshin/SHIN_Music/raw/master/GitImg/img_concern.jpg)     ![关注歌曲列表](https://github.com/ginshin/SHIN_Music/raw/master/GitImg/img_concern_detail.jpg)
+![关注列表](https://github.com/ginshin/SHIN_Music/raw/master/GitImg/img_concern.jpg)     ![关注歌曲列表](https://github.com/ginshin/SHIN_Music/raw/master/GitImg/img_concern_list.jpg)
 
 喜欢可以关注，关注后可以从菜单中直接到达对方的歌单（公开的情况）
 
