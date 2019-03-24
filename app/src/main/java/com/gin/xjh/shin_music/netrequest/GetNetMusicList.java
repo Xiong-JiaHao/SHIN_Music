@@ -74,7 +74,9 @@ public class GetNetMusicList {
                             String AlbumName = alObject.getString(mContext.getString(R.string.NAME));
                             String AlbumUri = alObject.getString(mContext.getString(R.string.PICURL));
                             Long AlbumId = alObject.getLong(mContext.getString(R.string.ID));
-                            Song song = new Song(jsonObject.getString(mContext.getString(R.string.NAME)), jsonObject.getLong(mContext.getString(R.string.NAME)), Singer, SingerId, AlbumName, AlbumUri, jsonObject.getInt("dt"));
+                            Song song = new Song(jsonObject.getString(mContext.getString(R.string.NAME)),
+                                    jsonObject.getLong(mContext.getString(R.string.ID)), Singer,
+                                    SingerId, AlbumName, AlbumUri, jsonObject.getInt("dt"));
                             song.setAlbumId(AlbumId);
                             song.setAlbumTime(jsonObject.getLong(mContext.getString(R.string.PUBLISH_TIME)));
                             mSongList.add(song);

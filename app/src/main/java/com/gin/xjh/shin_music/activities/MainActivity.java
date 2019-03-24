@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.gin.xjh.shin_music.R;
 import com.gin.xjh.shin_music.adapter.FragmentAdapter;
+import com.gin.xjh.shin_music.bean.AppUrl;
 import com.gin.xjh.shin_music.bean.User;
 import com.gin.xjh.shin_music.fragments.FragmentLocal;
 import com.gin.xjh.shin_music.fragments.FragmentOnline;
@@ -44,8 +45,10 @@ import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobInstallationManager;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.InstallationListener;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -82,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }).start();
         initView();
-        initEvent();
         Intent startIntent = new Intent(this, MusicService.class);
         bindService(startIntent, connection, BIND_AUTO_CREATE);
     }
@@ -108,6 +110,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         // 启动推送服务
         BmobPush.startWork(this);
+        BmobQuery<AppUrl> query = new BmobQuery<>();
+        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        query.setMaxCacheAge(43200000);//缓存有半天的有效期
+        query.findObjects(new FindListener<AppUrl>() {
+            @Override
+            public void done(List<AppUrl> list, BmobException e) {
+                AppUrl appUrl = list.get(0);
+                ConstantUtil.URL_BASE = appUrl.getUrl();
+                initEvent();
+            }
+        });
 
     }
 
@@ -128,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             user.setObjectId(objId);
             user.setLikeSongListName(sharedPreferences.getString(getString(R.string.LIKE_SONGLIST_NAME), null));
             boolean ispublic = sharedPreferences.getBoolean(getString(R.string.IS_PUBLIC_SONG), false);
-            if(ispublic){
+            if (ispublic) {
                 user.changPublic_song();
             }
             UserState.Login(user);
